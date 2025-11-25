@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -162,14 +162,11 @@
             position: relative;
         }
 
-        /* Placeholder for superhero face */
-        .comic-portrait::after {
-            content: '🦸‍♂️';
-            font-size: 60px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .comic-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
 
         .speech-bubble {
@@ -389,7 +386,9 @@
     <div class="status-panel">
         <div class="section-label">CURRENT STATUS</div>
         <div class="portrait-container">
-            <div class="comic-portrait"></div>
+            <div class="comic-portrait">
+                <img src="default-profile.jpg" alt="Hero Profile Picture">
+            </div>
             <div class="speech-bubble">
                 {{ getStatusMessage() }}
             </div>
