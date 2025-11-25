@@ -545,8 +545,8 @@
                         return 'empty';
                     }
 
-                    if (segmentNumber <= 7) return 'filled-green';
-                    if (segmentNumber <= 9) return 'filled-yellow';
+                    if (segmentNumber >= 6) return 'filled-green';
+                    if (segmentNumber >= 3) return 'filled-yellow';
                     return 'filled-red';
                 }
             }
