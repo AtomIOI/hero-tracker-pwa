@@ -187,9 +187,24 @@
                         <textarea v-model="characterSheet.hero.background" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24"></textarea>
                     </div>
 
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Principles</label>
-                        <textarea v-model="characterSheet.hero.principles" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24"></textarea>
+                    <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="mb-4 p-2 border border-gray-400 rounded bg-gray-50">
+                        <h3 class="font-bangers text-lg mb-2 text-blue-800">Principle {{ index + 1 }}</h3>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1">Name</label>
+                            <input type="text" v-model="principle.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1">During Roleplay</label>
+                            <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="During roleplay, you..."></textarea>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1 text-yellow-600">Minor Twist</label>
+                            <textarea v-model="principle.minorTwist" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="Minor twist..."></textarea>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1 text-red-600">Major Twist</label>
+                            <textarea v-model="principle.majorTwist" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="Major twist..."></textarea>
+                        </div>
                     </div>
                 </div>
 

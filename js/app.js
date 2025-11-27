@@ -16,7 +16,10 @@ const app = createApp({
                     powerSource: 'Experimentation',
                     personality: 'Brave and bold',
                     background: 'A mysterious past...',
-                    principles: 'With great power comes great responsibility.',
+                    principles: [
+                        { name: 'Principle of Destiny', duringRoleplay: 'You are destined for greatness.', minorTwist: 'A small setback occurs.', majorTwist: 'Your destiny is called into question.' },
+                        { name: 'Principle of Justice', duringRoleplay: 'Justice must be served.', minorTwist: 'The law is complicated.', majorTwist: 'You must break the law to save it.' }
+                    ],
                     gender: 'Unknown',
                     age: 25,
                     height: '6\'0"',
@@ -191,6 +194,15 @@ const app = createApp({
                             ...(parsed.hero || {})
                         }
                     };
+
+                    // Migration: Ensure principles is an array of 2 objects
+                    if (!Array.isArray(this.characterSheet.hero.principles) || this.characterSheet.hero.principles.length !== 2) {
+                        console.log('Resetting principles to default structure');
+                        this.characterSheet.hero.principles = [
+                            { name: 'Principle of Destiny', duringRoleplay: 'You are destined for greatness.', minorTwist: 'A small setback occurs.', majorTwist: 'Your destiny is called into question.' },
+                            { name: 'Principle of Justice', duringRoleplay: 'Justice must be served.', minorTwist: 'The law is complicated.', majorTwist: 'You must break the law to save it.' }
+                        ];
+                    }
                 }
             } catch (e) {
                 console.error('Error loading settings', e);
