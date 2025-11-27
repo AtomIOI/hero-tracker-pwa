@@ -1,0 +1,130 @@
+/* Home Page Specific Styles */
+
+/* Compact Status Panel overrides */
+.status-panel.compact-status {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.status-panel.compact-status .portrait-container {
+    margin-bottom: 0; /* Override default margin */
+}
+
+.status-panel.compact-status .comic-portrait {
+    width: 70px;
+    height: 70px;
+    border-width: 2px;
+}
+
+.health-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.health-section .health-controls {
+    position: static; /* Remove absolute positioning from comic-theme.css */
+    transform: none;
+    margin-bottom: 0.5rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.health-section .health-bar-container {
+    width: 100%;
+    /* max-width: 300px; */
+    height: auto;
+    padding: 2px;
+}
+
+.health-section .health-segments {
+    height: 18px;
+}
+
+/* Split Row Layout */
+.split-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* On larger screens, make them side-by-side */
+@media (min-width: 600px) {
+    .split-row {
+        flex-direction: row;
+        align-items: stretch;
+    }
+}
+
+.hero-points-panel,
+.hero-profile-panel {
+    flex: 1;
+    padding: 1.5rem 1rem 1rem; /* Top padding for label */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 120px;
+}
+
+.hero-points-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.hero-points-content .value-star {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+}
+
+.profile-content {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.hero-name {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--color-ink);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.hero-archetype {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Principles Panel */
+.principles-panel {
+    padding: 1.5rem 1rem 1rem;
+    position: relative;
+    margin-bottom: 6rem; /* Extra space for bottom nav */
+    min-height: 100px;
+}
+
+.principles-content {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.4;
+    white-space: pre-wrap; /* Preserve line breaks */
+    color: var(--color-ink);
+    margin-top: 0.5rem;
+}
