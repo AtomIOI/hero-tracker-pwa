@@ -2,29 +2,18 @@
     "name": "Hero Tracker - Comic Edition",
     "short_name": "Hero Tracker",
     "description": "Modular Hero Character Tracker with Vintage Comic Book Aesthetic",
-    "start_url": "/",
+    "start_url": ".",
+    "scope": ".",
     "display": "standalone",
     "background_color": "#fdf6e3",
     "theme_color": "#ec008c",
     "orientation": "portrait-primary",
     "icons": [
         {
-            "src": "/assets/icons/icon-192.png",
-            "sizes": "192x192",
+            "src": "/assets/icons/Hero_Tracker_Icon.png",
+            "sizes": "192x192 512x512",
             "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/assets/icons/icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/assets/icons/icon-maskable.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            "purpose": "any maskable"
         }
     ],
     "categories": [
@@ -39,8 +28,9 @@
             "url": "/#dice",
             "icons": [
                 {
-                    "src": "/assets/icons/dice-icon.png",
-                    "sizes": "192x192"
+                    "src": "/assets/icons/dice-icon.svg",
+                    "sizes": "192x192",
+                    "type": "image/svg+xml"
                 }
             ]
         }

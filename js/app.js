@@ -9,8 +9,17 @@ const app = createApp({
                     timestamp: Date.now()
                 },
                 hero: {
+                    playerName: 'Player One',
                     name: 'Super Hero',
+                    alias: 'The Masked Avenger',
                     archetype: 'Generic',
+                    powerSource: 'Experimentation',
+                    personality: 'Brave and bold',
+                    background: 'A mysterious past...',
+                    principles: 'With great power comes great responsibility.',
+                    gender: 'Unknown',
+                    age: 25,
+                    height: '6\'0"',
                     health: {
                         current: 30,
                         max: 30,
@@ -60,6 +69,9 @@ const app = createApp({
         displayedAbilities() {
             return this.characterSheet.hero.abilities;
         }
+    },
+    mounted() {
+        this.loadSettings();
     },
     methods: {
         getStatusMessage() {
@@ -148,6 +160,41 @@ const app = createApp({
         },
         setPage(page) {
             this.currentPage = page;
+        },
+        updateHealthRanges() {
+            const max = this.characterSheet.hero.health.max;
+            this.characterSheet.hero.health.ranges.greenMin = Math.floor(max * 0.75);
+            this.characterSheet.hero.health.ranges.yellowMin = Math.floor(max * 0.35);
+            this.characterSheet.hero.health.ranges.redMin = 1;
+        },
+        saveSettings() {
+            this.updateHealthRanges();
+            try {
+                localStorage.setItem('hero-character', JSON.stringify(this.characterSheet));
+                alert('Settings Saved!');
+            } catch (e) {
+                console.error('Error saving settings', e);
+                alert('Error saving settings');
+            }
+        },
+        loadSettings() {
+            try {
+                const saved = localStorage.getItem('hero-character');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    // Merge saved data with current structure to ensure new fields exist if loading old data
+                    this.characterSheet = {
+                        ...this.characterSheet,
+                        ...parsed,
+                        hero: {
+                            ...this.characterSheet.hero,
+                            ...(parsed.hero || {})
+                        }
+                    };
+                }
+            } catch (e) {
+                console.error('Error loading settings', e);
+            }
         }
     }
 });

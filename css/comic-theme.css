@@ -778,4 +778,21 @@
     background-color: rgba(255, 255, 255, 0.8); /* Slight background to pop over text */
     box-shadow: 2px 2px 0px var(--color-ink);
     pointer-events: none;
+/* Helper Classes for Settings Page */
+.pb-nav {
+    padding-bottom: 120px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.comic-btn.primary {
+    background-color: var(--color-cyan);
+    color: white;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.comic-btn.primary:hover {
+    filter: brightness(1.1);
 }
