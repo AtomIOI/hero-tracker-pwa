@@ -104,7 +104,7 @@
                 <h1 class="comic-title">ABILITY MODULES</h1>
             </div>
 
-            <button id="add-power-btn" class="comic-btn plus" @click="openAddPowerModal">Add New Ability</button>
+            <button id="add-power-btn" class="comic-btn plus" @click="openAddAbilityModal">Add New Ability</button>
 
             <div id="abilities-grid" class="abilities-grid">
                 <ability-card v-for="ability in displayedAbilities" :key="ability.id" :ability="ability" @edit="openEditAbilityModal(ability)" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
@@ -234,6 +234,7 @@
 
                 <button class="comic-btn primary full-width" @click="saveSettings">SAVE SETTINGS</button>
             </div>
+        </div>
         <!-- Powers & Qualities Page -->
         <div v-if="currentPage === 'powers-qualities'">
             <powers-qualities-page :hero="characterSheet.hero"></powers-qualities-page>
@@ -280,60 +281,6 @@
                 await pwa.promptInstall();
             });
         }
-
-        const { createApp } = Vue;
-
-        createApp({
-            data() {
-                return {
-                    character: {
-                        currentHealth: 30, // Changed from 75
-                        maxHealth: 30,     // Changed from 100
-                        heroPoints: 3,
-                        modifiers: 2
-                    }
-                };
-            },
-            computed: {
-                healthPercentage() {
-                    if (this.character.maxHealth === 0) return 0;
-                    return (this.character.currentHealth / this.character.maxHealth) * 100;
-                }
-            },
-            methods: {
-                getStatusMessage() {
-                    const pct = this.healthPercentage;
-                    if (pct >= 75) return "READY FOR ACTION!";
-                    if (pct >= 35) return "I CAN KEEP GOING!";
-                    if (pct >= 1) return "I NEED BACKUP!";
-                    return "DOWN FOR THE COUNT!";
-                },
-                changeHealth(amount) {
-                    const newHealth = this.character.currentHealth + amount;
-                    if (newHealth >= 0 && newHealth <= this.character.maxHealth) {
-                        this.character.currentHealth = newHealth;
-                    }
-                },
-                changeHeroPoints(amount) {
-                    const newPoints = this.character.heroPoints + amount;
-                    if (newPoints >= 0) {
-                        this.character.heroPoints = newPoints;
-                    }
-                },
-                getSegmentClass(segmentNumber) {
-                    const pct = this.healthPercentage;
-                    const segmentThreshold = segmentNumber * 10;
-
-                    if (pct < segmentThreshold) {
-                        return 'empty';
-                    }
-
-                    if (segmentNumber >= 6) return 'filled-green';
-                    if (segmentNumber >= 3) return 'filled-yellow';
-                    return 'filled-red';
-                }
-            }
-        }).mount('#app');
     </script>
     <script src="js/app.js"></script>
     <script src="js/components/AbilityCard.js"></script>
