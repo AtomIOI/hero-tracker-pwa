@@ -1,238 +1,148 @@
-// Main Vue 3 Application
-import StorageManager from './storage.js';
-
 const { createApp } = Vue;
 
-createApp({
+const app = createApp({
     data() {
         return {
-            showAddModuleModal: false,
-            newModule: {
-                name: '',
-                dieRating: 'd8',
-                text: '',
-                zoneTag: 'green'
+            characterSheet: {
+                meta: {
+                    version: '1.0',
+                    timestamp: Date.now()
+                },
+                hero: {
+                    name: 'Super Hero',
+                    archetype: 'Generic',
+                    health: {
+                        current: 30,
+                        max: 30,
+                        ranges: {
+                            greenMin: 23, // floor(30 * 0.75)
+                            yellowMin: 11, // floor(30 * 0.35)
+                            redMin: 1
+                        }
+                    },
+                    heroPoints: {
+                        current: 0,
+                        max: 5
+                    },
+                    modifier: {
+                        current: 0
+                    },
+                    statusDice: {
+                        green: 6,
+                        yellow: 8,
+                        red: 10
+                    },
+                    qualities: [],
+                    abilities: [
+                        { id: 'laser-eyes', name: 'Laser Eyes', die: 8, zone: 'green', text: 'Shoots lasers from eyes.' },
+                        { id: 'flight', name: 'Flight', die: 10, zone: 'yellow', text: 'Can fly.' },
+                        { id: 'super-strength', name: 'Super Strength', die: 12, zone: 'red', text: 'Is very strong.' }
+                    ]
+                }
             },
-            character: {
-                currentHealth: 100,
-                maxHealth: 100,
-                sceneOverride: false,
-                modules: [],
-                principles: '',
-                heroPoints: 0,
-                modifiers: 0
-            },
-            diceEngine: {
-                powerDie: 'd8',
-                qualityDie: 'd8',
-                statusDie: 'd8',
-                results: null
-            }
+            showAddEditAbilityModal: false,
+            editingAbility: null,
+            currentPage: 'home'
         };
     },
-    mounted() {
-        this.loadFromLocalStorage();
+    computed: {
+        healthPercentage() {
+            if (this.characterSheet.hero.health.max === 0) return 0;
+            return (this.characterSheet.hero.health.current / this.characterSheet.hero.health.max) * 100;
+        },
+        displayedAbilities() {
+            return this.characterSheet.hero.abilities;
+        }
     },
     methods: {
-        getHealthPercentage() {
-            if (this.character.maxHealth === 0) return 0;
-            return Math.round((this.character.currentHealth / this.character.maxHealth) * 100);
+        getStatusMessage() {
+            const pct = this.healthPercentage;
+            if (pct >= 75) return "READY FOR ACTION!";
+            if (pct >= 35) return "I CAN KEEP GOING!";
+            if (pct >= 1) return "I NEED BACKUP!";
+            return "DOWN FOR THE COUNT!";
         },
-        getZone() {
-            if (this.character.sceneOverride) return 'red';
-            if (this.character.currentHealth <= 0) return 'out';
+        changeHealth(amount) {
+            const newHealth = this.characterSheet.hero.health.current + amount;
+            if (newHealth >= 0 && newHealth <= this.characterSheet.hero.health.max) {
+                this.characterSheet.hero.health.current = newHealth;
+            }
+        },
+        changeHeroPoints(amount) {
+            const newHeroPoints = this.characterSheet.hero.heroPoints.current + amount;
+            if (newHeroPoints >= 0 && newHeroPoints <= this.characterSheet.hero.heroPoints.max) {
+                this.characterSheet.hero.heroPoints.current = newHeroPoints;
+            }
+        },
+        changeModifier(amount) {
+            this.characterSheet.hero.modifier.current += amount;
+        },
+        getSegmentClass(segmentNumber) {
+            const pct = this.healthPercentage;
+            const segmentThreshold = segmentNumber * 10;
 
-            const percentage = this.getHealthPercentage();
-            if (percentage >= 75) return 'green';
-            if (percentage >= 35) return 'yellow';
-            if (percentage >= 1) return 'red';
+            if (pct < segmentThreshold) {
+                return 'empty';
+            }
+
+            if (segmentNumber >= 6) return 'filled-green';
+            if (segmentNumber >= 3) return 'filled-yellow';
+            return 'filled-red';
+        },
+        openAddAbilityModal() {
+            this.editingAbility = null;
+            this.showAddEditAbilityModal = true;
+        },
+        openEditAbilityModal(ability) {
+            this.editingAbility = ability;
+            this.showAddEditAbilityModal = true;
+        },
+        closeAddEditAbilityModal() {
+            this.showAddEditAbilityModal = false;
+        },
+        saveAbility(abilityData) {
+            const { id, name, die, zone, text } = abilityData;
+            const abilityIndex = this.characterSheet.hero.abilities.findIndex(a => a.id === id);
+
+            if (abilityIndex > -1) { // Editing existing ability
+                this.characterSheet.hero.abilities.splice(abilityIndex, 1, { id, name, die, zone, text });
+            } else { // Adding new ability
+                const newId = id || name.toLowerCase().replace(/\s+/g, '-');
+                this.characterSheet.hero.abilities.push({ id: newId, name, die, zone, text });
+            }
+            this.closeAddEditAbilityModal();
+        },
+        deleteAbility(abilityIdentifier) {
+            const abilityId = abilityIdentifier.id;
+            this.characterSheet.hero.abilities = this.characterSheet.hero.abilities.filter(a => a.id !== abilityId);
+        },
+        getGyroStatus() {
+            const health = this.characterSheet.hero.health;
+            const ranges = health.ranges;
+            if (health.current >= ranges.greenMin) return 'green';
+            if (health.current >= ranges.yellowMin) return 'yellow';
+            if (health.current >= ranges.redMin) return 'red';
             return 'out';
         },
-        getThemeClass() {
-            const zone = this.getZone();
-            return `theme-${zone}`;
-        },
-        getTextColorClass() {
-            const zone = this.getZone();
-            const colors = {
-                green: 'text-green-600',
-                yellow: 'text-yellow-600',
-                red: 'text-red-600',
-                out: 'text-gray-600'
-            };
-            return colors[zone];
-        },
-        getHealthBarClass() {
-            const zone = this.getZone();
-            const colors = {
-                green: 'bg-green-500',
-                yellow: 'bg-yellow-500',
-                red: 'bg-red-500',
-                out: 'bg-gray-500'
-            };
-            return colors[zone];
-        },
-        toggleOverride() {
-            this.character.sceneOverride = !this.character.sceneOverride;
-            this.saveToLocalStorage();
-        },
-        addModule() {
-            this.newModule = {
-                name: '',
-                dieRating: 'd8',
-                text: '',
-                zoneTag: 'green'
-            };
-            this.showAddModuleModal = true;
-        },
-        confirmAddModule() {
-            if (!this.newModule.name) this.newModule.name = 'New Power';
-
-            this.character.modules.push({ ...this.newModule });
-            this.saveToLocalStorage();
-            this.showAddModuleModal = false;
-        },
-        removeModule(index) {
-            this.character.modules.splice(index, 1);
-            this.saveToLocalStorage();
-        },
-        isModuleLocked(module) {
-            const currentZone = this.getZone();
-
-            // Green Zone: Lock Yellow and Red
-            if (currentZone === 'green' && (module.zoneTag === 'yellow' || module.zoneTag === 'red')) {
-                return true;
-            }
-
-            // Yellow Zone: Lock Red
-            if (currentZone === 'yellow' && module.zoneTag === 'red') {
-                return true;
-            }
-
-            return false;
-        },
-        getSuggestedStatusDie() {
-            const zone = this.getZone();
-            const suggestions = {
-                green: 'd10',
-                yellow: 'd8',
-                red: 'd6',
-                out: 'd4'
-            };
-            return suggestions[zone];
-        },
-        rollDie(dieType) {
-            const max = parseInt(dieType.substring(1));
-            return Math.floor(Math.random() * max) + 1;
-        },
-        rollDice() {
-            const results = [
-                this.rollDie(this.diceEngine.powerDie),
-                this.rollDie(this.diceEngine.qualityDie),
-                this.rollDie(this.diceEngine.statusDie)
-            ];
-
-            results.sort((a, b) => a - b);
-
-            this.diceEngine.results = {
-                min: results[0],
-                mid: results[1],
-                max: results[2]
-            };
-        },
-        saveToLocalStorage() {
-            const saveData = {
-                character: this.character,
-                diceEngine: {
-                    powerDie: this.diceEngine.powerDie,
-                    qualityDie: this.diceEngine.qualityDie,
-                    statusDie: this.diceEngine.statusDie
-                }
-            };
-            StorageManager.save(saveData);
-        },
-        loadFromLocalStorage() {
-            const data = StorageManager.load();
-            if (data) {
-                try {
-                    this.character = data.character;
-                    if (data.diceEngine) {
-                        this.diceEngine.powerDie = data.diceEngine.powerDie;
-                        this.diceEngine.qualityDie = data.diceEngine.qualityDie;
-                        this.diceEngine.statusDie = data.diceEngine.statusDie;
-                    }
-                } catch (e) {
-                    console.error('Error loading from localStorage:', e);
-                }
+        isAbilityAvailable(ability) {
+            const gyro = this.getGyroStatus();
+            switch (gyro) {
+                case 'green':
+                    return ability.zone === 'green';
+                case 'yellow':
+                    return ['green', 'yellow'].includes(ability.zone);
+                case 'red':
+                    return ['green', 'yellow', 'red'].includes(ability.zone);
+                case 'out':
+                    return false;
+                default:
+                    return false;
             }
         },
-        exportJSON() {
-            const data = {
-                character: this.character,
-                exportDate: new Date().toISOString(),
-                version: '1.0'
-            };
-
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `hero-character-${Date.now()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        },
-        async importJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.character) {
-                        this.character = data.character;
-                        this.saveToLocalStorage();
-                        alert('Character loaded successfully!');
-                    } else {
-                        alert('Invalid character file format.');
-                    }
-                } catch (error) {
-                    alert('Error reading file: ' + error.message);
-                }
-            };
-            reader.readAsText(file);
-
-            // Reset the input
-            event.target.value = '';
-        },
-
-        // PWA Share functionality
-        async shareCharacter() {
-            const data = {
-                character: this.character,
-                exportDate: new Date().toISOString(),
-                version: '1.0'
-            };
-
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const file = new File([blob], `hero-character-${Date.now()}.json`, { type: 'application/json' });
-
-            if (navigator.share && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        title: 'My Hero Character',
-                        text: 'Check out my hero!',
-                        files: [file]
-                    });
-                } catch (error) {
-                    console.log('Share cancelled or failed:', error);
-                    // Fallback to download
-                    this.exportJSON();
-                }
-            } else {
-                // Fallback to download
-                this.exportJSON();
-            }
+        setPage(page) {
+            this.currentPage = page;
         }
     }
-}).mount('#app');
+});
+
+app.mount('#app');
