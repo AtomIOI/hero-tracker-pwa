@@ -106,7 +106,7 @@
 
             <button id="add-power-btn" class="comic-btn plus" @click="openAddAbilityModal">Add New Ability</button>
 
-            <div id="abilities-grid" class="abilities-grid">
+            <div id="abilities-grid" class="abilities-grid modules-grid">
                 <ability-card v-for="ability in displayedAbilities" :key="ability.id" :ability="ability" @edit="openEditAbilityModal(ability)" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
             </div>
 

@@ -54,6 +54,18 @@
     /* Fade dots slightly */
 }
 
+.pattern-dots {
+    background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px);
+    background-size: 6px 6px;
+}
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .status-panel {
     padding: 1rem;
     margin-bottom: 1.5rem;
@@ -669,6 +681,103 @@
     margin-top: 1.5rem;
 }
 
+/* Ability Cards Overhaul */
+.ability-card {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid var(--color-ink);
+    /* Wobbly border shape */
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: 4px 4px 0px var(--color-ink);
+    background: white;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.1s;
+    height: 100%;
+}
+
+/* Header Styling */
+.ability-card-header {
+    padding: 0.8rem 1rem;
+    border-bottom: 3px solid var(--color-ink);
+    text-align: center;
+}
+
+.ability-card-header h3 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--color-ink);
+    text-transform: uppercase;
+    line-height: 1.1;
+    text-shadow: 1px 1px 0px white;
+}
+
+/* Zone Colors */
+.ability-card.bg-green .ability-card-header {
+    background-color: var(--color-green);
+}
+
+.ability-card.bg-yellow .ability-card-header {
+    background-color: var(--color-yellow);
+}
+
+.ability-card.bg-red .ability-card-header {
+    background-color: var(--color-magenta);
+}
+
+/* Body Styling */
+.ability-card-body {
+    padding: 1rem;
+    flex-grow: 1;
+    font-family: var(--font-body);
+    font-weight: bold;
+    color: var(--color-ink);
+    background-color: white; /* fallback */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.ability-card-body p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Footer Styling */
+.ability-card-footer {
+    padding: 0.8rem;
+    display: flex;
+    justify-content: center;
+    background: white;
+}
+
+/* Unavailable / Locked State */
+.ability-card.ability-unavailable .ability-card-header,
+.ability-card.ability-unavailable .ability-card-body {
+    filter: grayscale(100%);
+    opacity: 0.6;
+}
+
+.ability-card.ability-unavailable::after {
+    content: 'LOCKED';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--color-magenta);
+    border: 5px solid var(--color-magenta);
+    padding: 0.2rem 1rem;
+    border-radius: 10px;
+    z-index: 10;
+    letter-spacing: 2px;
+    background-color: rgba(255, 255, 255, 0.8); /* Slight background to pop over text */
+    box-shadow: 2px 2px 0px var(--color-ink);
+    pointer-events: none;
 /* Helper Classes for Settings Page */
 .pb-nav {
     padding-bottom: 120px;
