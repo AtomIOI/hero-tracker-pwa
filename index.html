@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/comic-theme.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/visual-update.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/desktop.css">
 </head>
@@ -55,6 +56,9 @@
                 <div class="portrait-container">
                     <div class="comic-portrait">
                         <img src="default-profile.jpg" alt="Hero Profile Picture">
+                    </div>
+                    <div class="hero-name-container">
+                        <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
                     </div>
                 </div>
 
@@ -77,29 +81,45 @@
 
             <!-- Split Row: Hero Points & Hero Profile -->
             <div class="split-row">
-                <div class="hero-points-panel wobbly-box bg-dots">
-                    <div class="section-label">HERO POINTS</div>
+                <div class="hero-points-panel wobbly-box bg-white">
+                    <div class="panel-header-bar">HERO POINTS</div>
                     <div class="hero-points-content">
                         <button class="comic-btn minus" @click="changeHeroPoints(-1)">-</button>
-                        <div class="value-star">
-                            <div class="value">{{ characterSheet.hero.heroPoints.current }}</div>
+                        <div class="value-star-container">
+                            <div class="star-shape">
+                                <span class="star-value">{{ characterSheet.hero.heroPoints.current }}</span>
+                            </div>
                         </div>
                         <button class="comic-btn plus" @click="changeHeroPoints(1)">+</button>
                     </div>
                 </div>
 
-                <div class="hero-profile-panel wobbly-box bg-dots">
-                    <div class="section-label">HERO PROFILE</div>
+                <div class="hero-profile-panel wobbly-box bg-white">
+                    <div class="panel-header-bar">HERO PROFILE</div>
                     <div class="profile-content">
-                        <p class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</p>
-                        <p class="hero-archetype">{{ characterSheet.hero.archetype || 'No Archetype' }}</p>
+                        <div class="profile-field">
+                            <span class="field-label">Background:</span>
+                            <span class="field-value">{{ characterSheet.hero.background || '-' }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Power Source:</span>
+                            <span class="field-value">{{ characterSheet.hero.powerSource || '-' }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Archetype:</span>
+                            <span class="field-value">{{ characterSheet.hero.archetype || '-' }}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Personality:</span>
+                            <span class="field-value">{{ characterSheet.hero.personality || '-' }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Principles Section -->
-            <div class="principles-panel wobbly-box bg-dots">
-                <div class="section-label">PRINCIPLES</div>
+            <div class="principles-panel wobbly-box bg-white">
+                <div class="panel-header-bar">PRINCIPLES</div>
                 <div class="principles-content">
                     <p>{{ characterSheet.hero.principles || 'No principles defined.' }}</p>
                 </div>
