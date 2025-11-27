@@ -1,0 +1,88 @@
+graph TD
+    subgraph "Project Root"
+        A[Hero Tracker PWA]
+    end
+
+    subgraph "HTML"
+        B(index.html)
+    end
+
+    subgraph "Vue.js Application"
+        C{Vue.js App}
+        subgraph "Views"
+            D[Home Page]
+            G[Abilities Page]
+        end
+        subgraph "Components"
+            H[AbilityCard.js]
+            I[AddEditAbilityModal.js]
+        end
+    end
+
+    subgraph "CSS"
+        J(css/)
+        subgraph "Stylesheets"
+            J1[variables.css]
+            J2[base.css]
+            J3[comic-theme.css]
+            J4[mobile.css]
+            J5[desktop.css]
+        end
+    end
+
+    subgraph "JavaScript"
+        M(js/)
+        subgraph "Scripts"
+            M1[app.js]
+            M2[storage.js]
+            M3[pwa.js]
+        end
+    end
+
+    subgraph "Assets"
+        P(assets/)
+        subgraph "Static Assets"
+            Q[icons/]
+            R[textures/]
+        end
+    end
+
+    subgraph "Documentation & Config"
+        S(README.md)
+        T(manifest.json)
+        U(sw.js)
+        V(documentation.md)
+        W(project-structure.mmd)
+    end
+
+    A --> B
+    B --> C
+    C --> D
+    C --> G
+    D --> E[Status Panel]
+    D --> F[Stats Grid]
+    G --> H
+    G --> I
+
+    A --> J
+    J --> J1
+    J --> J2
+    J --> J3
+    J --> J4
+    J --> J5
+
+    A --> M
+    M --> M1
+    C -.-> M1
+    M --> M2
+    M --> M3
+
+    A --> P
+    P --> Q
+    P --> R
+
+    A --> S
+    A --> T
+    A --> U
+    A --> V
+    A --> W

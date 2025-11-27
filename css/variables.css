@@ -1,17 +1,20 @@
-/* CSS Custom Properties */
 :root {
-    --color-paper: #fdf6e3;
-    --color-ink: #1a1a1a;
-    --color-cyan: #00aeef;
-    --color-magenta: #ec008c;
-    --color-yellow: #fff200;
-    --color-black: #231f20;
-    
-    /* Spacing */
-    --panel-gap: 1.5rem;
-    --panel-padding: 1.5rem;
-    
-    /* Typography */
+    /* Fonts */
     --font-heading: 'Bangers', cursive;
-    --font-body: 'Comic Neue', cursive, sans-serif;
+    --font-body: 'Comic Neue', cursive;
+
+    /* Vintage Comic Palette */
+    --color-paper: #f0e6d2;
+    /* Aged paper */
+    --color-ink: #0a0a0a;
+    /* Deep ink, almost black */
+    --color-cyan: #4fb3d9;
+    /* Muted Cyan */
+    --color-magenta: #e64c4c;
+    /* Reddish Magenta */
+    --color-yellow: #fcd116;
+    /* Golden Yellow */
+    --color-green: #76c043;
+    /* Muted Green */
+    --color-shadow: rgba(10, 10, 10, 0.2);
 }

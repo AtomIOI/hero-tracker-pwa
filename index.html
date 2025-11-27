@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -23,606 +23,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap"
         rel="stylesheet">
 
-    <style>
-        :root {
-            /* Vintage Comic Palette */
-            --color-paper: #f0e6d2;
-            /* Aged paper */
-            --color-ink: #0a0a0a;
-            /* Deep ink, almost black */
-            --color-cyan: #4fb3d9;
-            /* Muted Cyan */
-            --color-magenta: #e64c4c;
-            /* Reddish Magenta */
-            --color-yellow: #fcd116;
-            /* Golden Yellow */
-            --color-green: #76c043;
-            /* Muted Green */
-            --color-shadow: rgba(10, 10, 10, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Comic Neue', cursive, sans-serif;
-            background-color: var(--color-paper);
-            /* Vintage Paper Texture */
-            background-image: url('assets/textures/vintage_paper_texture.png');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            padding: 1rem;
-            padding-bottom: 90px;
-            color: var(--color-ink);
-        }
-
-        /* Utility for Wobbly Borders */
-        .wobbly-box {
-            border: 3px solid var(--color-ink);
-            /* Organic border radius for hand-drawn look */
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            box-shadow: 4px 4px 0px var(--color-ink);
-            background: white;
-            transition: transform 0.1s;
-        }
-
-        .comic-title {
-            font-family: 'Bangers', cursive;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 0px var(--color-ink);
-            /* Hard shadow for text */
-            text-align: center;
-            font-size: 2.8rem;
-            color: var(--color-magenta);
-            -webkit-text-stroke: 1px var(--color-ink);
-            /* Outline text */
-            line-height: 1;
-        }
-
-        .comic-header-box {
-            background: var(--color-yellow);
-            padding: 1.5rem 1rem;
-            position: relative;
-            margin-bottom: 1.5rem;
-            border: 3px solid var(--color-ink);
-            /* Slightly different wobble for header */
-            border-radius: 5px 255px 3px 25px / 255px 5px 225px 5px;
-            box-shadow: 4px 4px 0px var(--color-ink);
-        }
-
-        .issue-box {
-            position: absolute;
-            top: 0.5rem;
-            left: 0.5rem;
-            background: white;
-            border: 2px solid var(--color-ink);
-            padding: 0.2rem 0.5rem;
-            font-family: 'Comic Neue', cursive;
-            font-weight: bold;
-            font-size: 0.8rem;
-            transform: rotate(-2deg);
-        }
-
-        /* Ben-Day Dot Pattern Mixin */
-        .bg-dots {
-            background-image: radial-gradient(var(--color-ink) 1px, transparent 1px);
-            background-size: 8px 8px;
-            background-color: rgba(255, 255, 255, 0.9);
-            /* Fade dots slightly */
-        }
-
-        .status-panel {
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            background-color: #e6f2f5;
-            /* Very light blue tint */
-            background-image: radial-gradient(#4fb3d9 1.5px, transparent 1.5px);
-            background-size: 6px 6px;
-            border: 3px solid var(--color-ink);
-            /* Another wobble variation */
-            border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
-            box-shadow: 4px 4px 0px var(--color-ink);
-            position: relative;
-        }
-
-        .section-label {
-            font-family: 'Bangers', cursive;
-            font-size: 1.2rem;
-            background: var(--color-yellow);
-            border: 2px solid var(--color-ink);
-            display: inline-block;
-            padding: 0.2rem 0.8rem;
-            transform: rotate(-2deg);
-            /* Jaunty angle */
-            margin-bottom: 0.5rem;
-            box-shadow: 2px 2px 0px var(--color-ink);
-        }
-
-        .portrait-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .comic-portrait {
-            width: 100px;
-            height: 100px;
-            border: 3px solid var(--color-ink);
-            border-radius: 50% 40% 60% 50% / 50% 55% 45% 50%;
-            /* Imperfect circle */
-            background: linear-gradient(135deg, var(--color-cyan), var(--color-magenta));
-            box-shadow: 3px 3px 0px var(--color-ink);
-            flex-shrink: 0;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .comic-portrait img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        .speech-bubble {
-            position: relative;
-            background: white;
-            border: 3px solid var(--color-ink);
-            padding: 1rem;
-            border-radius: 50% 20% 40% 10%;
-            /* Organic bubble shape */
-            font-weight: bold;
-            font-family: 'Comic Neue', cursive;
-            font-size: 1.1rem;
-            text-align: center;
-            flex-grow: 1;
-            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Speech bubble tail */
-        .speech-bubble::before {
-            content: '';
-            position: absolute;
-            left: -15px;
-            top: 40%;
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 20px solid var(--color-ink);
-        }
-
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            left: -9px;
-            top: 40%;
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 20px solid white;
-        }
-
-        .health-controls {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: white;
-            padding: 0.3rem;
-            border: 2px solid var(--color-ink);
-            border-radius: 15px 255px 15px 255px / 255px 15px 225px 15px;
-            box-shadow: 3px 3px 0px var(--color-ink);
-            transform: rotate(1deg);
-        }
-
-        /* Generic Comic Button - Reusable */
-        .comic-btn {
-            width: 30px;
-            height: 30px;
-            border: 2px solid var(--color-ink);
-            border-radius: 50%;
-            font-family: 'Bangers', cursive;
-            font-size: 1.2rem;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 1px 1px 0px var(--color-ink);
-            transition: transform 0.1s;
-        }
-
-        .comic-btn:active {
-            transform: translate(1px, 1px);
-            box-shadow: none;
-        }
-
-        .comic-btn.minus {
-            background-color: var(--color-magenta);
-        }
-
-        .comic-btn.plus {
-            background-color: var(--color-green);
-        }
-
-        .health-value {
-            font-family: 'Bangers', cursive;
-            font-size: 1.5rem;
-            min-width: 30px;
-            text-align: center;
-        }
-
-        .hero-points-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        /* Hero Points Specific Styles */
-        .hero-label {
-            position: absolute;
-            top: -10px;
-            left: -5px;
-            transform: rotate(-3deg);
-            z-index: 10;
-        }
-
-        .hero-points-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .hero-btn-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .hero-btn {
-            width: 40px;
-            height: 25px;
-            /* Rectangular shape */
-            background-color: var(--color-yellow);
-            border: 2px solid var(--color-ink);
-            border-radius: 4px;
-            /* Slight rounding */
-            font-family: 'Bangers', cursive;
-            font-size: 1.2rem;
-            color: var(--color-ink);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 2px 2px 0px var(--color-ink);
-            transition: transform 0.1s;
-            line-height: 1;
-            padding-bottom: 2px;
-            /* Visual alignment */
-        }
-
-        .hero-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: none;
-        }
-
-        .health-bar-container {
-            border: 3px solid var(--color-ink);
-            padding: 4px;
-            background: white;
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            box-shadow: 2px 2px 0px var(--color-ink);
-            display: flex;
-            align-items: center;
-        }
-
-        .health-label {
-            font-family: 'Bangers', cursive;
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
-            padding-left: 0.5rem;
-        }
-
-        .health-segments {
-            display: flex;
-            flex-grow: 1;
-            gap: 2px;
-            height: 24px;
-        }
-
-        .health-segment {
-            flex: 1;
-            border: 2px solid var(--color-ink);
-            background: transparent;
-        }
-
-        .health-segment.filled-green {
-            background-color: var(--color-green);
-        }
-
-        .health-segment.filled-yellow {
-            background-color: var(--color-yellow);
-        }
-
-        .health-segment.filled-red {
-            background-color: var(--color-magenta);
-        }
-
-        .health-segment.empty {
-            background-color: #e0e0e0;
-            opacity: 0.3;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-box {
-            background: #fdf6e3;
-            /* Cream */
-            background-image: radial-gradient(var(--color-magenta) 1px, transparent 1px);
-            background-size: 6px 6px;
-            padding: 1rem;
-            text-align: center;
-            position: relative;
-            border: 3px solid var(--color-ink);
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            box-shadow: 4px 4px 0px var(--color-ink);
-        }
-
-        .stat-star {
-            font-size: 7rem;
-            /* Changed from 4rem */
-            color: var(--color-yellow);
-            text-shadow:
-                -2px -2px 0 #000,
-                2px -2px 0 #000,
-                -2px 2px 0 #000,
-                2px 2px 0 #000,
-                4px 4px 0 rgba(0, 0, 0, 0.2);
-            position: relative;
-            display: inline-block;
-        }
-
-        .stat-number {
-            position: absolute;
-            top: 54%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Bangers', cursive;
-            font-size: 2rem;
-            color: var(--color-ink);
-            text-shadow: none;
-        }
-
-        .modifier-box {
-            border: 3px solid var(--color-ink);
-            background: white;
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            font-family: 'Bangers', cursive;
-            font-size: 2rem;
-            box-shadow: 3px 3px 0px var(--color-ink);
-            transform: rotate(2deg);
-        }
-
-        .nav-bar {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            right: 1rem;
-            background: var(--color-yellow);
-            border: 3px solid var(--color-ink);
-            /* Wobbly nav bar */
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            display: flex;
-            justify-content: space-around;
-            padding: 0.5rem 0;
-            z-index: 100;
-            box-shadow: 4px 4px 0px var(--color-ink);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: 'Bangers', cursive;
-            font-size: 0.9rem;
-            cursor: pointer;
-            color: var(--color-ink);
-            opacity: 0.7;
-            transition: transform 0.2s;
-        }
-
-        .nav-item.active {
-            opacity: 1;
-            transform: scale(1.1) rotate(-2deg);
-            color: var(--color-magenta);
-        }
-
-        /* Navigation Icons */
-        .nav-icon {
-            width: 48px;
-            /* Keep the larger size */
-            height: 48px;
-            /* Keep the larger size */
-            margin-bottom: 4px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            display: inline-block;
-            /* Removed mask properties */
-        }
-
-        /* Individual Icon Images */
-        .nav-icon.home {
-            background-image: url('assets/icons/icon_home.png');
-        }
-
-        .nav-icon.powers {
-            background-image: url('assets/icons/icon_powers.png');
-        }
-
-        .nav-icon.dice {
-            background-image: url('assets/icons/icon_dice.png');
-        }
-
-        .nav-icon.settings {
-            background-image: url('assets/icons/icon_settings.png');
-        }
-    </style>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/comic-theme.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/desktop.css">
 </head>
 
 <body id="app">
-    <!-- Comic Header Box -->
-    <div class="comic-header-box">
-        <div class="issue-box">ISSUE #1</div>
-        <h1 class="comic-title">HERO TRACKER</h1>
-    </div>
-
-    <!-- Current Status Panel -->
-    <div class="status-panel">
-        <div class="section-label">CURRENT STATUS</div>
-        <div class="health-controls">
-            <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
-            <div class="health-value">{{ character.currentHealth }}</div>
-            <button class="comic-btn plus" @click="changeHealth(1)">+</button>
-        </div>
-        <div class="portrait-container">
-            <div class="comic-portrait">
-                <img src="default-profile.jpg" alt="Hero Profile Picture">
+    <main id="page-content">
+        <!-- Home Page -->
+        <div v-if="currentPage === 'home'">
+            <!-- Comic Header Box -->
+            <div class="comic-header-box">
+                <div class="issue-box">ISSUE #1</div>
+                <h1 class="comic-title">HERO TRACKER</h1>
             </div>
-            <div class="speech-bubble">
-                {{ getStatusMessage() }}
-            </div>
-        </div>
 
-        <!-- Health Bar -->
-        <div class="health-bar-container">
-            <div class="health-label">HEALTH</div>
-            <div class="health-segments">
-                <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hero Stats Panel -->
-    <div class="stats-grid">
-        <!-- Hero Points -->
-        <div class="stat-box" style="position: relative;">
-            <div class="section-label hero-label">HERO POINTS</div>
-            <div class="hero-points-controls">
-                <div class="stat-star">
-                    ★
-                    <div class="stat-number">{{ character.heroPoints }}</div>
+            <!-- Current Status Panel -->
+            <div class="status-panel">
+                <div class="section-label">CURRENT STATUS</div>
+                <div class="health-controls">
+                    <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
+                    <div class="health-value">{{ characterSheet.hero.health.current }}</div>
+                    <button class="comic-btn plus" @click="changeHealth(1)">+</button>
                 </div>
-                <div class="hero-btn-stack">
-                    <button class="hero-btn" @click="changeHeroPoints(1)">+</button>
-                    <button class="hero-btn" @click="changeHeroPoints(-1)">-</button>
+                <div class="portrait-container">
+                    <div class="comic-portrait">
+                        <img src="default-profile.jpg" alt="Hero Profile Picture">
+                    </div>
+                    <div class="speech-bubble">
+                        {{ getStatusMessage() }}
+                    </div>
+                </div>
+
+                <!-- Health Bar -->
+                <div class="health-bar-container">
+                    <div class="health-label">HEALTH</div>
+                    <div class="health-segments">
+                        <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
+                    </div>
+                </div>
+
+                <!-- Hero Points -->
+                <div class="hero-points-container">
+                    <div class="section-label">HERO POINTS</div>
+                    <div class="controls">
+                        <button class="comic-btn minus" @click="changeHeroPoints(-1)">-</button>
+                        <div class="value-star">
+                            <div class="value">{{ characterSheet.hero.heroPoints.current }}</div>
+                        </div>
+                        <button class="comic-btn plus" @click="changeHeroPoints(1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Modifier -->
+                <div class="modifier-container">
+                    <div class="section-label">MODIFIER</div>
+                    <div class="controls">
+                        <button class="comic-btn minus" @click="changeModifier(-1)">-</button>
+                        <div class="value">{{ characterSheet.hero.modifier.current }}</div>
+                        <button class="comic-btn plus" @click="changeModifier(1)">+</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modifiers -->
-        <div class="stat-box">
-            <div class="section-label" style="transform: rotate(2deg); margin-bottom: 1rem;">MODIFIERS</div>
-            <div class="modifier-box">
-                {{ character.modifiers >= 0 ? '+' : '' }}{{ character.modifiers }}
+        <!-- Abilities Page -->
+        <div v-if="currentPage === 'abilities'">
+            <div class="comic-header-box">
+                <h1 class="comic-title">ABILITY MODULES</h1>
             </div>
+
+            <button id="add-power-btn" class="comic-btn plus" @click="openAddPowerModal">Add New Ability</button>
+
+            <div id="abilities-grid" class="abilities-grid">
+                <ability-card v-for="ability in displayedAbilities" :key="ability.id" :ability="ability" @edit="openEditAbilityModal(ability)" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
+            </div>
+
+            <add-edit-ability-modal :show="showAddEditAbilityModal" :ability="editingAbility" @close="closeAddEditAbilityModal" @save="saveAbility" @delete="deleteAbility"></add-edit-ability-modal>
         </div>
-    </div>
+    </main>
 
     <!-- Bottom Navigation -->
     <nav class="nav-bar">
-        <div class="nav-item active">
+        <div class="nav-item" :class="{ active: currentPage === 'home' }" @click="setPage('home')">
             <div class="nav-icon home"></div>
             <span>HOME</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" :class="{ active: currentPage === 'abilities' }" @click="setPage('abilities')">
             <div class="nav-icon powers"></div>
-            <span>POWERS</span>
+            <span>ABILITIES</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" :class="{ active: currentPage === 'dice' }" @click="setPage('dice')">
             <div class="nav-icon dice"></div>
             <span>DICE</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" :class="{ active: currentPage === 'settings' }" @click="setPage('settings')">
             <div class="nav-icon settings"></div>
             <span>SETTINGS</span>
         </div>
     </nav>
 
-    <script>
-        const { createApp } = Vue;
-
-        createApp({
-            data() {
-                return {
-                    character: {
-                        currentHealth: 30, // Changed from 75
-                        maxHealth: 30,     // Changed from 100
-                        heroPoints: 3,
-                        modifiers: 2
-                    }
-                };
-            },
-            computed: {
-                healthPercentage() {
-                    if (this.character.maxHealth === 0) return 0;
-                    return (this.character.currentHealth / this.character.maxHealth) * 100;
-                }
-            },
-            methods: {
-                getStatusMessage() {
-                    const pct = this.healthPercentage;
-                    if (pct >= 75) return "READY FOR ACTION!";
-                    if (pct >= 35) return "I CAN KEEP GOING!";
-                    if (pct >= 1) return "I NEED BACKUP!";
-                    return "DOWN FOR THE COUNT!";
-                },
-                changeHealth(amount) {
-                    const newHealth = this.character.currentHealth + amount;
-                    if (newHealth >= 0 && newHealth <= this.character.maxHealth) {
-                        this.character.currentHealth = newHealth;
-                    }
-                },
-                changeHeroPoints(amount) {
-                    const newPoints = this.character.heroPoints + amount;
-                    if (newPoints >= 0) {
-                        this.character.heroPoints = newPoints;
-                    }
-                },
-                getSegmentClass(segmentNumber) {
-                    const pct = this.healthPercentage;
-                    const segmentThreshold = segmentNumber * 10;
-
-                    if (pct < segmentThreshold) {
-                        return 'empty';
-                    }
-
-                    if (segmentNumber >= 6) return 'filled-green';
-                    if (segmentNumber >= 3) return 'filled-yellow';
-                    return 'filled-red';
-                }
-            }
-        }).mount('#app');
-    </script>
+    <script src="js/app.js"></script>
+    <script src="js/components/AbilityCard.js"></script>
+    <script src="js/components/AddEditAbilityModal.js"></script>
 </body>
 
 </html>
