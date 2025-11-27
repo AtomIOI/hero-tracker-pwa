@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/comic-theme.css">
+    <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/desktop.css">
 </head>
@@ -49,24 +50,14 @@
                 <h1 class="comic-title">HERO TRACKER</h1>
             </div>
 
-            <!-- Current Status Panel -->
-            <div class="status-panel">
-                <div class="section-label">CURRENT STATUS</div>
-                <div class="health-controls">
-                    <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
-                    <div class="health-value">{{ characterSheet.hero.health.current }}</div>
-                    <button class="comic-btn plus" @click="changeHealth(1)">+</button>
-                </div>
+            <!-- Compact Status Panel -->
+            <div class="status-panel compact-status">
                 <div class="portrait-container">
                     <div class="comic-portrait">
                         <img src="default-profile.jpg" alt="Hero Profile Picture">
                     </div>
-                    <div class="speech-bubble">
-                        {{ getStatusMessage() }}
-                    </div>
                 </div>
 
-                <!-- Health Bar -->
                 <div class="health-bar-container">
                     <div class="health-label">HEALTH</div>
                     <div class="health-segments">
@@ -74,26 +65,34 @@
                     </div>
                 </div>
 
-                <!-- Hero Points -->
-                <div class="hero-points-container">
-                    <div class="section-label">HERO POINTS</div>
-                    <div class="controls">
-                        <button class="comic-btn minus" @click="changeHeroPoints(-1)">-</button>
-                        <div class="value-star">
-                            <div class="value">{{ characterSheet.hero.heroPoints.current }}</div>
-                        </div>
-                        <button class="comic-btn plus" @click="changeHeroPoints(1)">+</button>
-                    </div>
+                <div class="health-controls">
+                    <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
+                    <div class="health-value">{{ characterSheet.hero.health.current }}</div>
+                    <button class="comic-btn plus" @click="changeHealth(1)">+</button>
                 </div>
+            </div>
 
-                <!-- Modifier -->
-                <div class="modifier-container">
-                    <div class="section-label">MODIFIER</div>
-                    <div class="controls">
-                        <button class="comic-btn minus" @click="changeModifier(-1)">-</button>
-                        <div class="value">{{ characterSheet.hero.modifier.current }}</div>
-                        <button class="comic-btn plus" @click="changeModifier(1)">+</button>
-                    </div>
+            <!-- Main Menu Grid (Dark Theme) -->
+            <div class="main-menu-grid">
+                <div class="menu-btn" @click="setPage('powers-qualities')"> <!-- Using P&Q for Character temporarily -->
+                    <div class="menu-btn-icon character"></div>
+                    <div class="menu-btn-text">CHARACTER</div>
+                </div>
+                <div class="menu-btn" onclick="alert('Inventory not implemented')">
+                    <div class="menu-btn-icon inventory"></div>
+                    <div class="menu-btn-text">INVENTORY</div>
+                </div>
+                <div class="menu-btn" onclick="alert('Quests not implemented')">
+                    <div class="menu-btn-icon quest"></div>
+                    <div class="menu-btn-text">QUESTS</div>
+                </div>
+                <div class="menu-btn" onclick="alert('Map not implemented')">
+                    <div class="menu-btn-icon map"></div>
+                    <div class="menu-btn-text">MAP</div>
+                </div>
+                <div class="menu-btn" @click="setPage('settings')">
+                    <div class="menu-btn-icon settings"></div>
+                    <div class="menu-btn-text">SETTINGS</div>
                 </div>
             </div>
         </div>

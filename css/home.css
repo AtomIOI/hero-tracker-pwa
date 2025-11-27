@@ -1,0 +1,165 @@
+/* Home Page Specific Styles */
+
+/* Dark Theme Variables */
+:root {
+    --color-dark-bg: #1a1a1a;
+    --color-dark-panel: #2c2c2c;
+    --color-dark-btn: #333333;
+    --color-dark-text: #ffffff;
+    --color-accent-yellow: #fcd116;
+}
+
+/* Compact Status Panel */
+.status-panel.compact-status {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    height: auto;
+    /* Reset background if needed, or keep comic style */
+    background-color: #e6f2f5;
+}
+
+/* Override existing children for compact layout */
+.status-panel.compact-status .portrait-container {
+    margin-bottom: 0;
+    width: 60px;
+    height: 60px;
+}
+
+.status-panel.compact-status .comic-portrait {
+    width: 60px;
+    height: 60px;
+    border-width: 2px;
+}
+
+.status-panel.compact-status .health-bar-container {
+    flex-grow: 1;
+    height: 40px;
+    padding: 2px;
+    margin: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.status-panel.compact-status .health-label {
+    font-size: 0.8rem;
+    margin-right: 0;
+    margin-bottom: 2px;
+    padding-left: 2px;
+    line-height: 1;
+}
+
+.status-panel.compact-status .health-segments {
+    height: 12px;
+}
+
+.status-panel.compact-status .health-controls {
+    position: static; /* Remove absolute positioning */
+    transform: none;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.2rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.status-panel.compact-status .health-value {
+    font-size: 1.2rem;
+    min-width: 20px;
+}
+
+.status-panel.compact-status .comic-btn {
+    padding: 0.2rem 0.5rem;
+    font-size: 1rem;
+}
+
+/* Main Menu Grid (Dark Layout) */
+.main-menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-bottom: 5rem; /* Space for bottom nav */
+}
+
+.menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: var(--color-dark-btn);
+    color: var(--color-dark-text);
+    border: 3px solid var(--color-ink);
+    /* Wobbly border */
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px var(--color-ink);
+    transition: transform 0.1s;
+    text-decoration: none; /* In case it's an anchor */
+}
+
+.menu-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--color-ink);
+}
+
+.menu-btn-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 1.5rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Invert colors or use specific icons if needed */
+    filter: drop-shadow(1px 1px 0 #000);
+}
+
+.menu-btn-text {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px var(--color-ink);
+}
+
+/* Icon Placeholders (using emoji or existing assets) */
+.menu-btn-icon.character {
+    background-image: url('../assets/icons/icon_powers.png'); /* Placeholder */
+}
+.menu-btn-icon.inventory {
+    /* No asset, use CSS shape or emoji fallback */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+.menu-btn-icon.inventory::after {
+    content: '🎒';
+}
+.menu-btn-icon.quest {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+.menu-btn-icon.quest::after {
+    content: '📜';
+}
+.menu-btn-icon.map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+.menu-btn-icon.map::after {
+    content: '🗺️';
+}
+.menu-btn-icon.settings {
+    background-image: url('../assets/icons/icon_settings.png');
+}
