@@ -12,8 +12,7 @@ const urlsToCache = [
     '/js/storage.js',
     '/js/pwa.js',
     '/manifest.json',
-    '/assets/icons/icon-192.png',
-    '/assets/icons/icon-512.png',
+    '/assets/icons/Hero_Tracker_Icon.png',
     'https://unpkg.com/vue@3/dist/vue.global.js',
     'https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap'
 ];

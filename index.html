@@ -12,6 +12,15 @@
     <meta name="apple-mobile-web-app-title" content="Hero Tracker">
     <meta name="theme-color" content="#ec008c">
 
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="/assets/icons/Hero_Tracker_Icon.png">
+    <link rel="apple-touch-icon" href="/assets/icons/Hero_Tracker_Icon.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/Hero_Tracker_Icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/Hero_Tracker_Icon.png">
+
     <title>Hero Tracker - Nano Banana</title>
 
     <!-- Vue 3 CDN -->
@@ -231,6 +240,11 @@
         </div>
     </main>
 
+    <!-- Install PWA Button (shown when available) -->
+    <button id="install-button" class="comic-btn plus" style="display:none; position: fixed; right: 1rem; bottom: 5rem; z-index: 1000; width: auto; height: auto; padding: 0.5rem 1rem; border-radius: 8px;">
+        Install App
+    </button>
+
     <!-- Bottom Navigation -->
     <nav class="nav-bar">
         <div class="nav-item" :class="{ active: currentPage === 'home' }" @click="setPage('home')">
@@ -255,6 +269,72 @@
         </div>
     </nav>
 
+    <script type="module">
+        import PWAManager from './js/pwa.js';
+        const pwa = new PWAManager();
+        pwa.registerServiceWorker();
+        pwa.setupInstallPrompt();
+        const installBtn = document.getElementById('install-button');
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                await pwa.promptInstall();
+            });
+        }
+
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    character: {
+                        currentHealth: 30, // Changed from 75
+                        maxHealth: 30,     // Changed from 100
+                        heroPoints: 3,
+                        modifiers: 2
+                    }
+                };
+            },
+            computed: {
+                healthPercentage() {
+                    if (this.character.maxHealth === 0) return 0;
+                    return (this.character.currentHealth / this.character.maxHealth) * 100;
+                }
+            },
+            methods: {
+                getStatusMessage() {
+                    const pct = this.healthPercentage;
+                    if (pct >= 75) return "READY FOR ACTION!";
+                    if (pct >= 35) return "I CAN KEEP GOING!";
+                    if (pct >= 1) return "I NEED BACKUP!";
+                    return "DOWN FOR THE COUNT!";
+                },
+                changeHealth(amount) {
+                    const newHealth = this.character.currentHealth + amount;
+                    if (newHealth >= 0 && newHealth <= this.character.maxHealth) {
+                        this.character.currentHealth = newHealth;
+                    }
+                },
+                changeHeroPoints(amount) {
+                    const newPoints = this.character.heroPoints + amount;
+                    if (newPoints >= 0) {
+                        this.character.heroPoints = newPoints;
+                    }
+                },
+                getSegmentClass(segmentNumber) {
+                    const pct = this.healthPercentage;
+                    const segmentThreshold = segmentNumber * 10;
+
+                    if (pct < segmentThreshold) {
+                        return 'empty';
+                    }
+
+                    if (segmentNumber >= 6) return 'filled-green';
+                    if (segmentNumber >= 3) return 'filled-yellow';
+                    return 'filled-red';
+                }
+            }
+        }).mount('#app');
+    </script>
     <script src="js/app.js"></script>
     <script src="js/components/AbilityCard.js"></script>
     <script src="js/components/AddEditAbilityModal.js"></script>
