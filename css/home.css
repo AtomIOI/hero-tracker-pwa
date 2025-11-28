@@ -225,3 +225,65 @@
     display: inline;
     margin-left: 0;
 }
+
+/*
+    Profile Grid Styles
+    Added as part of Comic Theme Visual Update
+*/
+
+/* Grid Layout */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* Card Styling */
+.profile-card {
+    border: 2px solid var(--color-ink);
+    border-radius: 4px;
+    background: white;
+    box-shadow: 2px 2px 0px var(--color-ink);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-card-header {
+    background-color: var(--color-yellow);
+    color: var(--color-ink);
+    font-family: var(--font-heading);
+    font-size: 0.7rem; /* Small font for headers in grid */
+    padding: 0.2rem;
+    border-bottom: 2px solid var(--color-ink);
+    text-align: center;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    line-height: 1.1;
+}
+
+.profile-card-body {
+    padding: 0.3rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem; /* Compact text */
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-height: 2.5rem; /* Ensure some height if empty */
+    line-height: 1.1;
+    word-break: break-word; /* Prevent overflow */
+}
+
+/* Icons */
+.header-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
+}
