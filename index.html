@@ -59,7 +59,7 @@
                 </div>
                 <div class="portrait-container">
                     <div class="comic-portrait">
-                        <img src="default-profile.jpg" alt="Hero Profile Picture">
+                        <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
                     </div>
                     <div class="speech-bubble">
                         {{ getStatusMessage() }}
@@ -132,6 +132,25 @@
                     <div class="form-group mb-2">
                         <label class="block font-bold mb-1">Hero Name</label>
                         <input type="text" v-model="characterSheet.hero.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label class="block font-bold mb-1">Profile Picture</label>
+                        <input type="file" accept="image/*" @change="handleProfileImageUpload" :disabled="isProcessingImage" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        <div class="mt-2 flex items-center gap-2" v-if="characterSheet.hero.profileImage">
+                            <img :src="characterSheet.hero.profileImage" alt="Profile Preview" style="width: 64px; height: 64px; object-fit: cover; border: 2px solid #000; border-radius: 8px;">
+                            <button type="button" class="comic-btn minus" @click="clearProfileImage">Remove</button>
+                        </div>
+                        <div v-if="isProcessingImage" class="mt-2" style="display:flex; align-items:center; gap:8px; color:#0a0a0a;">
+                            <span class="spinner" style="width:16px; height:16px; border:3px solid #000; border-top-color: transparent; border-radius:50%; display:inline-block; animation: spin 0.8s linear infinite;"></span>
+                            <span>Processing image...</span>
+                        </div>
+                        <div v-if="profileImageError" class="mt-2" style="color: #e64c4c; font-weight: bold;">
+                            {{ profileImageError }}
+                        </div>
+                        <style>
+                            @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                        </style>
                     </div>
 
                     <div class="form-group mb-2">

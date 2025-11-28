@@ -20,6 +20,7 @@ const app = createApp({
                     gender: 'Unknown',
                     age: 25,
                     height: '6\'0"',
+                    profileImage: null,
                     health: {
                         current: 30,
                         max: 30,
@@ -58,7 +59,9 @@ const app = createApp({
             },
             showAddEditAbilityModal: false,
             editingAbility: null,
-            currentPage: 'home'
+            currentPage: 'home',
+            profileImageError: '',
+            isProcessingImage: false
         };
     },
     computed: {
@@ -167,6 +170,86 @@ const app = createApp({
             this.characterSheet.hero.health.ranges.yellowMin = Math.floor(max * 0.35);
             this.characterSheet.hero.health.ranges.redMin = 1;
         },
+        async handleProfileImageUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            this.profileImageError = '';
+            this.isProcessingImage = true;
+            try {
+                const dataUrl = await this.resizeImageFile(file, 512, 0.8);
+                // Final size guard (~1.5 MB)
+                const MAX_BYTES = Math.floor(1.5 * 1024 * 1024);
+                // Rough check: base64 expands ~33%. Convert to approx bytes length.
+                const approxBytes = Math.ceil((dataUrl.length - 'data:image/jpeg;base64,'.length) * 3 / 4);
+                if (approxBytes > MAX_BYTES) {
+                    this.profileImageError = `Compressed image is still too large (${(approxBytes / (1024*1024)).toFixed(2)} MB). Please choose a smaller image.`;
+                    return;
+                }
+                this.characterSheet.hero.profileImage = dataUrl;
+            } catch (err) {
+                console.error('Image processing failed', err);
+                this.profileImageError = 'Could not process image. Please try a different file.';
+            } finally {
+                this.isProcessingImage = false;
+            }
+        },
+        // Resize an image file into a JPEG Data URL, constraining longest side to maxDim
+        resizeImageFile(file, maxDim = 512, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                const fr = new FileReader();
+                fr.onerror = () => reject(new Error('File read error'));
+                fr.onload = () => {
+                    const img = new Image();
+                    img.onload = () => {
+                        try {
+                            let { width, height } = img;
+                            const scale = Math.min(1, maxDim / Math.max(width, height));
+                            const targetW = Math.max(1, Math.round(width * scale));
+                            const targetH = Math.max(1, Math.round(height * scale));
+                            const canvas = document.createElement('canvas');
+                            canvas.width = targetW;
+                            canvas.height = targetH;
+                            const ctx = canvas.getContext('2d');
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = 'high';
+                            ctx.drawImage(img, 0, 0, targetW, targetH);
+                            if (canvas.toBlob) {
+                                canvas.toBlob((blob) => {
+                                    if (!blob) {
+                                        // Fallback to dataURL if blob failed
+                                        try {
+                                            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                                            resolve(dataUrl);
+                                        } catch (e) {
+                                            reject(e);
+                                        }
+                                        return;
+                                    }
+                                    const fr2 = new FileReader();
+                                    fr2.onload = () => resolve(fr2.result);
+                                    fr2.onerror = () => reject(new Error('Blob read error'));
+                                    fr2.readAsDataURL(blob);
+                                }, 'image/jpeg', quality);
+                            } else {
+                                // iOS Safari fallback
+                                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                                resolve(dataUrl);
+                            }
+                        } catch (e) {
+                            reject(e);
+                        }
+                    };
+                    img.onerror = () => reject(new Error('Image load error'));
+                    img.src = fr.result;
+                };
+                fr.readAsDataURL(file);
+            });
+        },
+        clearProfileImage() {
+            this.characterSheet.hero.profileImage = null;
+            this.profileImageError = '';
+        },
+
         saveSettings() {
             this.updateHealthRanges();
             try {
