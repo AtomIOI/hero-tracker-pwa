@@ -91,8 +91,12 @@
                 <div class="hero-profile-panel wobbly-box bg-dots">
                     <div class="section-label">HERO PROFILE</div>
                     <div class="profile-content">
-                        <p class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</p>
-                        <p class="hero-archetype">{{ characterSheet.hero.archetype || 'No Archetype' }}</p>
+                        <ul class="profile-list">
+                            <li><span class="label">Background:</span> {{ characterSheet.hero.background || 'N/A' }}</li>
+                            <li><span class="label">Power Source:</span> {{ characterSheet.hero.powerSource || 'N/A' }}</li>
+                            <li><span class="label">Archetype:</span> {{ characterSheet.hero.archetype || 'N/A' }}</li>
+                            <li><span class="label">Personality:</span> {{ characterSheet.hero.personality || 'N/A' }}</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -100,8 +104,23 @@
             <!-- Principles Section -->
             <div class="principles-panel wobbly-box bg-dots">
                 <div class="section-label">PRINCIPLES</div>
-                <div class="principles-content">
-                    <p>{{ characterSheet.hero.principles || 'No principles defined.' }}</p>
+                <div class="principles-content-grid">
+                    <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="principle-card">
+                        <div class="principle-header">{{ principle.name || 'Principle Name' }}</div>
+                        <div class="principle-body">
+                            <div class="principle-roleplay">
+                                <span class="principle-text">{{ principle.duringRoleplay || 'During roleplay instructions...' }}</span>
+                            </div>
+                            <div class="principle-twist">
+                                <span class="twist-label minor">Minor Twist:</span>
+                                <span class="twist-text">{{ principle.minorTwist || 'Minor twist description...' }}</span>
+                            </div>
+                            <div class="principle-twist">
+                                <span class="twist-label major">Major Twist:</span>
+                                <span class="twist-text">{{ principle.majorTwist || 'Major twist description...' }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
