@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/comic-theme.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/dice.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/desktop.css">
 </head>
@@ -326,6 +327,11 @@
         <div v-if="currentPage === 'powers-qualities'">
             <powers-qualities-page :hero="characterSheet.hero"></powers-qualities-page>
         </div>
+
+        <!-- Dice Page -->
+        <div v-if="currentPage === 'dice'">
+            <dice-page :hero="characterSheet.hero"></dice-page>
+        </div>
     </main>
 
     <!-- Install PWA Button (shown when available) -->
@@ -374,6 +380,7 @@
     <script src="js/components/AddEditAbilityModal.js"></script>
     <script src="js/components/AddEditTraitModal.js"></script>
     <script src="js/components/PowersQualitiesPage.js"></script>
+    <script src="js/components/DicePage.js"></script>
     <script>
       if (window.__heroApp) {
         window.__heroApp.mount('#app');

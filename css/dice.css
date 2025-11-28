@@ -1,0 +1,299 @@
+/* Dice Page Specific Styles */
+
+.dice-tray-header {
+    background-color: var(--color-yellow);
+    color: var(--color-ink);
+    padding: 1rem;
+    text-align: center;
+    border: 3px solid var(--color-ink);
+    border-radius: 5px 255px 3px 25px / 255px 5px 225px 5px;
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    box-shadow: 4px 4px 0px var(--color-ink);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+/* Dice Selection Area */
+.dice-selection-area {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    perspective: 1000px;
+}
+
+.die-slot {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border: 3px solid var(--color-ink);
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px var(--color-ink);
+    transition: transform 0.2s;
+    position: relative;
+}
+
+.die-slot:active {
+    transform: scale(0.95);
+}
+
+.die-slot.selected {
+    background-color: var(--color-cyan);
+    color: white;
+    text-shadow: 1px 1px 0 #000;
+}
+
+/* Roll Button */
+.roll-button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.roll-btn {
+    width: 150px;
+    height: 120px;
+    background: var(--color-yellow);
+    color: var(--color-ink);
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    border: 3px solid var(--color-ink);
+    /* Starburst shape using clip-path or custom borders */
+    /* Since we want comic style, let's use a rough polygon clip-path if possible or just wobbly borders with radial gradient */
+    border-radius: 50% 20% 50% 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px var(--color-ink);
+    transition: transform 0.1s;
+    text-transform: uppercase;
+    transform: rotate(-5deg);
+}
+
+.roll-btn:active {
+    transform: rotate(-5deg) scale(0.95);
+    box-shadow: 2px 2px 0px var(--color-ink);
+}
+
+/* Results Area */
+.results-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.result-box {
+    flex: 1;
+    max-width: 100px;
+    background: white;
+    border: 3px solid var(--color-ink);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: 0.5rem;
+    text-align: center;
+    box-shadow: 3px 3px 0px var(--color-ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.result-label {
+    font-family: var(--font-body);
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--color-ink);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.2rem;
+}
+
+.result-value {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.result-detail {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+    color: #666;
+}
+
+/* Color coding based on reference */
+.result-box.min {
+    background-color: #d1f7ff; /* Light Cyan */
+}
+.result-box.min .result-label {
+    background-color: var(--color-cyan);
+    color: white;
+    border: 2px solid var(--color-ink);
+    transform: rotate(-2deg);
+    margin: -10px -10px 5px -10px;
+    padding: 2px 0;
+    width: calc(100% + 20px);
+}
+
+.result-box.mid {
+    background-color: #fff9c4; /* Light Yellow */
+    transform: scale(1.1); /* Emphasize Mid */
+    z-index: 10;
+}
+.result-box.mid .result-label {
+    background-color: var(--color-yellow);
+    color: var(--color-ink);
+    border: 2px solid var(--color-ink);
+    margin: -15px -10px 5px -10px;
+    padding: 2px 0;
+    width: calc(100% + 20px);
+}
+
+.result-box.max {
+    background-color: #dbfadd; /* Light Green */
+}
+.result-box.max .result-label {
+    background-color: var(--color-green);
+    color: white;
+    border: 2px solid var(--color-ink);
+    transform: rotate(2deg);
+    margin: -10px -10px 5px -10px;
+    padding: 2px 0;
+    width: calc(100% + 20px);
+}
+
+/* Modifiers Section */
+.modifiers-section {
+    padding: 1rem;
+    background: white;
+    border: 3px solid var(--color-ink);
+    border-radius: 15px 255px 15px 255px / 255px 15px 225px 15px;
+    box-shadow: 4px 4px 0px var(--color-ink);
+    margin-bottom: 6rem;
+}
+
+.modifiers-header {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: var(--color-yellow);
+    text-decoration-thickness: 3px;
+}
+
+.modifiers-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.modifier-chip {
+    display: flex;
+    align-items: center;
+    background: #f0f0f0;
+    border: 2px solid var(--color-ink);
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: transform 0.1s;
+    user-select: none;
+}
+
+.modifier-chip.active {
+    background-color: var(--color-yellow);
+    transform: rotate(-1deg) scale(1.05);
+    box-shadow: 2px 2px 0px var(--color-ink);
+}
+
+.modifier-chip.persistent {
+    border-left: 5px solid var(--color-magenta);
+}
+
+.modifier-chip.temporary {
+    border-left: 5px solid var(--color-cyan);
+}
+
+.modifier-value {
+    margin-left: 0.5rem;
+    background: var(--color-ink);
+    color: white;
+    padding: 0 0.3rem;
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
+.add-modifier-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background: #eee;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 2px dashed var(--color-ink);
+}
+
+.add-modifier-form input {
+    flex: 1;
+    padding: 0.3rem;
+    border: 2px solid var(--color-ink);
+    font-family: var(--font-body);
+}
+
+.add-modifier-form select {
+    padding: 0.3rem;
+    border: 2px solid var(--color-ink);
+    font-family: var(--font-body);
+}
+
+.delete-mod-btn {
+    margin-left: 0.5rem;
+    color: var(--color-magenta);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Modal for Dice Selection */
+.dice-selector-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dice-selector-content {
+    background: white;
+    padding: 2rem;
+    border: 3px solid var(--color-ink);
+    border-radius: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.die-option {
+    width: 60px;
+    height: 60px;
+    background: var(--color-yellow);
+    border: 2px solid var(--color-ink);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
