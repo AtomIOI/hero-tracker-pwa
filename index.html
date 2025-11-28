@@ -77,6 +77,44 @@
 
             <!-- Split Row: Hero Points & Hero Profile -->
             <div class="split-row">
+                <div class="hero-profile-panel wobbly-box bg-dots">
+                    <div class="section-label">HERO PROFILE</div>
+                    <div class="profile-content">
+                        <div class="profile-grid">
+                            <!-- Background Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">BACKGROUND</div>
+                                <div class="profile-card-body">{{ characterSheet.hero.background || 'N/A' }}</div>
+                            </div>
+                            <!-- Power Source Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">POWER SOURCE</div>
+                                <div class="profile-card-body">{{ characterSheet.hero.powerSource || 'N/A' }}</div>
+                            </div>
+                            <!-- Archetype Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    ARCHETYPE
+                                    <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <div class="profile-card-body">{{ characterSheet.hero.archetype || 'N/A' }}</div>
+                            </div>
+                            <!-- Personality Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    PERSONALITY
+                                    <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <div class="profile-card-body">{{ characterSheet.hero.personality || 'N/A' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="hero-points-panel wobbly-box bg-dots">
                     <div class="section-label">HERO POINTS</div>
                     <div class="hero-points-content">
@@ -85,18 +123,6 @@
                             <div class="value">{{ characterSheet.hero.heroPoints.current }}</div>
                         </div>
                         <button class="comic-btn plus" @click="changeHeroPoints(1)">+</button>
-                    </div>
-                </div>
-
-                <div class="hero-profile-panel wobbly-box bg-dots">
-                    <div class="section-label">HERO PROFILE</div>
-                    <div class="profile-content">
-                        <ul class="profile-list">
-                            <li><span class="label">Background:</span> {{ characterSheet.hero.background || 'N/A' }}</li>
-                            <li><span class="label">Power Source:</span> {{ characterSheet.hero.powerSource || 'N/A' }}</li>
-                            <li><span class="label">Archetype:</span> {{ characterSheet.hero.archetype || 'N/A' }}</li>
-                            <li><span class="label">Personality:</span> {{ characterSheet.hero.personality || 'N/A' }}</li>
-                        </ul>
                     </div>
                 </div>
             </div>
