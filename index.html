@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/comic-theme.css">
+    <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/desktop.css">
 </head>
@@ -50,34 +51,35 @@
             </div>
 
             <!-- Current Status Panel -->
-            <div class="status-panel">
-                <div class="section-label">CURRENT STATUS</div>
-                <div class="health-controls">
-                    <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
-                    <div class="health-value">{{ characterSheet.hero.health.current }}</div>
-                    <button class="comic-btn plus" @click="changeHealth(1)">+</button>
-                </div>
+            <div class="status-panel compact-status">
                 <div class="portrait-container">
                     <div class="comic-portrait">
                         <img src="default-profile.jpg" alt="Hero Profile Picture">
                     </div>
-                    <div class="speech-bubble">
-                        {{ getStatusMessage() }}
-                    </div>
                 </div>
 
-                <!-- Health Bar -->
-                <div class="health-bar-container">
-                    <div class="health-label">HEALTH</div>
-                    <div class="health-segments">
-                        <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
+                <div class="health-section">
+                    <div class="health-controls">
+                        <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
+                        <div class="health-value">{{ characterSheet.hero.health.current }}</div>
+                        <button class="comic-btn plus" @click="changeHealth(1)">+</button>
+                    </div>
+
+                    <!-- Health Bar -->
+                    <div class="health-bar-container">
+                        <div class="health-label">HEALTH</div>
+                        <div class="health-segments">
+                            <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Hero Points -->
-                <div class="hero-points-container">
+            <!-- Split Row: Hero Points & Hero Profile -->
+            <div class="split-row">
+                <div class="hero-points-panel wobbly-box bg-dots">
                     <div class="section-label">HERO POINTS</div>
-                    <div class="controls">
+                    <div class="hero-points-content">
                         <button class="comic-btn minus" @click="changeHeroPoints(-1)">-</button>
                         <div class="value-star">
                             <div class="value">{{ characterSheet.hero.heroPoints.current }}</div>
@@ -86,14 +88,20 @@
                     </div>
                 </div>
 
-                <!-- Modifier -->
-                <div class="modifier-container">
-                    <div class="section-label">MODIFIER</div>
-                    <div class="controls">
-                        <button class="comic-btn minus" @click="changeModifier(-1)">-</button>
-                        <div class="value">{{ characterSheet.hero.modifier.current }}</div>
-                        <button class="comic-btn plus" @click="changeModifier(1)">+</button>
+                <div class="hero-profile-panel wobbly-box bg-dots">
+                    <div class="section-label">HERO PROFILE</div>
+                    <div class="profile-content">
+                        <p class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</p>
+                        <p class="hero-archetype">{{ characterSheet.hero.archetype || 'No Archetype' }}</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- Principles Section -->
+            <div class="principles-panel wobbly-box bg-dots">
+                <div class="section-label">PRINCIPLES</div>
+                <div class="principles-content">
+                    <p>{{ characterSheet.hero.principles || 'No principles defined.' }}</p>
                 </div>
             </div>
         </div>
@@ -179,9 +187,24 @@
                         <textarea v-model="characterSheet.hero.background" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24"></textarea>
                     </div>
 
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Principles</label>
-                        <textarea v-model="characterSheet.hero.principles" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24"></textarea>
+                    <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="mb-4 p-2 border border-gray-400 rounded bg-gray-50">
+                        <h3 class="font-bangers text-lg mb-2 text-blue-800">Principle {{ index + 1 }}</h3>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1">Name</label>
+                            <input type="text" v-model="principle.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1">During Roleplay</label>
+                            <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="During roleplay, you..."></textarea>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1 text-yellow-600">Minor Twist</label>
+                            <textarea v-model="principle.minorTwist" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="Minor twist..."></textarea>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="block font-bold mb-1 text-red-600">Major Twist</label>
+                            <textarea v-model="principle.majorTwist" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="Major twist..."></textarea>
+                        </div>
                     </div>
                 </div>
 
