@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/comic-theme.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/dice.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/desktop.css">
@@ -175,40 +176,61 @@
 
             <div class="settings-container p-4">
                 <!-- Identity Section -->
-                <div class="comic-card mb-4 p-4 relative bg-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="section-label absolute -top-3 left-4 bg-yellow-400 border-2 border-black px-2 font-bangers text-xl">IDENTITY</div>
+                <div class="wobbly-box mb-6 bg-white relative p-4">
+                    <div class="section-label">IDENTITY</div>
 
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Player Name</label>
-                        <input type="text" v-model="characterSheet.hero.playerName" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="form-group">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">HERO NAME</label>
+                            <input type="text" v-model="characterSheet.hero.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        </div>
+                        <div class="form-group">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">PLAYER NAME</label>
+                            <input type="text" v-model="characterSheet.hero.playerName" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        </div>
                     </div>
 
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Hero Name</label>
-                        <input type="text" v-model="characterSheet.hero.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                    </div>
+                    <!-- Profile Picture Upload -->
+                    <div class="form-group mb-4">
+                        <label class="block font-bangers tracking-wide text-lg mb-2">PROFILE PICTURE</label>
+                        <div class="flex items-start gap-4">
+                            <!-- Clickable Image Area -->
+                            <div class="relative group cursor-pointer" @click="$refs.fileInput.click()" style="width: 100px; height: 100px;">
+                                <div class="w-full h-full border-2 border-black rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all">
+                                    <img v-if="characterSheet.hero.profileImage" :src="characterSheet.hero.profileImage" class="w-full h-full object-cover">
+                                    <span v-else class="text-4xl text-gray-400">+</span>
 
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Profile Picture</label>
-                        <input type="file" accept="image/*" @change="handleProfileImageUpload" :disabled="isProcessingImage" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        <div class="mt-2 flex items-center gap-2" v-if="characterSheet.hero.profileImage">
-                            <img :src="characterSheet.hero.profileImage" alt="Profile Preview" style="width: 64px; height: 64px; object-fit: cover; border: 2px solid #000; border-radius: 8px;">
-                            <button type="button" class="comic-btn minus" @click="clearProfileImage">Remove</button>
+                                    <!-- Hover Overlay -->
+                                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold transition-opacity">
+                                        CHANGE
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="flex flex-col gap-2 justify-center h-[100px]">
+                                <input type="file" ref="fileInput" accept="image/*" @change="handleProfileImageUpload" class="hidden">
+                                <button type="button" class="comic-btn primary" @click="$refs.fileInput.click()">
+                                    {{ characterSheet.hero.profileImage ? 'CHANGE PHOTO' : 'UPLOAD PHOTO' }}
+                                </button>
+                                <button v-if="characterSheet.hero.profileImage" type="button" class="comic-btn minus text-sm py-1" @click="clearProfileImage" style="font-size: 0.9rem;">
+                                    REMOVE
+                                </button>
+                            </div>
                         </div>
-                        <div v-if="isProcessingImage" class="mt-2" style="display:flex; align-items:center; gap:8px; color:#0a0a0a;">
-                            <span class="spinner" style="width:16px; height:16px; border:3px solid #000; border-top-color: transparent; border-radius:50%; display:inline-block; animation: spin 0.8s linear infinite;"></span>
-                            <span>Processing image...</span>
+
+                        <!-- Status Messages -->
+                         <div v-if="isProcessingImage" class="mt-2 flex items-center gap-2 text-sm font-bold">
+                            <span class="spinner w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+                            <span>Processing...</span>
                         </div>
-                        <div v-if="profileImageError" class="mt-2" style="color: #e64c4c; font-weight: bold;">
+                        <div v-if="profileImageError" class="mt-2 text-red-600 font-bold text-sm">
                             {{ profileImageError }}
                         </div>
-                        <style>
-                            @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-                        </style>
                     </div>
 
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Alias</label>
+                    <div class="form-group mb-4">
+                        <label class="block font-bangers tracking-wide text-lg mb-1">ALIAS</label>
                         <input type="text" v-model="characterSheet.hero.alias" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                     </div>
 
@@ -229,66 +251,88 @@
                 </div>
 
                 <!-- Origins Section -->
-                <div class="comic-card mb-4 p-4 relative bg-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="section-label absolute -top-3 left-4 bg-yellow-400 border-2 border-black px-2 font-bangers text-xl">ORIGINS</div>
+                <div class="wobbly-box mb-6 bg-white relative p-4">
+                    <div class="section-label">ORIGINS</div>
 
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Archetype</label>
-                        <input type="text" v-model="characterSheet.hero.archetype" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Power Source</label>
-                        <input type="text" v-model="characterSheet.hero.powerSource" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Personality</label>
-                        <textarea v-model="characterSheet.hero.personality" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20"></textarea>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label class="block font-bold mb-1">Background</label>
-                        <textarea v-model="characterSheet.hero.background" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24"></textarea>
-                    </div>
-
-                    <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="mb-4 p-2 border border-gray-400 rounded bg-gray-50">
-                        <h3 class="font-bangers text-lg mb-2 text-blue-800">Principle {{ index + 1 }}</h3>
-                        <div class="form-group mb-2">
-                            <label class="block font-bold mb-1">Name</label>
-                            <input type="text" v-model="principle.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="form-group">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">ARCHETYPE</label>
+                            <input type="text" v-model="characterSheet.hero.archetype" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                         </div>
-                        <div class="form-group mb-2">
-                            <label class="block font-bold mb-1">During Roleplay</label>
-                            <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="During roleplay, you..."></textarea>
+                        <div class="form-group">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">POWER SOURCE</label>
+                            <input type="text" v-model="characterSheet.hero.powerSource" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                         </div>
-                        <div class="form-group mb-2">
-                            <label class="block font-bold mb-1 text-yellow-600">Minor Twist</label>
-                            <textarea v-model="principle.minorTwist" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="Minor twist..."></textarea>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label class="block font-bold mb-1 text-red-600">Major Twist</label>
-                            <textarea v-model="principle.majorTwist" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-16" placeholder="Major twist..."></textarea>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="block font-bangers tracking-wide text-lg mb-1">PERSONALITY</label>
+                        <textarea v-model="characterSheet.hero.personality" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20 resize-none"></textarea>
+                    </div>
+
+                    <div class="form-group mb-6">
+                        <label class="block font-bangers tracking-wide text-lg mb-1">BACKGROUND</label>
+                        <textarea v-model="characterSheet.hero.background" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- Principles Section -->
+                <div class="wobbly-box mb-6 bg-white relative p-4">
+                    <div class="section-label">PRINCIPLES</div>
+                    <div class="space-y-6">
+                        <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="relative">
+                            <!-- Principle Card Container -->
+                             <div class="border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded overflow-hidden">
+                                <!-- Header -->
+                                <div class="bg-yellow-400 border-b-2 border-black p-2 flex justify-between items-center">
+                                    <h3 class="font-bangers text-xl tracking-wide">PRINCIPLE {{ index + 1 }}</h3>
+                                </div>
+
+                                <!-- Body -->
+                                <div class="p-4 space-y-3">
+                                    <div class="form-group">
+                                        <label class="block font-bold text-sm mb-1 uppercase text-gray-600">Name</label>
+                                        <input type="text" v-model="principle.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded" placeholder="Principle of...">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During Roleplay</label>
+                                        <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="During roleplay, you..."></textarea>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="form-group">
+                                            <label class="block font-bangers tracking-wide text-yellow-600 text-lg mb-1">MINOR TWIST</label>
+                                            <textarea v-model="principle.minorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Minor twist..."></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="block font-bangers tracking-wide text-red-600 text-lg mb-1">MAJOR TWIST</label>
+                                            <textarea v-model="principle.majorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Major twist..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Stats Section -->
-                <div class="comic-card mb-4 p-4 relative bg-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="section-label absolute -top-3 left-4 bg-yellow-400 border-2 border-black px-2 font-bangers text-xl">STATS</div>
+                <div class="wobbly-box mb-6 bg-white relative p-4">
+                    <div class="section-label">STATS</div>
 
-                    <div class="form-group mb-4">
-                        <label class="block font-bold mb-1">Max Health</label>
+                    <div class="form-group mb-6">
+                        <label class="block font-bangers tracking-wide text-lg mb-1">MAX HEALTH</label>
                         <input type="number" v-model.number="characterSheet.hero.health.max" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        <p class="text-sm text-gray-600">Changing this updates status ranges.</p>
+                        <p class="text-sm text-gray-500 font-bold mt-1 italic">Changing this automatically updates status ranges.</p>
                     </div>
 
                     <div class="form-group">
-                        <label class="block font-bold mb-2">Status Dice Sizes</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div>
-                                <label class="block text-sm mb-1 text-green-600 font-bold">Green</label>
-                                <select v-model.number="characterSheet.hero.statusDice.green" class="w-full border-2 border-black p-2 font-comic rounded bg-green-100">
+                        <label class="block font-bangers tracking-wide text-lg mb-3">STATUS DICE</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <!-- Green Die -->
+                            <div class="flex flex-col">
+                                <div class="bg-green-500 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">GREEN</div>
+                                <select v-model.number="characterSheet.hero.statusDice.green" class="w-full border-2 border-black p-2 font-comic text-xl text-center rounded-b-lg bg-green-50 focus:bg-white transition-colors">
                                     <option :value="4">d4</option>
                                     <option :value="6">d6</option>
                                     <option :value="8">d8</option>
@@ -296,9 +340,11 @@
                                     <option :value="12">d12</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="block text-sm mb-1 text-yellow-600 font-bold">Yellow</label>
-                                <select v-model.number="characterSheet.hero.statusDice.yellow" class="w-full border-2 border-black p-2 font-comic rounded bg-yellow-100">
+
+                            <!-- Yellow Die -->
+                            <div class="flex flex-col">
+                                <div class="bg-yellow-400 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-black">YELLOW</div>
+                                <select v-model.number="characterSheet.hero.statusDice.yellow" class="w-full border-2 border-black p-2 font-comic text-xl text-center rounded-b-lg bg-yellow-50 focus:bg-white transition-colors">
                                     <option :value="4">d4</option>
                                     <option :value="6">d6</option>
                                     <option :value="8">d8</option>
@@ -306,9 +352,11 @@
                                     <option :value="12">d12</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="block text-sm mb-1 text-red-600 font-bold">Red</label>
-                                <select v-model.number="characterSheet.hero.statusDice.red" class="w-full border-2 border-black p-2 font-comic rounded bg-red-100">
+
+                            <!-- Red Die -->
+                            <div class="flex flex-col">
+                                <div class="bg-red-600 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">RED</div>
+                                <select v-model.number="characterSheet.hero.statusDice.red" class="w-full border-2 border-black p-2 font-comic text-xl text-center rounded-b-lg bg-red-50 focus:bg-white transition-colors">
                                     <option :value="4">d4</option>
                                     <option :value="6">d6</option>
                                     <option :value="8">d8</option>
@@ -320,7 +368,7 @@
                     </div>
                 </div>
 
-                <button class="comic-btn primary full-width" @click="saveSettings">SAVE SETTINGS</button>
+                <button class="comic-btn primary full-width" style="margin-bottom: 2rem;" @click="saveSettings">SAVE SETTINGS</button>
             </div>
         </div>
         <!-- Powers & Qualities Page -->
