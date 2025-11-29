@@ -20,13 +20,13 @@ app.component('dice-page', {
 
         <!-- Roll Button -->
         <div class="roll-button-container">
-            <div class="roll-btn" @click="rollDice">
-                ROLL!
+            <div class="roll-btn" :class="{ 'is-rolling': isRolling }" @click="rollDice">
+                {{ isRolling ? '...' : 'ROLL!' }}
             </div>
         </div>
 
         <!-- Results Area -->
-        <div class="results-container" v-if="rollResults">
+        <div class="results-container" v-if="rollResults" :class="{ shaking: isRolling }">
             <!-- Min -->
             <div class="result-box min">
                 <div class="result-label">MIN</div>
@@ -106,6 +106,7 @@ app.component('dice-page', {
             availableDice: [4, 6, 8, 10, 12],
             activeSlot: null,
             showDieSelector: false,
+            isRolling: false,
             rollResults: null,
             modifiers: [], // { id, name, value, type, active }
             newModName: '',
@@ -143,38 +144,44 @@ app.component('dice-page', {
             this.closeDieSelector();
         },
         rollDice() {
-            const results = this.selectedDice.map(die => {
-                return {
-                    die: die,
-                    value: Math.floor(Math.random() * die) + 1
+            if (this.isRolling) return;
+            this.isRolling = true;
+
+            // Function to generate a single roll state
+            const generateRoll = () => {
+                const results = this.selectedDice.map(die => {
+                    return {
+                        die: die,
+                        value: Math.floor(Math.random() * die) + 1
+                    };
+                });
+
+                // Sort by value
+                const sortedResults = [...results].sort((a, b) => a.value - b.value);
+
+                this.rollResults = {
+                    min: sortedResults[0].value,
+                    mid: sortedResults[1].value,
+                    max: sortedResults[2].value,
+                    rawRolls: sortedResults
                 };
-            });
-
-            // Sort by value to find Min, Mid, Max
-            // Note: If duplicates exist, standard numeric sort works.
-            // SCRPG sorting: If ties exist, player usually chooses which physical die represents which slot,
-            // but effectively for value purposes, it's just sorted numbers.
-            const sortedValues = results.map(r => r.value).sort((a, b) => a - b);
-
-            // Raw rolls sorted for display matching logic
-            // We want to keep track of which physical die size went where?
-            // The prompt image shows "Min: d2, d3, 1 Total: 6" which was confusing but clarified as just "one number".
-            // The visual requirement shows "d8, d12" etc.
-            // If I roll d4(4), d8(4), d12(2).
-            // Sorted: 2 (d12), 4 (d4), 4 (d8).
-            // Min: 2 (from d12). Mid: 4 (from d4?). Max: 4 (from d8?).
-            // Strictly speaking, sorting the *values* is enough for the math.
-            // But visually I want to show which die rolled what if possible.
-
-            // Let's attach original die size to the sorted values
-            const sortedResults = [...results].sort((a, b) => a.value - b.value);
-
-            this.rollResults = {
-                min: sortedResults[0].value,
-                mid: sortedResults[1].value,
-                max: sortedResults[2].value,
-                rawRolls: sortedResults // Array of { die, value } ordered min->max
             };
+
+            // Start animation loop
+            let steps = 0;
+            const maxSteps = 10; // 10 steps * 60ms = 600ms duration
+
+            // Initial roll
+            generateRoll();
+
+            const interval = setInterval(() => {
+                generateRoll();
+                steps++;
+                if (steps >= maxSteps) {
+                    clearInterval(interval);
+                    this.isRolling = false;
+                }
+            }, 60);
         },
         addModifier() {
             if (!this.newModName) return;
