@@ -53,28 +53,30 @@
 
             <!-- Current Status Panel -->
             <div class="status-panel compact-status">
-                <div class="hero-identity">
-                    <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
-                    <div class="hero-archetype">{{ characterSheet.hero.archetype || 'No Archetype' }}</div>
-                </div>
-
                 <div class="portrait-container">
                     <div class="comic-portrait">
                         <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
                     </div>
                 </div>
 
-                <div class="health-section">
-                    <div class="health-readout-box">
-                        {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
+                <div class="status-info-column">
+                    <div class="hero-identity">
+                        <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
+                        <div class="hero-archetype">{{ characterSheet.hero.archetype || 'No Archetype' }}</div>
                     </div>
-                    <!-- Health Bar with Embedded Controls -->
-                    <div class="health-bar-container">
-                        <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
-                        <div class="health-segments">
-                            <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
+
+                    <div class="health-section">
+                        <div class="health-readout-box">
+                            {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
                         </div>
-                        <button class="comic-btn plus" @click="changeHealth(1)">+</button>
+                        <!-- Health Bar with Embedded Controls -->
+                        <div class="health-bar-container">
+                            <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
+                            <div class="health-segments">
+                                <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
+                            </div>
+                            <button class="comic-btn plus" @click="changeHealth(1)">+</button>
+                        </div>
                     </div>
                 </div>
             </div>
