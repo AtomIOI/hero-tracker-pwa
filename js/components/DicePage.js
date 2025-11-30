@@ -9,19 +9,20 @@ app.component('dice-page', {
 
         <!-- Dice Selection Area -->
         <div class="dice-selection-area">
+            <div v-if="impactText" class="impact-text-overlay">{{ impactText }}</div>
             <div v-for="(die, index) in selectedDice"
                  :key="index"
-                 class="die-slot"
-                 :class="{ selected: activeSlot === index }"
+                 class="die-slot-img-container"
+                 :class="{ selected: activeSlot === index, shaking: isRolling }"
                  @click="openDieSelector(index)">
-                d{{ die }}
+                <img :src="'assets/dice/D' + die + '.png'" class="die-img" :alt="'d'+die" />
             </div>
         </div>
 
         <!-- Roll Button -->
         <div class="roll-button-container">
-            <div class="roll-btn" @click="rollDice">
-                ROLL!
+            <div class="roll-btn" @click="rollDice" :class="{ disabled: isRolling }">
+                {{ isRolling ? '...' : 'ROLL!' }}
             </div>
         </div>
 
@@ -107,6 +108,8 @@ app.component('dice-page', {
             activeSlot: null,
             showDieSelector: false,
             rollResults: null,
+            isRolling: false,
+            impactText: null,
             modifiers: [], // { id, name, value, type, active }
             newModName: '',
             newModValue: 1,
@@ -143,38 +146,46 @@ app.component('dice-page', {
             this.closeDieSelector();
         },
         rollDice() {
-            const results = this.selectedDice.map(die => {
-                return {
-                    die: die,
-                    value: Math.floor(Math.random() * die) + 1
+            if (this.isRolling) return;
+
+            this.isRolling = true;
+            this.impactText = null;
+            this.rollResults = null;
+
+            // Simulate rolling time
+            setTimeout(() => {
+                const results = this.selectedDice.map(die => {
+                    return {
+                        die: die,
+                        value: Math.floor(Math.random() * die) + 1
+                    };
+                });
+
+                const sortedResults = [...results].sort((a, b) => a.value - b.value);
+
+                this.rollResults = {
+                    min: sortedResults[0].value,
+                    mid: sortedResults[1].value,
+                    max: sortedResults[2].value,
+                    rawRolls: sortedResults
                 };
-            });
 
-            // Sort by value to find Min, Mid, Max
-            // Note: If duplicates exist, standard numeric sort works.
-            // SCRPG sorting: If ties exist, player usually chooses which physical die represents which slot,
-            // but effectively for value purposes, it's just sorted numbers.
-            const sortedValues = results.map(r => r.value).sort((a, b) => a - b);
+                this.isRolling = false;
+                this.determineImpactText(this.rollResults.max);
 
-            // Raw rolls sorted for display matching logic
-            // We want to keep track of which physical die size went where?
-            // The prompt image shows "Min: d2, d3, 1 Total: 6" which was confusing but clarified as just "one number".
-            // The visual requirement shows "d8, d12" etc.
-            // If I roll d4(4), d8(4), d12(2).
-            // Sorted: 2 (d12), 4 (d4), 4 (d8).
-            // Min: 2 (from d12). Mid: 4 (from d4?). Max: 4 (from d8?).
-            // Strictly speaking, sorting the *values* is enough for the math.
-            // But visually I want to show which die rolled what if possible.
+            }, 800);
+        },
+        determineImpactText(maxValue) {
+            const impacts = [
+                { text: 'ZAP!', threshold: 0, color: 'var(--color-cyan)' },
+                { text: 'BAM!', threshold: 5, color: 'var(--color-yellow)' },
+                { text: 'CRASH!', threshold: 8, color: 'var(--color-magenta)' },
+                { text: 'KA-POW!', threshold: 11, color: '#ff0000' } // Max logic
+            ];
 
-            // Let's attach original die size to the sorted values
-            const sortedResults = [...results].sort((a, b) => a.value - b.value);
-
-            this.rollResults = {
-                min: sortedResults[0].value,
-                mid: sortedResults[1].value,
-                max: sortedResults[2].value,
-                rawRolls: sortedResults // Array of { die, value } ordered min->max
-            };
+            // Find the highest threshold met
+            const impact = impacts.slice().reverse().find(i => maxValue >= i.threshold);
+            this.impactText = impact ? impact.text : 'POW!';
         },
         addModifier() {
             if (!this.newModName) return;

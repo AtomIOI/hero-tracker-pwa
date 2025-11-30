@@ -18,36 +18,89 @@
 .dice-selection-area {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: center;
+    gap: 0rem; /* Tighter for clustering */
     margin-bottom: 2rem;
     perspective: 1000px;
+    position: relative;
+    min-height: 150px;
 }
 
-.die-slot {
-    width: 80px;
-    height: 80px;
-    background: white;
-    border: 3px solid var(--color-ink);
-    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+/* Cluster styling tweak: allow slight overlap via negative margins or transforms?
+   Or just keep them close. The image suggests a group.
+   We will rely on the natural shapes of the images. */
+
+.die-slot-img-container {
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 3px 3px 0px var(--color-ink);
-    transition: transform 0.2s;
-    position: relative;
+    width: 100px;
+    height: 100px;
 }
 
-.die-slot:active {
+.die-img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(3px 3px 0px var(--color-ink));
+    transition: transform 0.2s;
+}
+
+.die-slot-img-container:active .die-img {
     transform: scale(0.95);
 }
 
-.die-slot.selected {
-    background-color: var(--color-cyan);
-    color: white;
-    text-shadow: 1px 1px 0 #000;
+.die-slot-img-container.selected .die-img {
+    filter: drop-shadow(0px 0px 5px var(--color-cyan)) drop-shadow(3px 3px 0px var(--color-ink));
+    transform: scale(1.1);
+}
+
+/* Shaking Animation */
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.die-slot-img-container.shaking .die-img {
+    animation: shake 0.5s infinite;
+}
+
+/* Impact Text Overlay */
+.impact-text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-5deg);
+    font-family: var(--font-heading);
+    font-size: 6rem;
+    color: var(--color-yellow);
+    text-shadow:
+        4px 4px 0 var(--color-ink),
+        -2px -2px 0 var(--color-ink),
+        2px -2px 0 var(--color-ink),
+        -2px 2px 0 var(--color-ink),
+        4px 4px 0 var(--color-magenta); /* Extra pop */
+    z-index: 100;
+    pointer-events: none;
+    white-space: nowrap;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(180deg); opacity: 0; }
+    80% { transform: translate(-50%, -50%) scale(1.2) rotate(-10deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(-5deg); opacity: 1; }
 }
 
 /* Roll Button */
