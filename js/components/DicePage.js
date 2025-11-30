@@ -95,7 +95,7 @@ app.component('dice-page', {
         <div v-if="showDieSelector" class="dice-selector-modal" @click="closeDieSelector">
             <div class="dice-selector-content" @click.stop>
                 <div v-for="size in availableDice" :key="size" class="die-option" @click="selectDie(size)">
-                    d{{ size }}
+                    <img :src="'assets/dice/D' + size + '.png'" class="die-option-img" :alt="'d'+size" />
                 </div>
             </div>
         </div>
@@ -186,6 +186,11 @@ app.component('dice-page', {
             // Find the highest threshold met
             const impact = impacts.slice().reverse().find(i => maxValue >= i.threshold);
             this.impactText = impact ? impact.text : 'POW!';
+
+            // Clear text after 1.5 seconds
+            setTimeout(() => {
+                this.impactText = null;
+            }, 1500);
         },
         addModifier() {
             if (!this.newModName) return;

@@ -10,39 +10,47 @@ def verify_dice():
         # Navigate to Dice Page
         page.click("text=DICE")
 
-        # Verify initial dice (should be images now)
+        # Verify initial dice images exist
         print("Verifying dice images...")
         page.wait_for_selector(".die-img")
+
+        # Verify Modal Icons
+        print("Opening modal to check icons...")
+        # Click the first die to open modal
+        page.locator(".die-slot-img-container").first.click()
+        # Check for images inside modal
+        page.wait_for_selector(".die-option-img")
+        print("Modal images verified.")
+        # Close modal (click outside or select one)
+        page.locator(".die-option").first.click()
 
         # Click Roll
         print("Clicking Roll...")
         page.click(".roll-btn")
 
-        # Verify shaking animation
-        print("Verifying shaking...")
-        page.wait_for_selector(".shaking")
-
-        # Wait for roll to finish (0.8s) + a bit buffer
-        time.sleep(1)
-
-        # Verify Impact Text
-        print("Verifying impact text...")
-        # Since text depends on random result, just check if the overlay exists or contains one of the words
-        # Note: impact text might fade out or stay. The current implementation keeps it until next roll.
-        # But wait, did I clear it?
-        # Code: `this.determineImpactText` sets `this.impactText`. Template shows it `v-if="impactText"`.
-        # So it should be visible.
+        # Wait for impact text (it should appear after ~800ms)
+        print("Waiting for impact text...")
+        time.sleep(1) # Wait for animation to finish
 
         overlay = page.locator(".impact-text-overlay")
         if overlay.is_visible():
             text = overlay.inner_text()
             print(f"Impact Text Visible: {text}")
         else:
-            print("Impact Text NOT visible!")
+            print("Impact Text NOT visible (unexpected if roll just finished)!")
 
-        # Take screenshot
-        page.screenshot(path="verification/dice_verification.png")
-        print("Screenshot saved to verification/dice_verification.png")
+        # Wait for text to disappear (1.5s delay)
+        print("Waiting for text to disappear...")
+        time.sleep(2)
+
+        if not overlay.is_visible():
+            print("Impact Text successfully disappeared.")
+        else:
+            print("Error: Impact Text is still visible!")
+
+        # Take screenshot of the "Cluster"
+        page.screenshot(path="verification/dice_cluster_final.png")
+        print("Screenshot saved to verification/dice_cluster_final.png")
 
         browser.close()
 

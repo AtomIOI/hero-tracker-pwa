@@ -19,27 +19,47 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0rem; /* Tighter for clustering */
     margin-bottom: 2rem;
-    perspective: 1000px;
     position: relative;
-    min-height: 150px;
+    min-height: 180px; /* More space for rotation */
+    width: 100%;
 }
-
-/* Cluster styling tweak: allow slight overlap via negative margins or transforms?
-   Or just keep them close. The image suggests a group.
-   We will rely on the natural shapes of the images. */
 
 .die-slot-img-container {
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s, z-index 0s;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
+    margin: 0 -15px; /* Overlap */
 }
+
+/* Specific rotations for cluster feel */
+.die-slot-img-container:nth-child(2) {
+    transform: rotate(-15deg) translateY(10px);
+    z-index: 1;
+}
+
+.die-slot-img-container:nth-child(3) {
+    transform: rotate(10deg) translateY(-5px);
+    z-index: 2;
+}
+
+.die-slot-img-container:nth-child(4) { /* In case there's a 3rd die (indices are 1-based in CSS, but v-for starts after impact text?) No, v-for is separate div */
+    transform: rotate(25deg) translateY(15px);
+    z-index: 3;
+}
+/* Note: The first child in .dice-selection-area is .impact-text-overlay (v-if), so dice are nth-child(2), (3), (4) usually */
+
+/* Reset transform on shake so it doesn't conflict, OR combine them?
+   Shake uses translate/rotate. It might override the base rotation.
+   Let's wrap the image in a shaker div if needed, or just let shake override.
+   The shake animation resets at 0% and 100%, possibly snapping back.
+   Actually, let's apply the static rotation to the CONTAINER, and the shake to the IMAGE.
+*/
 
 .die-img {
     width: 100%;
@@ -336,17 +356,26 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+    box-shadow: 5px 5px 0 var(--color-ink);
 }
 
 .die-option {
-    width: 60px;
-    height: 60px;
-    background: var(--color-yellow);
-    border: 2px solid var(--color-ink);
+    width: 80px;
+    height: 80px;
+    /* Removed background yellow to let image shine, or keep transparent */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
     cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.die-option:active {
+    transform: scale(0.9);
+}
+
+.die-option-img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(2px 2px 0 var(--color-ink));
 }
