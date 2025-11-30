@@ -304,3 +304,21 @@
     height: 12px;
     fill: currentColor;
 }
+
+/* Health Readout Box - Readable and Bold */
+.health-readout-box {
+    background-color: white;
+    border: 2px solid var(--color-ink);
+    border-radius: 4px;
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 4px; /* Space between text and bar */
+    box-shadow: 2px 2px 0px rgba(0,0,0,1); /* Hard shadow */
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: bold; /* Ensure thickness */
+    color: var(--color-ink);
+    line-height: 1;
+    text-align: center;
+    min-width: 60px;
+    z-index: 2; /* Pop over */
+}

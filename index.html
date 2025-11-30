@@ -65,6 +65,9 @@
                 </div>
 
                 <div class="health-section">
+                    <div class="health-readout-box">
+                        {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
+                    </div>
                     <!-- Health Bar with Embedded Controls -->
                     <div class="health-bar-container">
                         <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
@@ -73,7 +76,6 @@
                         </div>
                         <button class="comic-btn plus" @click="changeHealth(1)">+</button>
                     </div>
-                    <div class="health-value-text">{{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}</div>
                 </div>
             </div>
 
