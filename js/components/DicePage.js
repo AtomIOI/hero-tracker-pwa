@@ -9,8 +9,14 @@ app.component('dice-page', {
          * The hero object (not currently used in logic but available).
          * @type {Object}
          */
-        hero: Object
+        hero: Object,
+        /**
+         * The initial dice selection passed from parent.
+         * @type {Array<number>}
+         */
+        initialDice: Array
     },
+    emits: ['update-dice'],
     template: `
     <div class="dice-page pb-nav">
         <!-- Dice Tray Header -->
@@ -115,7 +121,7 @@ app.component('dice-page', {
     data() {
         return {
             /** @type {number[]} Currently selected dice sizes */
-            selectedDice: [6, 8, 10], // Default dice
+            selectedDice: this.initialDice ? [...this.initialDice] : [6, 8, 10],
             /** @type {number[]} Available die sizes to choose from */
             availableDice: [4, 6, 8, 10, 12],
             /** @type {number|null} Index of the currently active die slot for selection */
@@ -187,6 +193,7 @@ app.component('dice-page', {
         selectDie(size) {
             if (this.activeSlot !== null) {
                 this.selectedDice[this.activeSlot] = size;
+                this.$emit('update-dice', this.selectedDice);
             }
             this.closeDieSelector();
         },
