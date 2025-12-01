@@ -53,32 +53,32 @@
                 <h1 class="comic-title">HERO TRACKER</h1>
             </div>
 
-            <!-- Current Status Panel -->
-            <div class="status-panel compact-status">
+            <!-- Hero Container -->
+            <div class="hero-header-card wobbly-box bg-dots mb-4">
                 <div class="portrait-container">
                     <div class="comic-portrait">
                         <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
                     </div>
                 </div>
+                <div class="hero-identity">
+                    <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
+                    <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
+                </div>
+            </div>
 
-                <div class="status-info-column">
-                    <div class="hero-identity">
-                        <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
-                        <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
+            <!-- Health Container -->
+            <div class="health-card wobbly-box bg-dots mb-4">
+                <div class="health-section">
+                    <div class="health-readout-box">
+                        {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
                     </div>
-
-                    <div class="health-section">
-                        <div class="health-readout-box">
-                            {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
+                    <!-- Health Bar with Embedded Controls -->
+                    <div class="health-bar-container">
+                        <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
+                        <div class="health-segments">
+                            <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
                         </div>
-                        <!-- Health Bar with Embedded Controls -->
-                        <div class="health-bar-container">
-                            <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
-                            <div class="health-segments">
-                                <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
-                            </div>
-                            <button class="comic-btn plus" @click="changeHealth(1)">+</button>
-                        </div>
+                        <button class="comic-btn plus" @click="changeHealth(1)">+</button>
                     </div>
                 </div>
             </div>
