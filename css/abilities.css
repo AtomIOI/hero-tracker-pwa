@@ -1,0 +1,95 @@
+/* Abilities CSS Module */
+
+/* Utility Grid/Flex helpers - scoped to avoid conflict but reusable */
+.grid { display: grid; }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-1 { flex: 1 1 0%; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.text-center { text-align: center; }
+.hidden { display: none; }
+.cursor-pointer { cursor: pointer; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.p-2 { padding: 0.5rem; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-4 { margin-top: 1rem; }
+.mr-2 { margin-right: 0.5rem; }
+.border-2 { border-width: 2px; }
+.border-black { border-color: black; }
+.rounded { border-radius: 0.25rem; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-bold { font-weight: bold; }
+.uppercase { text-transform: uppercase; }
+.tracking-wide { letter-spacing: 0.025em; }
+.shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Colors - Backgrounds */
+.bg-gray-100 { background-color: #f3f4f6; }
+.bg-green-500 { background-color: var(--color-green); }
+.bg-yellow-400 { background-color: var(--color-yellow); }
+.bg-red-600 { background-color: var(--color-magenta); } /* Map Red to Magenta/Red */
+.bg-blue-500 { background-color: var(--color-cyan); }
+.bg-purple-500 { background-color: #a855f7; } /* Custom purple */
+.bg-orange-500 { background-color: #f97316; } /* Custom orange */
+.bg-yellow-100 { background-color: #fef9c3; }
+
+/* Colors - Text */
+.text-white { color: white; }
+.text-black { color: black; }
+.text-gray-500 { color: #6b7280; }
+
+/* Modal specific inputs */
+input[type="radio"]:checked + div {
+    /* This mimics the peer-checked logic */
+}
+/* We need specific selectors because we can't do general peer-checked easily in vanilla CSS without exact structure knowledge */
+.cursor-pointer input:checked + div.bg-gray-100 {
+    /* Reset default bg */
+    background-color: transparent;
+}
+/* Override specifics */
+.cursor-pointer input[value="green"]:checked + div { background-color: var(--color-green); color: white; }
+.cursor-pointer input[value="yellow"]:checked + div { background-color: var(--color-yellow); color: black; }
+.cursor-pointer input[value="red"]:checked + div { background-color: var(--color-magenta); color: white; }
+
+.cursor-pointer input[value="action"]:checked + div { background-color: var(--color-cyan); color: white; }
+.cursor-pointer input[value="reaction"]:checked + div { background-color: #a855f7; color: white; }
+.cursor-pointer input[value="inherent"]:checked + div { background-color: #f97316; color: white; }
+
+/* Hover effects */
+.hover\:bg-gray-50:hover { background-color: #f9fafb; }
+.ring-2 { box-shadow: 0 0 0 2px var(--color-yellow); }
+
+/* SVG Icons */
+.w-8 { width: 2rem; }
+.h-8 { height: 2rem; }
+.w-6 { width: 1.5rem; }
+.h-6 { height: 1.5rem; }
+.w-5 { width: 1.25rem; }
+.h-5 { height: 1.25rem; }
+.w-4 { width: 1rem; }
+.h-4 { height: 1rem; }
+.rounded-full { border-radius: 9999px; }
+
+/* Ability Card Tweaks */
+.ability-card {
+    min-height: 200px;
+}
+.ability-card-body {
+    text-align: left; /* Override center alignment */
+    align-items: stretch;
+}
+.pattern-dots {
+    /* Ensure pattern dots class works if not already defined globally well */
+    background-image: radial-gradient(#00000020 1px, transparent 1px);
+    background-size: 4px 4px;
+}
