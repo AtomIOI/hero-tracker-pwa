@@ -48,7 +48,9 @@ app.component('powers-qualities-page', {
                     @click="openEditModal(trait)"
                 >
                     <div class="trait-name">{{ trait.name }}</div>
-                    <div class="trait-die">d{{ trait.die }}</div>
+                    <div class="trait-die-container">
+                        <img :src="'assets/dice/D' + trait.die + '.png'" :alt="'d' + trait.die" class="trait-die-icon" />
+                    </div>
                 </div>
             </div>
 

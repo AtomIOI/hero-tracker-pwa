@@ -33,14 +33,16 @@ app.component('add-edit-trait-modal', {
                         <input type="text" id="trait-name" v-model="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="trait-die">Die</label>
-                        <select id="trait-die" v-model.number="die">
-                            <option value="4">d4</option>
-                            <option value="6">d6</option>
-                            <option value="8">d8</option>
-                            <option value="10">d10</option>
-                            <option value="12">d12</option>
-                        </select>
+                        <label>Die</label>
+                        <div class="dice-selector">
+                            <div v-for="size in [4, 6, 8, 10, 12]"
+                                 :key="size"
+                                 class="form-die-option"
+                                 :class="{ selected: die === size }"
+                                 @click="die = size">
+                                <img :src="'assets/dice/D' + size + '.png'" :alt="'d' + size">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="comic-btn plus">{{ trait ? 'Save' : 'Add' }}</button>
