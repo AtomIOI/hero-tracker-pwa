@@ -69,7 +69,7 @@ hero-tracker-pwa/
 │       ├── AddEditAbilityModal.js  # Modal for editing abilities
 │       ├── AddEditTraitModal.js    # Modal for editing traits
 │       ├── DicePage.js             # Dice roller page component
-│       └── PowersQualitiesPage.js  # Powers & Qualities page component
+│       └── PowersQualitiesPage.js  # Powers/Qualities page component
 └── assets/
     ├── icons/          # Application icons
     ├── dice/           # Dice images

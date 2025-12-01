@@ -452,7 +452,7 @@
 }
 
 .nav-icon.powers {
-    background-image: url('../assets/icons/icon_powers.png');
+    background-image: url('../assets/icons/icon_abilities.png');
 }
 
 .nav-icon.dice {
@@ -464,7 +464,7 @@
 }
 
 .nav-icon.powers-qualities {
-    background-image: url('../assets/icons/icon_dice.png');
+    background-image: url('../assets/icons/icon_powers_qualities.png');
 }
 
 /* Powers Page */

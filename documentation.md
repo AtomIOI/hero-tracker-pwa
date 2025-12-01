@@ -41,9 +41,9 @@ The "Abilities" page allows users to manage their character's abilities. The pag
 - **Red:** Green, Yellow, and Red abilities are available.
 - **Out:** No abilities are available.
 
-## "Powers & Qualities" Page
+## "Powers/Qualities" Page
 
-The "Powers & Qualities" page allows users to manage their character's Powers and Qualities, which are used as dice in skill checks and actions.
+The "Powers/Qualities" page allows users to manage their character's Powers and Qualities, which are used as dice in skill checks and actions.
 
 - **Powers:** Supernatural or extraordinary capabilities (e.g., Flight, Lightning Bolt).
 - **Qualities:** Skills, traits, or background elements (e.g., Banter, Leadership).

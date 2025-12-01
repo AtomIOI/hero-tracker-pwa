@@ -14,9 +14,9 @@ test.describe('Navigation', () => {
         await expect(page.locator('.comic-title')).toHaveText('ABILITY MODULES');
         await expect(page.locator('.nav-item:has-text("ABILITIES")')).toHaveClass(/active/);
 
-        // Powers & Qualities
+        // Powers/Qualities
         await page.click('.nav-item:has-text("P & Q")');
-        await expect(page.locator('.comic-title')).toHaveText('POWERS & QUALITIES');
+        await expect(page.locator('.comic-title')).toHaveText('POWERS/QUALITIES');
         await expect(page.locator('.nav-item:has-text("P & Q")')).toHaveClass(/active/);
 
         // Dice

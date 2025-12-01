@@ -1,13 +1,13 @@
 const { test, expect } = require('@playwright/test');
 
-test.describe('Powers & Qualities Page', () => {
+test.describe('Powers/Qualities Page', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('http://localhost:8000');
         await page.click('.nav-item:has-text("P & Q")');
     });
 
-    test('should load Powers & Qualities page', async ({ page }) => {
-        await expect(page.locator('.comic-title')).toHaveText('POWERS & QUALITIES');
+    test('should load Powers/Qualities page', async ({ page }) => {
+        await expect(page.locator('.comic-title')).toHaveText('POWERS/QUALITIES');
         // Check for sections tabs
         await expect(page.locator('.comic-tab').filter({ hasText: 'POWERS' })).toBeVisible();
         await expect(page.locator('.comic-tab').filter({ hasText: 'QUALITIES' })).toBeVisible();

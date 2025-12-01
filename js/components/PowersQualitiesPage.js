@@ -1,5 +1,5 @@
 /**
- * Component representing the Powers & Qualities Page.
+ * Component representing the Powers/Qualities Page.
  * Displays lists of powers and qualities, allowing addition, editing, and deletion.
  * @component
  */
@@ -40,7 +40,7 @@ app.component('powers-qualities-page', {
     template: `
         <div>
             <div class="comic-header-box">
-                <h1 class="comic-title">POWERS & QUALITIES</h1>
+                <h1 class="comic-title">POWERS/QUALITIES</h1>
             </div>
 
             <div class="tabs-container">
