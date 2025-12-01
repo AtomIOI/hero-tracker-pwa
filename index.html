@@ -158,7 +158,7 @@
             <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
                 <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE</div>
                 <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
+            <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
                 </div>
             </div>
 
@@ -166,7 +166,7 @@
             <div v-if="abilitiesYellow.length > 0" class="zone-container mb-6">
                 <div class="section-label" style="background-color: var(--color-yellow); color: black;">YELLOW ZONE</div>
                 <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesYellow" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
+                    <ability-card v-for="ability in abilitiesYellow" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
                 </div>
             </div>
 
@@ -174,7 +174,7 @@
             <div v-if="abilitiesRed.length > 0" class="zone-container mb-6">
                 <div class="section-label" style="background-color: var(--color-magenta); color: white;">RED ZONE</div>
                 <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesRed" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
+                    <ability-card v-for="ability in abilitiesRed" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
                 </div>
             </div>
 
@@ -391,7 +391,7 @@
 
         <!-- Dice Page -->
         <div v-if="currentPage === 'dice'">
-            <dice-page :hero="characterSheet.hero"></dice-page>
+            <dice-page :hero="characterSheet.hero" :initial-dice="diceSelection" @update-dice="updateDiceSelection"></dice-page>
         </div>
     </main>
 
@@ -445,7 +445,7 @@
     <script src="js/components/DicePage.js"></script>
     <script>
       if (window.__heroApp) {
-        window.__heroApp.mount('#app');
+        window.vm = window.__heroApp.mount('#app');
       }
     </script>
 </body>

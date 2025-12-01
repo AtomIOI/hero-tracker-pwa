@@ -77,7 +77,9 @@ const app = createApp({
             /** @type {string} Error message related to profile image upload */
             profileImageError: '',
             /** @type {boolean} Flag indicating if an image is being processed */
-            isProcessingImage: false
+            isProcessingImage: false,
+            /** @type {Array<number>} Current selection of dice for the Dice Page */
+            diceSelection: [6, 6, 6]
         };
     },
     computed: {
@@ -386,6 +388,51 @@ const app = createApp({
                 alert('Error saving settings');
             }
         },
+        /**
+         * Updates the global dice selection state.
+         * @param {Array<number>} newDice - The new dice selection.
+         */
+        updateDiceSelection(newDice) {
+            this.diceSelection = [...newDice];
+        },
+
+        /**
+         * Prepares dice and navigates to the Dice page to use an ability.
+         * @param {Object} ability - The ability to use.
+         */
+        handleAbilityUse(ability) {
+            // 1. Check availability
+            if (!this.isAbilityAvailable(ability)) return;
+
+            // 2. Determine Status Die
+            const gyro = this.getGyroStatus();
+            if (gyro === 'out') return; // Should be covered by isAbilityAvailable but extra safety
+
+            // Map status to die value
+            const statusDice = this.characterSheet.hero.statusDice; // {green: 6, yellow: 8, red: 10}
+            let statusDieVal = 6;
+            if (gyro === 'green') statusDieVal = statusDice.green;
+            else if (gyro === 'yellow') statusDieVal = statusDice.yellow;
+            else if (gyro === 'red') statusDieVal = statusDice.red;
+
+            // 3. Determine Effect Die (Trait)
+            let effectDieVal = 6; // Default
+            if (ability.traitId) {
+                const trait = this.characterSheet.hero.powers.find(p => p.id === ability.traitId) ||
+                              this.characterSheet.hero.qualities.find(q => q.id === ability.traitId);
+                if (trait) {
+                    effectDieVal = trait.die;
+                }
+            }
+
+            // 4. Preserve 3rd Die
+            const thirdDieVal = this.diceSelection[2] || 6;
+
+            // 5. Update state and navigate
+            this.diceSelection = [statusDieVal, effectDieVal, thirdDieVal];
+            this.setPage('dice');
+        },
+
         /**
          * Loads settings from localStorage and merges with default state.
          * Handles data migration if necessary.

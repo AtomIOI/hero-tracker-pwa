@@ -15,13 +15,17 @@ app.component('ability-card', {
          */
         hero: Object
     },
-    emits: ['edit'],
+    emits: ['edit', 'use'],
     data() {
         return {
             /** @type {number|null} Timer ID for long press detection */
             longPressTimer: null,
             /** @type {boolean} Flag indicating if a long press occurred */
-            isLongPress: false
+            isLongPress: false,
+            /** @type {number} Timestamp of the last interaction start */
+            lastTapTime: 0,
+            /** @type {number} Timestamp of the last touch event to debounce mouse events */
+            lastTouchTime: 0
         };
     },
     computed: {
@@ -79,9 +83,31 @@ app.component('ability-card', {
     },
     methods: {
         /**
-         * Starts the timer for detecting a long press interaction.
+         * Handles interaction start (mouse down or touch start).
+         * Detects double taps and starts long press timer.
+         * @param {Event} event - The DOM event.
          */
-        startLongPress() {
+        handleInteractionStart(event) {
+            const now = Date.now();
+
+            // Ignore mousedown if it closely follows a touchstart (mobile ghost clicks)
+            if (event.type === 'mousedown' && (now - this.lastTouchTime < 500)) {
+                return;
+            }
+
+            if (event.type === 'touchstart') {
+                this.lastTouchTime = now;
+            }
+
+            if (now - this.lastTapTime < 300) {
+                // Double Tap Detected
+                this.$emit('use', this.ability);
+                this.lastTapTime = 0; // Reset to prevent triple-tap firing
+                this.cancelLongPress(); // Ensure long press doesn't fire
+                return;
+            }
+
+            this.lastTapTime = now;
             this.isLongPress = false;
             this.longPressTimer = setTimeout(() => {
                 this.isLongPress = true;
@@ -101,8 +127,9 @@ app.component('ability-card', {
     template: `
         <div class="ability-card no-select relative"
              :class="['bg-' + ability.zone]"
-             @mousedown="startLongPress"
-             @touchstart="startLongPress"
+             style="touch-action: manipulation;"
+             @mousedown="handleInteractionStart"
+             @touchstart="handleInteractionStart"
              @mouseup="cancelLongPress"
              @touchend="cancelLongPress"
              @mouseleave="cancelLongPress"
