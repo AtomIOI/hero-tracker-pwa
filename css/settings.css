@@ -33,10 +33,14 @@
 
 /* Mobile Adjustments for Containers */
 @media (max-width: 768px) {
+    .settings-container {
+        padding: 0.25rem;
+    }
+
     .settings-container .wobbly-box {
-        /* Add extra margin to ensure borders/shadows don't touch screen edges or overflow */
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
+        /* Remove side margins so cards go to the edges */
+        margin-left: 0;
+        margin-right: 0;
         width: auto;
     }
 }

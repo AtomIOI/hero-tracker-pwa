@@ -74,6 +74,15 @@ const app = createApp({
         },
         displayedAbilities() {
             return this.characterSheet.hero.abilities;
+        },
+        abilitiesGreen() {
+            return this.characterSheet.hero.abilities.filter(a => a.zone === 'green');
+        },
+        abilitiesYellow() {
+            return this.characterSheet.hero.abilities.filter(a => a.zone === 'yellow');
+        },
+        abilitiesRed() {
+            return this.characterSheet.hero.abilities.filter(a => a.zone === 'red');
         }
     },
     mounted() {
@@ -126,14 +135,23 @@ const app = createApp({
             this.showAddEditAbilityModal = false;
         },
         saveAbility(abilityData) {
-            const { id, name, die, zone, text } = abilityData;
+            const { id, name, zone, text, traitId, actions, interactionType } = abilityData;
             const abilityIndex = this.characterSheet.hero.abilities.findIndex(a => a.id === id);
 
+            const newAbility = {
+                id: id || name.toLowerCase().replace(/\s+/g, '-'),
+                name,
+                zone,
+                text,
+                traitId,
+                actions,
+                interactionType
+            };
+
             if (abilityIndex > -1) { // Editing existing ability
-                this.characterSheet.hero.abilities.splice(abilityIndex, 1, { id, name, die, zone, text });
+                this.characterSheet.hero.abilities.splice(abilityIndex, 1, newAbility);
             } else { // Adding new ability
-                const newId = id || name.toLowerCase().replace(/\s+/g, '-');
-                this.characterSheet.hero.abilities.push({ id: newId, name, die, zone, text });
+                this.characterSheet.hero.abilities.push(newAbility);
             }
             this.closeAddEditAbilityModal();
         },

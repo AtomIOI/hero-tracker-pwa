@@ -20,18 +20,17 @@
 
 .hero-name {
     font-family: var(--font-heading);
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     color: var(--color-ink);
     margin: 0;
     line-height: 1.1;
     text-transform: uppercase;
 }
 
-.hero-archetype {
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    color: #666;
-    font-style: italic;
+.hero-alias {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--color-ink);
     margin: 0;
     line-height: 1;
 }
@@ -367,7 +366,7 @@
 }
 
 .hero-name {
-    font-size: 1.5rem; /* Larger name */
+    font-size: 2rem; /* Larger name */
     margin-bottom: 0.2rem;
 }
 
