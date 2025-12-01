@@ -72,7 +72,7 @@ app.component('ability-card', {
                 <!-- Interaction Type Text Label -->
                 <div class="absolute top-1 right-1 transform rotate-2 font-bangers tracking-wide text-lg"
                      :class="interactionClass"
-                     style="text-shadow: 2px 2px 0 #000; -webkit-text-stroke: 1px #000; color: white;">
+                     style="text-shadow: 2px 2px 0 #000; -webkit-text-stroke: 1px #000;">
                     {{ interactionLabel }}
                 </div>
             </div>

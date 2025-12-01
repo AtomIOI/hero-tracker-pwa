@@ -46,6 +46,9 @@
 .text-white { color: white; }
 .text-black { color: black; }
 .text-gray-500 { color: #6b7280; }
+.text-cyan { color: var(--color-cyan); }
+.text-purple { color: #a855f7; }
+.text-orange { color: #f97316; }
 
 /* Modal specific inputs */
 input[type="radio"]:checked + div {
