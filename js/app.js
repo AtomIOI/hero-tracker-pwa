@@ -17,6 +17,11 @@ const app = createApp({
                     timestamp: Date.now()
                 },
                 hero: {
+                    issues: {
+                        current: 'Issue #1',
+                        past: [],
+                        collections: []
+                    },
                     playerName: 'Player One',
                     name: 'Super Hero',
                     alias: 'The Masked Avenger',
@@ -70,8 +75,12 @@ const app = createApp({
             },
             /** @type {boolean} Controls visibility of the Add/Edit Ability Modal */
             showAddEditAbilityModal: false,
+            /** @type {boolean} Controls visibility of the Issue Modal */
+            showIssueModal: false,
             /** @type {Object|null} The ability currently being edited */
             editingAbility: null,
+            /** @type {number|null} Timer ID for issue box long press */
+            issuePressTimer: null,
             /** @type {string} Current navigation page identifier */
             currentPage: 'home',
             /** @type {string} Error message related to profile image upload */
@@ -281,6 +290,33 @@ const app = createApp({
             this.characterSheet.hero.health.ranges.yellowMin = Math.floor(max * 0.35);
             this.characterSheet.hero.health.ranges.redMin = 1;
         },
+
+        /**
+         * Handles the start of a long press on the Issue Box.
+         */
+        startIssuePress() {
+            this.issuePressTimer = setTimeout(() => {
+                this.showIssueModal = true;
+                this.issuePressTimer = null;
+            }, 1000);
+        },
+
+        /**
+         * Cancels the long press on the Issue Box.
+         */
+        cancelIssuePress() {
+            if (this.issuePressTimer) {
+                clearTimeout(this.issuePressTimer);
+                this.issuePressTimer = null;
+            }
+        },
+
+        /**
+         * Closes the Issue Modal.
+         */
+        closeIssueModal() {
+            this.showIssueModal = false;
+        },
         /**
          * Handles the profile image file upload event.
          * Processes, resizes, and saves the image as a Data URL.
@@ -459,6 +495,15 @@ const app = createApp({
                             { name: 'Principle of Destiny', duringRoleplay: 'You are destined for greatness.', minorTwist: 'A small setback occurs.', majorTwist: 'Your destiny is called into question.' },
                             { name: 'Principle of Justice', duringRoleplay: 'Justice must be served.', minorTwist: 'The law is complicated.', majorTwist: 'You must break the law to save it.' }
                         ];
+                    }
+
+                    // Migration: Ensure issues object exists
+                    if (!this.characterSheet.hero.issues) {
+                        this.characterSheet.hero.issues = {
+                            current: 'Issue #1',
+                            past: [],
+                            collections: []
+                        };
                     }
                 }
             } catch (e) {

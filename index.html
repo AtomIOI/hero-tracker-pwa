@@ -50,7 +50,16 @@
         <div v-if="currentPage === 'home'">
             <!-- Comic Header Box -->
             <div class="comic-header-box">
-                <div class="issue-box">ISSUE #1</div>
+                <div class="issue-box cursor-pointer select-none active:scale-95 transition-transform"
+                     @mousedown="startIssuePress"
+                     @touchstart="startIssuePress"
+                     @mouseup="cancelIssuePress"
+                     @touchend="cancelIssuePress"
+                     @mouseleave="cancelIssuePress"
+                     @contextmenu.prevent
+                     title="Hold to edit Issue">
+                    ISSUE: {{ characterSheet.hero.issues.current || '...' }}
+                </div>
                 <h1 class="comic-title">HERO TRACKER</h1>
             </div>
 
@@ -182,6 +191,8 @@
 
             <add-edit-ability-modal :show="showAddEditAbilityModal" :ability="editingAbility" :hero="characterSheet.hero" @close="closeAddEditAbilityModal" @save="saveAbility" @delete="deleteAbility"></add-edit-ability-modal>
         </div>
+
+        <issue-modal :show="showIssueModal" :hero="characterSheet.hero" @close="closeIssueModal"></issue-modal>
 
         <!-- Settings Page -->
         <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
@@ -424,6 +435,7 @@
     <script src="js/app.js"></script>
     <script src="js/components/AbilityCard.js"></script>
     <script src="js/components/AddEditAbilityModal.js"></script>
+    <script src="js/components/IssueModal.js"></script>
     <script src="js/components/AddEditTraitModal.js"></script>
     <script src="js/components/PowersQualitiesPage.js"></script>
     <script src="js/components/DicePage.js"></script>
