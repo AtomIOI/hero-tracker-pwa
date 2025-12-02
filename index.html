@@ -54,21 +54,22 @@
                 <h1 class="comic-title">HERO TRACKER</h1>
             </div>
 
-            <!-- Hero Container -->
-            <div class="hero-header-card wobbly-box bg-dots mb-4">
-                <div class="portrait-container">
-                    <div class="comic-portrait">
-                        <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
+            <!-- Merged Hero & Health Container -->
+            <div class="merged-hero-health wobbly-box bg-dots mb-4">
+                <!-- Hero Header Content -->
+                <div class="hero-header-content">
+                    <div class="portrait-container">
+                        <div class="comic-portrait">
+                            <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
+                        </div>
+                    </div>
+                    <div class="hero-identity">
+                        <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
+                        <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
                     </div>
                 </div>
-                <div class="hero-identity">
-                    <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
-                    <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
-                </div>
-            </div>
 
-            <!-- Health Container -->
-            <div class="health-card wobbly-box bg-dots mb-4">
+                <!-- Health Section -->
                 <div class="health-section">
                     <div class="health-readout-box">
                         {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}

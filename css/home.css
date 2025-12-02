@@ -1,13 +1,21 @@
 /* Home Page Specific Styles */
 
-/* Hero Header Card */
-.hero-header-card {
+/* Merged Hero & Health Container */
+.merged-hero-health {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+    gap: 0.5rem;
+}
+
+/* Hero Header Content */
+.hero-header-content {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     gap: 1.5rem;
-    padding: 1rem;
     width: 100%;
 }
 
@@ -38,20 +46,14 @@
 }
 
 /* Portrait */
-.hero-header-card .portrait-container {
+.hero-header-content .portrait-container {
     flex: 0 0 auto;
 }
 
-.hero-header-card .comic-portrait {
+.hero-header-content .comic-portrait {
     width: 100px;
     height: 100px;
     border-width: 3px;
-}
-
-/* Health Card */
-.health-card {
-    padding: 1rem;
-    width: 100%;
 }
 
 /* Health Section */
@@ -323,7 +325,7 @@
     margin-bottom: 0; /* Removed bottom margin */
     box-shadow: 2px 2px 0px rgba(0,0,0,1); /* Hard shadow */
     font-family: var(--font-heading);
-    font-size: 1.4rem;
+    font-size: 2.2rem;
     font-weight: bold; /* Ensure thickness */
     color: var(--color-ink);
     line-height: 1;
