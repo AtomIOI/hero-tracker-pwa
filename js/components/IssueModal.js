@@ -164,11 +164,15 @@ app.component('issue-modal', {
                         <div class="section-label mb-2">PAST ISSUES ({{ pastIssuesCount }}/5)</div>
                         <div class="flex flex-col gap-3">
                             <div v-for="n in 5" :key="n" class="relative">
-                                <span class="absolute left-2 top-1/2 transform -translate-y-1/2 font-bangers text-gray-500">#{{ n }}</span>
+                                <!-- UPDATED: Using inline styles for positioning -->
+                                <span class="font-bangers text-gray-500"
+                                      style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); pointer-events: none;">#{{ n }}</span>
+                                <!-- UPDATED: Adjusted padding via inline style -->
                                 <input type="text"
                                        :value="hero.issues.past[n-1] || ''"
                                        @input="updatePastIssue(n-1, $event.target.value)"
-                                       class="w-full border-2 border-black p-2 pl-14 font-comic text-lg rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] past-issue-input"
+                                       class="w-full border-2 border-black p-2 font-comic text-lg rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] past-issue-input"
+                                       style="padding-right: 2.5rem;"
                                        placeholder="Enter Past Issue...">
                             </div>
                         </div>
@@ -202,12 +206,17 @@ app.component('issue-modal', {
                                  @touchend="cancelCollectionPress"
                                  @mouseleave="cancelCollectionPress">
 
-                                <div class="relative flex justify-center items-center transition-colors p-2 rounded border-2 border-black border-dashed"
-                                     :class="getCollectionStyle(index)">
+                                <div class="transition-colors p-2 rounded border-2 border-black border-dashed"
+                                     :class="getCollectionStyle(index)"
+                                     style="position: relative; display: flex; justify-content: center; align-items: center;">
+
+                                    <!-- UPDATED: Count on left, black text, inline styles -->
+                                    <span class="font-bangers text-xl text-black"
+                                          style="position: absolute; left: 0.5rem; z-index: 10;">({{ collection.issues.length }})</span>
+
                                     <!-- Centered Name -->
-                                    <span class="font-bangers text-xl tracking-wide z-10 text-center">{{ collection.name }}</span>
-                                    <!-- Count Badge Positioned Right -->
-                                    <span class="absolute right-2 font-comic text-sm bg-black text-white px-2 rounded-full z-10">{{ collection.issues.length }}</span>
+                                    <span class="font-bangers text-xl tracking-wide text-center"
+                                          style="z-index: 10;">{{ collection.name }}</span>
                                 </div>
 
                                 <!-- Expanded View -->

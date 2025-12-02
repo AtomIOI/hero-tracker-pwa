@@ -12,12 +12,12 @@ def run():
         # Load the page
         page.goto("http://localhost:8080/index.html")
 
-        # Inject data to have collections
+        # Inject data to have collections and past issues
         page.evaluate("""
+            window.vm.characterSheet.hero.issues.past = ['Issue A', 'Issue B', '', '', ''];
             window.vm.characterSheet.hero.issues.collections = [
                 { name: 'The Dark Age', issues: ['Issue 1', 'Issue 2', 'Issue 3', 'Issue 4', 'Issue 5'] },
-                { name: 'Golden Era', issues: ['Origin', 'First Flight', 'Nemesis', 'Team Up', 'Victory'] },
-                { name: 'Crisis', issues: ['Doom', 'Gloom', 'Boom', 'Zoom', 'Room'] }
+                { name: 'Golden Era', issues: ['Origin', 'First Flight', 'Nemesis', 'Team Up', 'Victory'] }
             ];
         """)
 
@@ -32,13 +32,13 @@ def run():
 
         # Wait for modal
         page.wait_for_selector(".modal-overlay")
+        time.sleep(0.5)
 
         # Scroll to collections (simulated by finding the element)
         collections_section = page.locator("text=COLLECTIONS")
         collections_section.scroll_into_view_if_needed()
 
         # Click the first collection to expand
-        # Structure: div.mb-4 > div.flex.flex-col > div (v-for item)
         page.locator(".mb-4 .flex.flex-col > div").first.click()
 
         # Wait for animation/render
