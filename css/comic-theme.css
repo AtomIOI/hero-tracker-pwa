@@ -1,36 +1,69 @@
-/* Utility for Wobbly Borders */
-.wobbly-box {
-    border: 3px solid var(--color-ink);
-    /* Organic border radius for hand-drawn look */
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    box-shadow: 4px 4px 0px var(--color-ink);
-    background: white;
-    transition: transform 0.1s;
+/* IMPORT FONTS:
+   'Bangers' for loud headers
+   'Comic Neue' for readable text
+   (Already imported in index.html, but keeping for reference)
+*/
+
+/* --- BASE TYPOGRAPHY --- */
+body {
+  font-family: var(--font-body);
+  color: var(--ink-black);
+  background-color: var(--comic-cream); /* Page background */
+}
+
+h1, h2, h3, h4, .comic-title {
+  font-family: var(--font-header);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
 }
 
 .comic-title {
-    font-family: var(--font-heading);
-    letter-spacing: 1px;
-    text-transform: uppercase;
     text-shadow: 2px 2px 0px var(--color-ink);
-    /* Hard shadow for text */
     text-align: center;
     font-size: 2.8rem;
     color: var(--color-magenta);
     -webkit-text-stroke: 1px var(--color-ink);
-    /* Outline text */
-    line-height: 1;
 }
 
+/* --- UTILITY: TEXTURE --- */
+/* Creates that classic "Ben-Day Dots" comic background */
+.halftone-bg, .bg-dots {
+  background-image: radial-gradient(var(--ink-black) 15%, transparent 16%);
+  background-size: 10px 10px;
+  opacity: 1;
+  /* Note: Apply background-color in HTML or specific class to sit under dots */
+  background-color: transparent;
+}
+
+/* --- COMPONENT: PANELS (The main containers) --- */
+.comic-panel, .wobbly-box {
+  border: var(--border-thick);
+  border-radius: 4px; /* Slight rounding, not too much - replacing wobbly border */
+  box-shadow: var(--shadow-md);
+  padding: 20px; /* Note: wobbly-box had no padding by default, consumers might need adjustment if they relied on that */
+  background-color: var(--comic-white);
+  position: relative;
+  margin-bottom: 2rem;
+  transition: transform 0.1s;
+}
+
+/* Make panels feel tactile */
+.comic-panel:hover, .wobbly-box:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--ink-black);
+}
+
+/* Header Box Adapter */
 .comic-header-box {
-    background: var(--color-yellow);
+    background: var(--comic-yellow);
     padding: 1.5rem 1rem;
     position: relative;
     margin-bottom: 1.5rem;
-    border: 3px solid var(--color-ink);
-    /* Slightly different wobble for header */
-    border-radius: 5px 255px 3px 25px / 255px 5px 225px 5px;
-    box-shadow: 4px 4px 0px var(--color-ink);
+    border: var(--border-thick);
+    border-radius: 4px;
+    box-shadow: var(--shadow-md);
 }
 
 .issue-box {
@@ -46,51 +79,120 @@
     transform: rotate(-2deg);
 }
 
-/* Ben-Day Dot Pattern Mixin */
-.bg-dots {
-    background-image: radial-gradient(var(--color-ink) 1px, transparent 1px);
-    background-size: 8px 8px;
-    background-color: transparent;
-    /* Transparent so dots are stark against white container background */
+
+/* --- COMPONENT: STICKER TITLES --- */
+.sticker-label, .section-label {
+  display: inline-block;
+  background-color: var(--comic-white);
+  border: var(--border-thick);
+  padding: 5px 15px;
+  font-family: var(--font-header);
+  font-size: 1.2rem;
+  color: var(--ink-black);
+
+  /* The "Slapped On" Look */
+  position: absolute;
+  top: -15px;
+  left: -10px;
+  transform: rotate(-3deg);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  margin-bottom: 0; /* Override old margin */
 }
 
-.pattern-dots {
-    background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px);
-    background-size: 6px 6px;
+/* --- COMPONENT: INPUTS & DATA --- */
+.comic-input-group {
+  margin-bottom: 10px;
 }
 
+.comic-label-box {
+  background-color: var(--comic-yellow);
+  border: var(--border-thick);
+  border-bottom: none; /* Merge with input below */
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  display: block;
+}
+
+.comic-input-box {
+  background-color: var(--comic-cream);
+  border: var(--border-thick);
+  padding: 10px;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  box-sizing: border-box; /* Fix padding issues */
+}
+
+/* --- COMPONENT: ACTION BUTTONS --- */
+.comic-btn {
+  background-color: var(--comic-red);
+  color: white;
+  border: var(--border-thick);
+  padding: 10px 25px;
+  font-family: var(--font-header);
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all 0.1s;
+  text-transform: uppercase;
+  border-radius: 4px; /* Reset wobbly border */
+}
+
+.comic-btn:active {
+  transform: translate(4px, 4px); /* Pushes down */
+  box-shadow: 0px 0px 0px var(--ink-black);
+}
+
+.comic-btn.secondary {
+  background-color: var(--comic-blue);
+}
+
+.comic-btn.minus {
+    background-color: var(--comic-red);
+    padding: 5px 10px; /* Adjust for smaller buttons */
+}
+
+.comic-btn.plus {
+    background-color: var(--comic-green-bg);
+    padding: 5px 10px;
+}
+
+/* --- COMPONENT: SPEECH BUBBLE --- */
+.speech-bubble {
+  position: relative;
+  background: var(--comic-white);
+  border: var(--border-thick);
+  border-radius: 50%;
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* The little triangle tail */
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 0;
+  height: 0;
+  border: 15px solid transparent;
+  border-top-color: var(--ink-black);
+  border-bottom: 0;
+  border-left: 0;
+  margin-left: -7.5px;
+  margin-bottom: -15px;
+}
+
+/* Maintain other existing classes needed for layout */
 .no-select {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.status-panel {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    background-color: #e6f2f5;
-    /* Very light blue tint */
-    background-image: radial-gradient(#4fb3d9 1.5px, transparent 1.5px);
-    background-size: 6px 6px;
-    border: 3px solid var(--color-ink);
-    /* Another wobble variation */
-    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
-    box-shadow: 4px 4px 0px var(--color-ink);
-    position: relative;
-}
-
-.section-label {
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    background: var(--color-yellow);
-    border: 2px solid var(--color-ink);
-    display: inline-block;
-    padding: 0.2rem 0.8rem;
-    transform: rotate(-2deg);
-    /* Jaunty angle */
-    margin-bottom: 0.5rem;
-    box-shadow: 2px 2px 0px var(--color-ink);
 }
 
 .portrait-container {
@@ -103,11 +205,10 @@
 .comic-portrait {
     width: 100px;
     height: 100px;
-    border: 3px solid var(--color-ink);
-    border-radius: 50% 40% 60% 50% / 50% 55% 45% 50%;
-    /* Imperfect circle */
-    background: linear-gradient(135deg, var(--color-cyan), var(--color-magenta));
-    box-shadow: 3px 3px 0px var(--color-ink);
+    border: var(--border-thick);
+    border-radius: 50%; /* Cleaner circle */
+    background: linear-gradient(135deg, var(--comic-blue), var(--comic-red));
+    box-shadow: var(--shadow-sm);
     flex-shrink: 0;
     overflow: hidden;
     position: relative;
@@ -120,46 +221,6 @@
     object-position: center;
 }
 
-.speech-bubble {
-    position: relative;
-    background: white;
-    border: 3px solid var(--color-ink);
-    padding: 1rem;
-    border-radius: 50% 20% 40% 10%;
-    /* Organic bubble shape */
-    font-weight: bold;
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-    text-align: center;
-    flex-grow: 1;
-    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
-}
-
-/* Speech bubble tail */
-.speech-bubble::before {
-    content: '';
-    position: absolute;
-    left: -15px;
-    top: 40%;
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 20px solid var(--color-ink);
-}
-
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    left: -9px;
-    top: 40%;
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 20px solid white;
-}
-
 .health-controls {
     position: absolute;
     top: 1rem;
@@ -169,259 +230,25 @@
     gap: 0.5rem;
     background: white;
     padding: 0.3rem;
-    border: 2px solid var(--color-ink);
-    border-radius: 15px 255px 15px 255px / 255px 15px 225px 15px;
-    box-shadow: 3px 3px 0px var(--color-ink);
-    transform: rotate(1deg);
-}
-
-/* Generic Comic Button - Reusable */
-.comic-btn {
-    border: 2px solid var(--color-ink);
-    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px; /* Wobbly border */
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    color: var(--color-ink);
-    background-color: var(--color-paper);
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    box-shadow: 2px 2px 0px var(--color-ink);
-    transition: transform 0.1s;
-}
-
-.comic-btn:active {
-    transform: translate(1px, 1px);
-    box-shadow: none;
-}
-
-.comic-btn.minus {
-    background-color: var(--color-magenta);
-}
-
-.comic-btn.plus {
-    background-color: var(--color-green);
-}
-
-.health-value {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    min-width: 30px;
-    text-align: center;
-}
-
-.hero-points-container,
-.modifier-container {
-    margin-top: 1.5rem;
-    text-align: center;
-}
-
-.hero-points-container .controls,
-.modifier-container .controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0.5rem;
-}
-
-.value-star {
-    width: 80px;
-    height: 80px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700' stroke='%23000' stroke-width='1'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    color: var(--color-ink);
-}
-
-.hero-points-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-/* Hero Points Specific Styles */
-.hero-label {
-    position: absolute;
-    top: -10px;
-    left: -5px;
-    transform: rotate(-3deg);
-    z-index: 10;
-}
-
-.hero-points-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.hero-btn-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.hero-btn {
-    width: 40px;
-    height: 25px;
-    /* Rectangular shape */
-    background-color: var(--color-yellow);
-    border: 2px solid var(--color-ink);
+    border: var(--border-thick);
     border-radius: 4px;
-    /* Slight rounding */
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    color: var(--color-ink);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 0px var(--color-ink);
-    transition: transform 0.1s;
-    line-height: 1;
-    padding-bottom: 2px;
-    /* Visual alignment */
+    box-shadow: var(--shadow-sm);
 }
 
-.hero-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: none;
-}
-
-.health-bar-container {
-    border: 3px solid var(--color-ink);
-    padding: 4px;
-    background: white;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    box-shadow: 2px 2px 0px var(--color-ink);
-    display: flex;
-    align-items: center;
-}
-
-.health-label {
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    margin-right: 0.5rem;
-    padding-left: 0.5rem;
-}
-
-.health-segments {
-    display: flex;
-    flex-grow: 1;
-    gap: 2px;
-    height: 24px;
-}
-
-.health-segment {
-    flex: 1;
-    border: 2px solid var(--color-ink);
-    background: transparent;
-}
-
-.health-segment.filled-green {
-    background-color: var(--color-green);
-}
-
-.health-segment.filled-yellow {
-    background-color: var(--color-yellow);
-}
-
-.health-segment.filled-red {
-    background-color: var(--color-magenta);
-}
-
-.health-segment.empty-green {
-    background-color: var(--color-green);
-    opacity: 0.3;
-}
-
-.health-segment.empty-yellow {
-    background-color: var(--color-yellow);
-    opacity: 0.3;
-}
-
-.health-segment.empty-red {
-    background-color: var(--color-magenta);
-    opacity: 0.3;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.stat-box {
-    background: #fdf6e3;
-    /* Cream */
-    background-image: radial-gradient(var(--color-magenta) 1px, transparent 1px);
-    background-size: 6px 6px;
-    padding: 1rem;
-    text-align: center;
-    position: relative;
-    border: 3px solid var(--color-ink);
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    box-shadow: 4px 4px 0px var(--color-ink);
-}
-
-.stat-star {
-    font-size: 7rem;
-    /* Changed from 4rem */
-    color: var(--color-yellow);
-    text-shadow:
-        -2px -2px 0 #000,
-        2px -2px 0 #000,
-        -2px 2px 0 #000,
-        2px 2px 0 #000,
-        4px 4px 0 rgba(0, 0, 0, 0.2);
-    position: relative;
-    display: inline-block;
-}
-
-.stat-number {
-    position: absolute;
-    top: 54%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    color: var(--color-ink);
-    text-shadow: none;
-}
-
-.modifier-box {
-    border: 3px solid var(--color-ink);
-    background: white;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    box-shadow: 3px 3px 0px var(--color-ink);
-    transform: rotate(2deg);
-}
-
+/* Nav Bar Update */
 .nav-bar {
     position: fixed;
     bottom: 1rem;
     left: 1rem;
     right: 1rem;
-    background: var(--color-yellow);
-    border: 3px solid var(--color-ink);
-    /* Wobbly nav bar */
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    background: var(--comic-yellow);
+    border: var(--border-thick);
+    border-radius: 8px; /* Slightly rounded */
     display: flex;
     justify-content: space-around;
     padding: 0.5rem 0;
     z-index: 100;
-    box-shadow: 4px 4px 0px var(--color-ink);
+    box-shadow: var(--shadow-md);
 }
 
 .nav-item {
@@ -439,426 +266,55 @@
 .nav-item.active {
     opacity: 1;
     transform: scale(1.1) rotate(-2deg);
-    color: var(--color-magenta);
+    color: var(--comic-red);
 }
 
 /* Navigation Icons */
 .nav-icon {
     width: 48px;
-    /* Keep the larger size */
     height: 48px;
-    /* Keep the larger size */
     margin-bottom: 4px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     display: inline-block;
-    /* Removed mask properties */
 }
 
-/* Individual Icon Images */
-.nav-icon.home {
-    background-image: url('../assets/icons/icon_home.png');
-}
+.nav-icon.home { background-image: url('../assets/icons/icon_home.png'); }
+.nav-icon.powers { background-image: url('../assets/icons/icon_abilities.png'); }
+.nav-icon.dice { background-image: url('../assets/icons/icon_dice.png'); }
+.nav-icon.settings { background-image: url('../assets/icons/icon_settings.png'); }
+.nav-icon.powers-qualities { background-image: url('../assets/icons/icon_powers_qualities.png'); }
 
-.nav-icon.powers {
-    background-image: url('../assets/icons/icon_abilities.png');
-}
-
-.nav-icon.dice {
-    background-image: url('../assets/icons/icon_dice.png');
-}
-
-.nav-icon.settings {
-    background-image: url('../assets/icons/icon_settings.png');
-}
-
-.nav-icon.powers-qualities {
-    background-image: url('../assets/icons/icon_powers_qualities.png');
-}
-
-/* Powers Page */
-.powers-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.power-card {
-    border: 3px solid var(--color-ink);
-    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
-    box-shadow: 4px 4px 0px var(--color-ink);
-    position: relative;
-    overflow: hidden;
-}
-
-.power-card.locked {
-    background-color: #ccc;
-    background-image: none;
-}
-
-.power-unavailable {
-    opacity: 0.5;
-    filter: grayscale(1);
-}
-
-.power-card-content {
-    padding: 1rem;
-}
-
-.power-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.power-card-header h2 {
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    color: var(--color-ink);
-    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
-}
-
-.power-card-dice {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    color: var(--color-ink);
-    background: white;
-    padding: 0.2rem 0.5rem;
-    border: 2px solid var(--color-ink);
-    border-radius: 5px;
-    box-shadow: 2px 2px 0px var(--color-ink);
-}
-
-.power-card-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.power-card-body img {
-    width: 100%;
-    height: auto;
-    max-height: 200px;
-    object-fit: contain;
-}
-
-.power-card-actions {
-    padding: 0 1rem 1rem;
-    display: flex;
-    justify-content: flex-end;
-}
-
-#add-power-btn {
-    display: block;
-    margin: 0 auto 1.5rem; /* Center the button and add margin below */
-    width: 80%; /* Make it wider for better tapping */
-    max-width: 300px; /* Set a max-width for larger screens */
-    height: auto; /* Auto height based on content */
-    padding: 0.8rem 1rem; /* Add padding */
-    font-size: 1.5rem; /* Adjust font size */
-    background-color: #cccccc;
-    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px; /* Wobbly border */
-    text-align: center;
-}
-
-.bg-green {
-    background-color: var(--color-green);
-}
-
-.bg-yellow {
-    background-color: var(--color-yellow);
-}
-
-.bg-red {
-    background-color: var(--color-magenta);
-}
-
-/* Tabs */
-.tabs-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.comic-tab {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    padding: 0.5rem 1rem;
-    background: white;
-    border: 3px solid var(--color-ink);
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    color: var(--color-ink);
-    cursor: pointer;
-    box-shadow: 2px 2px 0px var(--color-ink);
-    transition: transform 0.1s, background-color 0.1s;
-}
-
-.comic-tab.active {
-    background: var(--color-yellow);
-    transform: rotate(-2deg);
-    box-shadow: 4px 4px 0px var(--color-ink);
-}
-
-/* Trait List (Powers/Qualities) */
-.traits-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 5rem; /* Space for nav bar */
-}
-
-.trait-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    cursor: pointer;
-}
-
-.trait-name {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    color: var(--color-ink);
-}
-
-.trait-die {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    background: var(--color-yellow);
-    padding: 0.2rem 0.5rem;
-    border: 2px solid var(--color-ink);
-    border-radius: 5px;
-}
-
-.trait-die-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-}
-
-.trait-die-icon {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));
-}
-
-.add-trait-btn {
-    display: block;
-    margin: 0 auto 1.5rem;
-    width: 80%;
-    max-width: 300px;
-    text-align: center;
-}
-
-/* Modal */
+/* --- COMPONENT: MODAL --- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8); /* Darker overlay */
     display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 200;
+    align-items: center; /* Center vertically */
+    z-index: 2000; /* High z-index to sit on top of everything */
+    backdrop-filter: blur(2px);
 }
 
 .modal-content {
-    background: var(--color-paper);
-    padding: 2rem;
-    max-width: 90%;
+    /* Styles are often handled by wobbly-box, but ensure positioning */
+    position: relative;
+    max-width: 95%;
     max-height: 90vh;
     overflow-y: auto;
+    margin: auto; /* Fallback centering */
 }
 
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
+/* Fix for Huge Dice Images */
+.trait-die-icon, .trait-die-container img {
+    max-width: 50px;
+    max-height: 50px;
+    width: auto;
+    height: auto;
     display: block;
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 2px solid var(--color-ink);
-    border-radius: 5px;
-    font-family: var(--font-body);
-    background-color: white; /* Ensure consistent background */
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-/* Ability Cards Overhaul */
-.ability-card {
-    display: flex;
-    flex-direction: column;
-    border: 3px solid var(--color-ink);
-    /* Wobbly border shape */
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    box-shadow: 4px 4px 0px var(--color-ink);
-    background: white;
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.1s;
-    height: 100%;
-}
-
-/* Header Styling */
-.ability-card-header {
-    padding: 0.8rem 1rem;
-    border-bottom: 3px solid var(--color-ink);
-    text-align: center;
-}
-
-.ability-card-header h3 {
-    margin: 0;
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    color: var(--color-ink);
-    text-transform: uppercase;
-    line-height: 1.1;
-    text-shadow: 1px 1px 0px white;
-}
-
-/* Zone Colors */
-.ability-card.bg-green .ability-card-header {
-    background-color: var(--color-green);
-}
-
-.ability-card.bg-yellow .ability-card-header {
-    background-color: var(--color-yellow);
-}
-
-.ability-card.bg-red .ability-card-header {
-    background-color: var(--color-magenta);
-}
-
-/* Body Styling */
-.ability-card-body {
-    padding: 1rem;
-    flex-grow: 1;
-    font-family: var(--font-body);
-    font-weight: bold;
-    color: var(--color-ink);
-    background-color: white; /* fallback */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.ability-card-body p {
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-/* Footer Styling */
-.ability-card-footer {
-    padding: 0.8rem;
-    display: flex;
-    justify-content: center;
-    background: white;
-}
-
-/* Unavailable / Locked State */
-.ability-card.ability-unavailable .ability-card-header,
-.ability-card.ability-unavailable .ability-card-body {
-    filter: grayscale(100%);
-    opacity: 0.6;
-}
-
-.ability-card.ability-unavailable::after {
-    content: 'LOCKED';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-15deg);
-
-    font-family: var(--font-heading);
-    font-size: 3rem;
-    color: var(--color-magenta);
-    border: 5px solid var(--color-magenta);
-    padding: 0.2rem 1rem;
-    border-radius: 10px;
-    z-index: 10;
-    letter-spacing: 2px;
-    background-color: rgba(255, 255, 255, 0.8); /* Slight background to pop over text */
-    box-shadow: 2px 2px 0px var(--color-ink);
-    pointer-events: none;
-}
-
-/* Helper Classes for Settings Page */
-.pb-nav {
-    padding-bottom: 120px;
-}
-
-.full-width {
-    width: 100%;
-}
-
-.comic-btn.primary {
-    background-color: var(--color-cyan);
-    color: white;
-    text-shadow: 1px 1px 0 #000;
-}
-
-.comic-btn.primary:hover {
-    filter: brightness(1.1);
-}
-.dice-selector {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.form-die-option {
-    width: 60px;
-    height: 60px;
-    cursor: pointer;
-    transition: transform 0.2s, filter 0.2s;
-    opacity: 0.5;
-    filter: grayscale(0.8);
-    border-radius: 50%; /* Just in case */
-}
-
-.form-die-option:hover {
-    opacity: 0.8;
-    filter: grayscale(0.4);
-    transform: scale(1.1);
-}
-
-.form-die-option.selected {
-    opacity: 1;
-    filter: none;
-    transform: scale(1.2) rotate(-5deg);
-    /* Add a subtle glow or indicator */
-    filter: drop-shadow(0px 0px 5px var(--color-yellow));
-}
-
-.form-die-option img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
 }
