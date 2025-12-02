@@ -90,11 +90,6 @@ app.component('issue-modal', {
             // Add pattern-dots and ensure text is standard ink (black) which works on these comic colors
             return `${styles[index % styles.length]} pattern-dots text-black`;
         },
-        getIssueNumberStyle(index) {
-            // Rotate through theme colors for the issue numbers
-            const colors = ['text-cyan', 'text-purple', 'text-orange', 'text-red-600'];
-            return colors[index % colors.length];
-        },
 
         // Long Press Logic for Collections
         startCollectionPress(index) {
@@ -210,20 +205,20 @@ app.component('issue-modal', {
                                      :class="getCollectionStyle(index)"
                                      style="position: relative; display: flex; justify-content: center; align-items: center;">
 
-                                    <!-- UPDATED: Count on left, black text, inline styles -->
-                                    <span class="font-bangers text-xl text-black"
-                                          style="position: absolute; left: 0.5rem; z-index: 10;">({{ collection.issues.length }})</span>
-
-                                    <!-- Centered Name -->
-                                    <span class="font-bangers text-xl tracking-wide text-center"
-                                          style="z-index: 10;">{{ collection.name }}</span>
+                                    <!-- UPDATED: Removed Count, Exciting Title Styling -->
+                                    <span class="font-bangers text-center"
+                                          style="z-index: 10; font-size: 1.5rem; text-transform: uppercase; text-shadow: 2px 2px 0px rgba(255,255,255,0.5); letter-spacing: 1px;">
+                                        {{ collection.name }}
+                                    </span>
                                 </div>
 
                                 <!-- Expanded View -->
-                                <div v-if="expandedCollectionIndex === index" class="mt-3 pt-2 border-t-2 border-black/10 text-left pl-4">
+                                <!-- UPDATED: Centered text, Brick Red Bold Numbers -->
+                                <div v-if="expandedCollectionIndex === index" class="mt-3 pt-2 border-t-2 border-black/10 text-center">
                                     <ul class="font-comic text-sm" style="list-style-type: none; padding: 0; margin: 0;">
-                                        <li v-for="(issue, i) in collection.issues" :key="i" class="mb-1 flex items-center">
-                                            <span class="font-bangers text-lg mr-2" :class="getIssueNumberStyle(i)">#{{ i + 1 }}</span>
+                                        <li v-for="(issue, i) in collection.issues" :key="i" class="mb-1 flex justify-center items-center">
+                                            <span class="font-bangers text-lg mr-2"
+                                                  style="color: #B22222; font-weight: bold;">#{{ i + 1 }}</span>
                                             <span>{{ issue }}</span>
                                         </li>
                                     </ul>
