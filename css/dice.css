@@ -1,19 +1,5 @@
 /* Dice Page Specific Styles */
 
-.dice-tray-header {
-    background-color: var(--color-yellow);
-    color: var(--color-ink);
-    padding: 1rem;
-    text-align: center;
-    border: 3px solid var(--color-ink);
-    border-radius: 5px 255px 3px 25px / 255px 5px 225px 5px;
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    box-shadow: 4px 4px 0px var(--color-ink);
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-}
-
 /* Dice Selection Area */
 .dice-selection-area {
     display: flex;

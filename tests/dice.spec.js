@@ -7,7 +7,7 @@ test.describe('Dice Page', () => {
     });
 
     test('should load dice page', async ({ page }) => {
-        await expect(page.locator('.dice-tray-header')).toHaveText('DICE TRAY');
+        await expect(page.locator('.comic-title')).toHaveText('DICE TRAY');
         // Check default dice (d6, d8, d10)
         await expect(page.locator('.die-slot-img-container')).toHaveCount(3);
     });
