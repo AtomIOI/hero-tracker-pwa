@@ -337,8 +337,18 @@
     background-color: var(--color-magenta);
 }
 
-.health-segment.empty {
-    background-color: #e0e0e0;
+.health-segment.empty-green {
+    background-color: var(--color-green);
+    opacity: 0.3;
+}
+
+.health-segment.empty-yellow {
+    background-color: var(--color-yellow);
+    opacity: 0.3;
+}
+
+.health-segment.empty-red {
+    background-color: var(--color-magenta);
     opacity: 0.3;
 }
 

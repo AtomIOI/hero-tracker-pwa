@@ -179,14 +179,13 @@ const app = createApp({
         getSegmentClass(segmentNumber) {
             const pct = this.healthPercentage;
             const segmentThreshold = segmentNumber * 10;
+            const isFilled = pct >= segmentThreshold;
 
-            if (pct < segmentThreshold) {
-                return 'empty';
-            }
+            let color = 'red';
+            if (segmentNumber >= 8) color = 'green';
+            else if (segmentNumber >= 4) color = 'yellow';
 
-            if (segmentNumber >= 6) return 'filled-green';
-            if (segmentNumber >= 3) return 'filled-yellow';
-            return 'filled-red';
+            return isFilled ? `filled-${color}` : `empty-${color}`;
         },
         /**
          * Opens the modal to add a new ability.
