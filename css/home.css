@@ -15,18 +15,21 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 1.5rem;
     width: 100%;
 }
 
-/* Hero Identity Section */
-.hero-identity {
-    flex: 1;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+/* Hero Identity Box */
+.hero-identity-box {
+    background: white;
+    border: 2px solid var(--color-ink);
+    border-radius: 4px;
+    box-shadow: 2px 2px 0px rgba(0,0,0,1);
+    padding: 0.5rem;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
 }
 
 .hero-name {
