@@ -140,7 +140,7 @@ app.component('issue-modal', {
     template: `
         <teleport to="body">
             <div v-if="show" class="modal-overlay" @click.self="close">
-                <div class="modal-content wobbly-box relative" style="max-height: 90vh; overflow-y: auto;">
+                <div class="modal-content wobbly-box relative" style="height: 85vh; overflow-y: auto;">
                     <div class="comic-header-box mb-4">
                         <h2 class="comic-title text-3xl">ISSUE TRACKER</h2>
                     </div>
