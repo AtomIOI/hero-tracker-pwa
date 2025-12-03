@@ -178,12 +178,34 @@ const app = createApp({
          */
         getSegmentClass(segmentNumber) {
             const pct = this.healthPercentage;
-            const segmentThreshold = segmentNumber * 10;
-            const isFilled = pct >= segmentThreshold;
+            // Use the lower bound of the segment (segmentNumber - 1) * 10
+            // e.g., Segment 1 (0-10%) lights up if pct > 0
+            const segmentLowerBound = (segmentNumber - 1) * 10;
+            const isFilled = pct > segmentLowerBound;
+
+            // Determine zone thresholds percentages
+            const max = this.characterSheet.hero.health.max;
+            let greenMinPct = 75;
+            let yellowMinPct = 35;
+            if (max > 0) {
+                greenMinPct = (this.characterSheet.hero.health.ranges.greenMin / max) * 100;
+                yellowMinPct = (this.characterSheet.hero.health.ranges.yellowMin / max) * 100;
+            }
+
+            // Determine segment color based on its position relative to zone thresholds.
+            // We use the segment's upper bound (segmentNumber * 10) to determine if it falls into a higher zone.
+            // But to ensure the "entry" segment is colored correctly, we check if the segment *contains* the threshold.
+            // Actually, simpler logic: If the segment represents a health value that is in the green zone, it should be green.
+            // Let's use the segment's upper bound percentage as a proxy.
+            // Segment 8 (70-80). Upper 80. If 80 > greenMinPct (73.3), it *could* be green.
+            // But Segment 7 (60-70). Upper 70. 70 < 73.3. Yellow.
+            // This logic worked in manual trace.
+
+            const segmentUpperBound = segmentNumber * 10;
 
             let color = 'red';
-            if (segmentNumber >= 8) color = 'green';
-            else if (segmentNumber >= 4) color = 'yellow';
+            if (segmentUpperBound >= greenMinPct) color = 'green';
+            else if (segmentUpperBound >= yellowMinPct) color = 'yellow';
 
             return isFilled ? `filled-${color}` : `empty-${color}`;
         },
