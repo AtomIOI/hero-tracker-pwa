@@ -66,6 +66,42 @@ h1, h2, h3, h4, .comic-title {
     box-shadow: var(--shadow-md);
 }
 
+/* Header Color Variants */
+.comic-header-yellow {
+    background: var(--comic-yellow);
+}
+.comic-header-yellow .comic-title {
+    color: var(--comic-red); /* Magenta/Red */
+}
+
+.comic-header-blue {
+    background: var(--comic-blue);
+}
+.comic-header-blue .comic-title {
+    color: var(--comic-white);
+}
+
+.comic-header-purple {
+    background: var(--comic-purple);
+}
+.comic-header-purple .comic-title {
+    color: var(--comic-white);
+}
+
+.comic-header-red {
+    background: var(--comic-red);
+}
+.comic-header-red .comic-title {
+    color: var(--comic-white);
+}
+
+.comic-header-teal {
+    background: var(--comic-teal-bg);
+}
+.comic-header-teal .comic-title {
+    color: var(--comic-white);
+}
+
 .issue-box {
     position: absolute;
     top: 0.5rem;
