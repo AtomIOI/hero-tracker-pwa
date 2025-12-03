@@ -1,20 +1,40 @@
 :root {
-    /* Fonts */
+    /* --- FONTS --- */
     --font-heading: 'Bangers', cursive;
     --font-body: 'Comic Neue', cursive;
+    --font-header: var(--font-heading); /* Alias for new CSS */
 
-    /* Vintage Comic Palette */
-    --color-paper: #f0e6d2;
-    /* Aged paper */
-    --color-ink: #0a0a0a;
-    /* Deep ink, almost black */
-    --color-cyan: #4fb3d9;
-    /* Muted Cyan */
-    --color-magenta: #e64c4c;
-    /* Reddish Magenta */
-    --color-yellow: #fcd116;
-    /* Golden Yellow */
-    --color-green: #76c043;
-    /* Muted Green */
-    --color-shadow: rgba(10, 10, 10, 0.2);
+    /* --- PALETTE: AGED CMYK (New) --- */
+    --comic-red:      #E63946; /* Hero Red */
+    --comic-blue:     #457B9D; /* Deep Cyan */
+    --comic-yellow:   #F4D35E; /* Aged Yellow */
+    --comic-purple:   #6A4C93; /* Villain Purple */
+    --comic-green-bg: #8FB676; /* Sage */
+    --comic-teal-bg:  #8DBEC6; /* Muted Teal */
+    --comic-cream:    #F8F5E6; /* Old Paper */
+    --comic-white:    #FFFFFF; /* Sticker White */
+    --comic-gold:     #F2C04B; /* Yellow sub-headers */
+
+    /* Inks & Grays */
+    --ink-black:      #121212; /* Off-black for lines */
+    --ink-grey:       #A8DADC; /* Shadow/Depth grey */
+
+    /* --- COMPATIBILITY MAPPING (Old to New) --- */
+    --color-paper: var(--comic-cream);
+    --color-ink: var(--ink-black);
+    --color-cyan: var(--comic-blue);
+    --color-magenta: var(--comic-red);
+    --color-yellow: var(--comic-yellow);
+    --color-green: var(--comic-green-bg);
+    --color-shadow: rgba(18, 18, 18, 0.2);
+
+    /* --- STYLING VARIABLES --- */
+    --border-thick:   3px solid var(--ink-black);
+    --border-thin:    2px solid var(--ink-black);
+
+    /* Hard "Pop Art" Shadows (No Blur) */
+    --shadow-sm:      2px 2px 0px var(--ink-black);
+    --shadow-md:      4px 4px 0px var(--ink-black);
+    --shadow-lg:      8px 8px 0px rgba(18, 18, 18, 0.2);
+    --shadow-hard:    4px 4px 0px rgba(0,0,0,0.2);
 }

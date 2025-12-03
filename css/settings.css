@@ -45,6 +45,11 @@
     }
 }
 
+/* Fix for Sticker Labels overlapping content */
+.settings-container .wobbly-box {
+    padding-top: 2.5rem; /* Ensure enough space for the absolute header sticker */
+}
+
 /* Utility Classes */
 .gap-4 {
     gap: 1rem;

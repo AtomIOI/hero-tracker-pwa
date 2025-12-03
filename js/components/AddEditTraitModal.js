@@ -67,7 +67,7 @@ app.component('add-edit-trait-modal', {
                                  class="form-die-option"
                                  :class="{ selected: die === size }"
                                  @click="die = size">
-                                <img :src="'assets/dice/D' + size + '.png'" :alt="'d' + size">
+                                <img :src="'assets/dice/D' + size + '.png'" :alt="'d' + size" class="trait-die-icon">
                             </div>
                         </div>
                     </div>

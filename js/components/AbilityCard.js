@@ -73,6 +73,52 @@ app.component('ability-card', {
             return map[this.ability.interactionType] || 'text-cyan';
         },
         /**
+         * Checks if the ability is locked based on the hero's status.
+         * @returns {boolean} True if locked.
+         */
+        isLocked() {
+            if (!this.hero || !this.hero.status) return false;
+            const status = this.hero.status.toLowerCase(); // green, yellow, red, out
+            const zone = (this.ability.zone || '').toLowerCase();
+
+            // Logic:
+            // Green Status: Can use Green only? Usually SCRPG allows "Green" abilities in Green zone.
+            // Actually, usually:
+            // Green Zone: Available in Green, Yellow, Red
+            // Yellow Zone: Available in Yellow, Red
+            // Red Zone: Available in Red
+            // Out: None? Or maybe all locked.
+
+            // Wait, if I am Green status, I can only use Green abilities.
+            // If I am Yellow status, I can use Green and Yellow abilities.
+            // If I am Red status, I can use Green, Yellow, and Red abilities.
+
+            const statusRank = { 'green': 1, 'yellow': 2, 'red': 3, 'out': 0 };
+            const zoneRank = { 'green': 1, 'yellow': 2, 'red': 3 };
+
+            const currentRank = statusRank[status] || 0;
+            const abilityRank = zoneRank[zone] || 1; // Default to green if unknown
+
+            // Locked if ability rank is higher than current rank
+            // e.g. Ability Red (3) > Status Green (1) -> Locked
+            return abilityRank > currentRank;
+        },
+        /**
+         * Returns the CSS class for the background based on zone.
+         * Handles capitalization differences and mapping.
+         * @returns {string} The CSS class name.
+         */
+        zoneClass() {
+            if (!this.ability.zone) return 'bg-gray-100';
+            const zone = this.ability.zone.toLowerCase();
+            const map = {
+                'green': 'bg-green-500',
+                'yellow': 'bg-yellow-400',
+                'red': 'bg-red-600' // Mapping Red to Magenta/Red as per CSS
+            };
+            return map[zone] || 'bg-gray-100';
+        },
+        /**
          * Returns the list of icon objects for the ability's basic actions.
          * @returns {Array<{label: string, svg: string}>} Array of icon objects.
          */
@@ -125,8 +171,8 @@ app.component('ability-card', {
         }
     },
     template: `
-        <div class="ability-card no-select relative"
-             :class="['bg-' + ability.zone]"
+        <div class="ability-card wobbly-box no-select relative p-2"
+             :class="[zoneClass]"
              style="touch-action: manipulation;"
              @mousedown="handleInteractionStart"
              @touchstart="handleInteractionStart"
@@ -135,19 +181,28 @@ app.component('ability-card', {
              @mouseleave="cancelLongPress"
              @contextmenu.prevent>
 
-            <!-- Header -->
-            <div class="ability-card-header pattern-dots flex justify-between items-center pr-2 relative">
-                <h3 class="flex-1 truncate mr-2">{{ ability.name }}</h3>
+            <!-- Locked Overlay -->
+            <div v-if="isLocked" class="absolute inset-0 z-20 flex items-center justify-center bg-black/50 rounded pointer-events-none">
+                <div class="border-4 border-red-600 text-red-600 font-bangers text-4xl px-4 py-2 transform -rotate-12 uppercase tracking-widest bg-white/80"
+                     style="box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+                    LOCKED
+                </div>
+            </div>
 
-                <!-- Interaction Type Text Label -->
-                <div class="absolute top-1 right-1 transform rotate-2 font-bangers tracking-wide text-lg"
+            <!-- Header -->
+            <div class="ability-card-header pattern-dots flex justify-center items-center relative mb-2 pb-1 border-b-2 border-black/10" style="min-height: 40px;">
+                <!-- Centered Title -->
+                <h3 class="truncate text-center w-full pr-12" style="font-size: 1.4rem;">{{ ability.name }}</h3>
+
+                <!-- Interaction Type Text Label (Top Right, Smaller) -->
+                <div class="absolute top-0 right-0 font-bangers tracking-wide text-sm z-10"
                      :class="interactionClass"
-                     style="text-shadow: 2px 2px 0 #000; -webkit-text-stroke: 1px #000;">
+                     style="text-shadow: 1px 1px 0 #000; -webkit-text-stroke: 0.5px #000; transform: translate(0, 0); top: 2px; right: 5px;">
                     {{ interactionLabel }}
                 </div>
             </div>
 
-            <div class="ability-card-body flex flex-col h-full relative">
+            <div class="ability-card-body flex flex-col h-full relative" :class="{ 'opacity-50': isLocked }">
                 <!-- Trait Info -->
                 <div class="text-sm font-bangers tracking-wide mb-2 border-b-2 border-black/10 pb-1 w-full text-center" style="color: var(--color-magenta); text-shadow: 1px 1px 0px white;">
                     {{ traitLabel }}

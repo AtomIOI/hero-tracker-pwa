@@ -96,3 +96,9 @@ input[type="radio"]:checked + div {
     background-image: radial-gradient(#00000020 1px, transparent 1px);
     background-size: 4px 4px;
 }
+
+/* Zone Container - Fix for Absolute Headers */
+.zone-container {
+    position: relative; /* Anchor for absolute .section-label */
+    margin-top: 2rem; /* Space for the sticker header */
+}
