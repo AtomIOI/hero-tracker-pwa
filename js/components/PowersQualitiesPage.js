@@ -43,7 +43,7 @@ app.component('powers-qualities-page', {
                 <h1 class="comic-title">POWERS/QUALITIES</h1>
             </div>
 
-            <div class="tabs-container">
+            <div class="tabs-container purple-tabs">
                 <button
                     class="comic-tab"
                     :class="{ active: activeTab === 'powers' }"
