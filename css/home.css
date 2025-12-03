@@ -213,7 +213,7 @@
 }
 
 .principle-header {
-    background-color: var(--comic-gold); /* Updated */
+    background-color: var(--comic-teal-bg); /* Updated to match section background */
     padding: 0.5rem;
     font-family: var(--font-heading);
     font-size: 1.2rem;
