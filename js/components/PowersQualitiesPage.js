@@ -39,7 +39,7 @@ app.component('powers-qualities-page', {
     },
     template: `
         <div>
-            <div class="comic-header-box">
+            <div class="comic-header-box comic-header-purple">
                 <h1 class="comic-title">POWERS/QUALITIES</h1>
             </div>
 

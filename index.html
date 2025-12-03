@@ -49,7 +49,7 @@
         <!-- Home Page -->
         <div v-if="currentPage === 'home'">
             <!-- Comic Header Box -->
-            <div class="comic-header-box">
+            <div class="comic-header-box comic-header-yellow">
                 <div class="issue-box cursor-pointer select-none active:scale-95 transition-transform"
                      @mousedown="startIssuePress"
                      @touchstart="startIssuePress"
@@ -159,7 +159,7 @@
 
         <!-- Abilities Page -->
         <div v-if="currentPage === 'abilities'">
-            <div class="comic-header-box">
+            <div class="comic-header-box comic-header-blue">
                 <h1 class="comic-title">ABILITY MODULES</h1>
             </div>
 
@@ -196,7 +196,7 @@
 
         <!-- Settings Page -->
         <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
-            <div class="comic-header-box">
+            <div class="comic-header-box comic-header-teal">
                 <h1 class="comic-title">SETTINGS</h1>
             </div>
 
