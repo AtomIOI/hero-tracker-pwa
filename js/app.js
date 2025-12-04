@@ -18,7 +18,7 @@ const app = createApp({
                 },
                 hero: {
                     issues: {
-                        current: 'Issue #1',
+                        current: '#1',
                         past: [],
                         collections: []
                     },
@@ -79,8 +79,6 @@ const app = createApp({
             showIssueModal: false,
             /** @type {Object|null} The ability currently being edited */
             editingAbility: null,
-            /** @type {number|null} Timer ID for issue box long press */
-            issuePressTimer: null,
             /** @type {string} Current navigation page identifier */
             currentPage: 'home',
             /** @type {string} Error message related to profile image upload */
@@ -326,26 +324,6 @@ const app = createApp({
         },
 
         /**
-         * Handles the start of a long press on the Issue Box.
-         */
-        startIssuePress() {
-            this.issuePressTimer = setTimeout(() => {
-                this.showIssueModal = true;
-                this.issuePressTimer = null;
-            }, 1000);
-        },
-
-        /**
-         * Cancels the long press on the Issue Box.
-         */
-        cancelIssuePress() {
-            if (this.issuePressTimer) {
-                clearTimeout(this.issuePressTimer);
-                this.issuePressTimer = null;
-            }
-        },
-
-        /**
          * Closes the Issue Modal.
          */
         closeIssueModal() {
@@ -534,7 +512,7 @@ const app = createApp({
                     // Migration: Ensure issues object exists
                     if (!this.characterSheet.hero.issues) {
                         this.characterSheet.hero.issues = {
-                            current: 'Issue #1',
+                            current: '#1',
                             past: [],
                             collections: []
                         };

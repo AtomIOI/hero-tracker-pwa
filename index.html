@@ -51,13 +51,8 @@
             <!-- Comic Header Box -->
             <div class="comic-header-box comic-header-yellow">
                 <div class="issue-box cursor-pointer select-none active:scale-95 transition-transform"
-                     @mousedown="startIssuePress"
-                     @touchstart="startIssuePress"
-                     @mouseup="cancelIssuePress"
-                     @touchend="cancelIssuePress"
-                     @mouseleave="cancelIssuePress"
-                     @contextmenu.prevent
-                     title="Hold to edit Issue">
+                     @click="showIssueModal = true"
+                     title="Tap to edit Issue">
                     ISSUE: {{ characterSheet.hero.issues.current || '...' }}
                 </div>
                 <h1 class="comic-title">HERO TRACKER</h1>
