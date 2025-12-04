@@ -52,29 +52,34 @@ app.component('add-edit-trait-modal', {
     },
     template: `
         <div class="modal-overlay" v-if="show">
-            <div class="modal-content wobbly-box">
+            <div class="modal-content wobbly-box comic-modal-panel">
                 <h2 class="comic-title">{{ trait ? 'Edit' : 'Add' }} {{ type }}</h2>
                 <form @submit.prevent="handleSubmit">
-                    <div class="form-group">
-                        <label for="trait-name">Name</label>
-                        <input type="text" id="trait-name" v-model="name" required>
+
+                    <div class="comic-input-group">
+                        <label for="trait-name" class="comic-label-box">Name</label>
+                        <input type="text" id="trait-name" v-model="name" required class="comic-input-box">
                     </div>
-                    <div class="form-group">
-                        <label>Die</label>
-                        <div class="dice-selector">
-                            <div v-for="size in [4, 6, 8, 10, 12]"
-                                 :key="size"
-                                 class="form-die-option"
-                                 :class="{ selected: die === size }"
-                                 @click="die = size">
-                                <img :src="'assets/dice/D' + size + '.png'" :alt="'d' + size" class="trait-die-icon">
+
+                    <div class="comic-input-group">
+                        <label class="comic-label-box">Die Rating</label>
+                        <div class="comic-input-box dice-selector-container">
+                            <div class="dice-selector">
+                                <div v-for="size in [4, 6, 8, 10, 12]"
+                                     :key="size"
+                                     class="form-die-option"
+                                     :class="{ selected: die === size }"
+                                     @click="die = size">
+                                    <img :src="'assets/dice/D' + size + '.png'" :alt="'d' + size" class="trait-die-icon">
+                                </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="form-actions">
-                        <button type="submit" class="comic-btn plus">{{ trait ? 'Save' : 'Add' }}</button>
                         <button type="button" class="comic-btn" @click="$emit('close')">Cancel</button>
                         <button v-if="trait" type="button" class="comic-btn minus" @click="handleDelete">Delete</button>
+                        <button type="submit" class="comic-btn plus">{{ trait ? 'Save' : 'Add' }}</button>
                     </div>
                 </form>
             </div>

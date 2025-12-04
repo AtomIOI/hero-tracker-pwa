@@ -134,3 +134,25 @@
        For now, let's stick to the default green 'plus' style or override based on context
     */
 }
+
+/* AddEditTraitModal Styling */
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.dice-selector-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+/* Ensure the modal doesn't get too wide on larger screens */
+.comic-modal-panel {
+    width: 90%;
+    max-width: 450px;
+}
