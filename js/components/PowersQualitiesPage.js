@@ -35,12 +35,34 @@ app.component('powers-qualities-page', {
          */
         currentTypeLabel() {
             return this.activeTab === 'powers' ? 'Power' : 'Quality';
+        },
+        /**
+         * Returns the dynamic header title based on active tab.
+         * @returns {string} 'POWERS' or 'QUALITIES'.
+         */
+        headerTitle() {
+            return this.activeTab === 'powers' ? 'POWERS' : 'QUALITIES';
+        },
+        /**
+         * Returns the appropriate class for the header based on active tab.
+         * @returns {string} CSS class for the header background.
+         */
+        headerClass() {
+             // Powers = Yellow, Qualities = Purple
+             return this.activeTab === 'powers' ? 'comic-header-yellow' : 'comic-header-purple';
+        },
+        /**
+         * Returns the appropriate class for the trait type.
+         * @returns {string} 'power' or 'quality'.
+         */
+        traitTypeClass() {
+             return this.activeTab === 'powers' ? 'power' : 'quality';
         }
     },
     template: `
-        <div>
-            <div class="comic-header-box comic-header-purple">
-                <h1 class="comic-title">POWERS/QUALITIES</h1>
+        <div class="powers-qualities-container pb-nav">
+            <div class="comic-header-box" :class="headerClass">
+                <h1 class="comic-title">{{ headerTitle }}</h1>
             </div>
 
             <div class="tabs-container">
@@ -62,16 +84,18 @@ app.component('powers-qualities-page', {
                 Add New {{ currentTypeLabel }}
             </button>
 
-            <div class="traits-grid">
+            <div class="traits-list">
                 <div
                     v-for="trait in displayedTraits"
                     :key="trait.id"
-                    class="trait-card wobbly-box"
+                    class="trait-panel"
+                    :class="traitTypeClass"
                     @click="openEditModal(trait)"
                 >
                     <div class="trait-name">{{ trait.name }}</div>
-                    <div class="trait-die-container">
-                        <img :src="'assets/dice/D' + trait.die + '.png'" :alt="'d' + trait.die" class="trait-die-icon" />
+                    <div class="trait-die-wrapper">
+                         <div class="starburst"></div>
+                        <img :src="getDieImage(trait.die)" :alt="'d' + trait.die" class="trait-die-icon" />
                     </div>
                 </div>
             </div>
@@ -87,6 +111,18 @@ app.component('powers-qualities-page', {
         </div>
     `,
     methods: {
+        /**
+         * Generates the image path for a die rating.
+         * Handles normalization of 'd8' vs '8'.
+         * @param {string|number} die - The die rating.
+         * @returns {string} Path to the die image.
+         */
+        getDieImage(die) {
+            if (!die) return '';
+            // Ensure string, remove 'd' prefix if present, then uppercase 'D'
+            const dieStr = String(die).toLowerCase().replace('d', '');
+            return `assets/dice/D${dieStr}.png`;
+        },
         /**
          * Opens the modal for adding a new trait.
          */
@@ -129,6 +165,7 @@ app.component('powers-qualities-page', {
                 list.push({ id: newId, name, die });
             }
             this.closeModal();
+            this.$root.saveCharacterSheet(); // Ensure persistence
         },
         /**
          * Deletes a trait.
@@ -140,6 +177,7 @@ app.component('powers-qualities-page', {
             if (index > -1) {
                 list.splice(index, 1);
             }
+            this.$root.saveCharacterSheet(); // Ensure persistence
         }
     }
 });

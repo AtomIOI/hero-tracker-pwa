@@ -40,384 +40,387 @@
     <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/dice-select.css">
     <link rel="stylesheet" href="css/dice.css">
+    <link rel="stylesheet" href="css/powers-qualities.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/desktop.css">
 </head>
 
-<body id="app">
-    <main id="page-content">
-        <!-- Home Page -->
-        <div v-if="currentPage === 'home'">
-            <!-- Comic Header Box -->
-            <div class="comic-header-box comic-header-yellow">
-                <div class="issue-box cursor-pointer select-none active:scale-95 transition-transform"
-                     @mousedown="startIssuePress"
-                     @touchstart="startIssuePress"
-                     @mouseup="cancelIssuePress"
-                     @touchend="cancelIssuePress"
-                     @mouseleave="cancelIssuePress"
-                     @contextmenu.prevent
-                     title="Hold to edit Issue">
-                    ISSUE: {{ characterSheet.hero.issues.current || '...' }}
-                </div>
-                <h1 class="comic-title">HERO TRACKER</h1>
-            </div>
-
-            <!-- Merged Hero & Health Container -->
-            <div class="merged-hero-health wobbly-box bg-dots mb-4">
-                <!-- Hero Header Content -->
-                <div class="hero-header-content">
-                    <div class="portrait-container">
-                        <div class="comic-portrait">
-                            <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
-                        </div>
+<body>
+    <div id="app">
+        <main id="page-content">
+            <!-- Home Page -->
+            <div v-if="currentPage === 'home'">
+                <!-- Comic Header Box -->
+                <div class="comic-header-box comic-header-yellow">
+                    <div class="issue-box cursor-pointer select-none active:scale-95 transition-transform"
+                        @mousedown="startIssuePress"
+                        @touchstart="startIssuePress"
+                        @mouseup="cancelIssuePress"
+                        @touchend="cancelIssuePress"
+                        @mouseleave="cancelIssuePress"
+                        @contextmenu.prevent
+                        title="Hold to edit Issue">
+                        ISSUE: {{ characterSheet.hero.issues.current || '...' }}
                     </div>
-                    <div class="hero-identity">
-                        <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
-                        <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
-                    </div>
+                    <h1 class="comic-title">HERO TRACKER</h1>
                 </div>
 
-                <!-- Health Section -->
-                <div class="health-section">
-                    <div class="health-readout-box">
-                        {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
-                    </div>
-                    <!-- Health Bar with Embedded Controls -->
-                    <div class="health-bar-container">
-                        <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
-                        <div class="health-segments">
-                            <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
-                        </div>
-                        <button class="comic-btn plus" @click="changeHealth(1)">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Profile Panel (Full Width) -->
-            <div class="hero-profile-panel wobbly-box bg-dots">
-                <div class="section-label">HERO PROFILE</div>
-                <div class="profile-content">
-                    <div class="profile-grid">
-                        <!-- Background Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">BACKGROUND</div>
-                            <div class="profile-card-body">{{ characterSheet.hero.background || 'N/A' }}</div>
-                        </div>
-                        <!-- Power Source Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">POWER SOURCE</div>
-                            <div class="profile-card-body">{{ characterSheet.hero.powerSource || 'N/A' }}</div>
-                        </div>
-                        <!-- Archetype Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">
-                                ARCHETYPE
-                                <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor"/>
-                                </svg>
-                            </div>
-                            <div class="profile-card-body">{{ characterSheet.hero.archetype || 'N/A' }}</div>
-                        </div>
-                        <!-- Personality Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">
-                                PERSONALITY
-                                <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
-                                </svg>
-                            </div>
-                            <div class="profile-card-body">{{ characterSheet.hero.personality || 'N/A' }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Principles Section -->
-            <div class="principles-panel wobbly-box bg-dots">
-                <div class="section-label">PRINCIPLES</div>
-                <div class="principles-content-grid">
-                    <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="principle-card">
-                        <div class="principle-header">{{ principle.name || 'Principle Name' }}</div>
-                        <div class="principle-body">
-                            <div class="principle-roleplay">
-                                <span class="principle-text">{{ principle.duringRoleplay || 'During roleplay instructions...' }}</span>
-                            </div>
-                            <div class="principle-twist">
-                                <span class="twist-label minor">Minor Twist:</span>
-                                <span class="twist-text">{{ principle.minorTwist || 'Minor twist description...' }}</span>
-                            </div>
-                            <div class="principle-twist">
-                                <span class="twist-label major">Major Twist:</span>
-                                <span class="twist-text">{{ principle.majorTwist || 'Major twist description...' }}</span>
+                <!-- Merged Hero & Health Container -->
+                <div class="merged-hero-health wobbly-box bg-dots mb-4">
+                    <!-- Hero Header Content -->
+                    <div class="hero-header-content">
+                        <div class="portrait-container">
+                            <div class="comic-portrait">
+                                <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Abilities Page -->
-        <div v-if="currentPage === 'abilities'">
-            <div class="comic-header-box comic-header-blue">
-                <h1 class="comic-title">ABILITY MODULES</h1>
-            </div>
-
-            <button id="add-power-btn" class="comic-btn plus" @click="openAddAbilityModal">Add New Ability</button>
-
-            <!-- Green Zone -->
-            <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE</div>
-                <div class="abilities-grid modules-grid">
-            <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
-                </div>
-            </div>
-
-            <!-- Yellow Zone -->
-            <div v-if="abilitiesYellow.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--color-yellow); color: black;">YELLOW ZONE</div>
-                <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesYellow" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
-                </div>
-            </div>
-
-            <!-- Red Zone -->
-            <div v-if="abilitiesRed.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--color-magenta); color: white;">RED ZONE</div>
-                <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesRed" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
-                </div>
-            </div>
-
-            <add-edit-ability-modal :show="showAddEditAbilityModal" :ability="editingAbility" :hero="characterSheet.hero" @close="closeAddEditAbilityModal" @save="saveAbility" @delete="deleteAbility"></add-edit-ability-modal>
-        </div>
-
-        <issue-modal :show="showIssueModal" :hero="characterSheet.hero" @close="closeIssueModal"></issue-modal>
-
-        <!-- Settings Page -->
-        <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
-            <div class="comic-header-box comic-header-teal">
-                <h1 class="comic-title">SETTINGS</h1>
-            </div>
-
-            <div class="settings-container">
-                <!-- Identity Section -->
-                <div class="wobbly-box mb-6 bg-white relative p-4">
-                    <div class="section-label">IDENTITY</div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div class="form-group">
-                            <label class="block font-bangers tracking-wide text-lg mb-1">HERO NAME</label>
-                            <input type="text" v-model="characterSheet.hero.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        </div>
-                        <div class="form-group">
-                            <label class="block font-bangers tracking-wide text-lg mb-1">PLAYER NAME</label>
-                            <input type="text" v-model="characterSheet.hero.playerName" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        <div class="hero-identity">
+                            <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
+                            <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
                         </div>
                     </div>
 
-                    <!-- Profile Picture Upload -->
-                    <div class="form-group mb-4">
-                        <label class="block font-bangers tracking-wide text-lg mb-2">PROFILE PICTURE</label>
-                        <div class="flex items-start gap-4">
-                            <!-- Clickable Image Area -->
-                            <div class="relative group cursor-pointer" @click="$refs.fileInput.click()" style="width: 100px; height: 100px;">
-                                <div class="w-full h-full border-2 border-black rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all">
-                                    <img v-if="characterSheet.hero.profileImage" :src="characterSheet.hero.profileImage" class="w-full h-full object-cover">
-                                    <span v-else class="text-4xl text-gray-400">+</span>
+                    <!-- Health Section -->
+                    <div class="health-section">
+                        <div class="health-readout-box">
+                            {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
+                        </div>
+                        <!-- Health Bar with Embedded Controls -->
+                        <div class="health-bar-container">
+                            <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
+                            <div class="health-segments">
+                                <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
+                            </div>
+                            <button class="comic-btn plus" @click="changeHealth(1)">+</button>
+                        </div>
+                    </div>
+                </div>
 
-                                    <!-- Hover Overlay -->
-                                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold transition-opacity">
-                                        CHANGE
-                                    </div>
+                <!-- Hero Profile Panel (Full Width) -->
+                <div class="hero-profile-panel wobbly-box bg-dots">
+                    <div class="section-label">HERO PROFILE</div>
+                    <div class="profile-content">
+                        <div class="profile-grid">
+                            <!-- Background Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">BACKGROUND</div>
+                                <div class="profile-card-body">{{ characterSheet.hero.background || 'N/A' }}</div>
+                            </div>
+                            <!-- Power Source Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">POWER SOURCE</div>
+                                <div class="profile-card-body">{{ characterSheet.hero.powerSource || 'N/A' }}</div>
+                            </div>
+                            <!-- Archetype Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    ARCHETYPE
+                                    <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor"/>
+                                    </svg>
                                 </div>
+                                <div class="profile-card-body">{{ characterSheet.hero.archetype || 'N/A' }}</div>
                             </div>
-
-                            <!-- Controls -->
-                            <div class="flex flex-col gap-2 justify-center h-[100px]">
-                                <input type="file" ref="fileInput" accept="image/*" @change="handleProfileImageUpload" class="hidden">
-                                <button type="button" class="comic-btn primary" @click="$refs.fileInput.click()">
-                                    {{ characterSheet.hero.profileImage ? 'CHANGE PHOTO' : 'UPLOAD PHOTO' }}
-                                </button>
-                                <button v-if="characterSheet.hero.profileImage" type="button" class="comic-btn minus text-sm py-1" @click="clearProfileImage" style="font-size: 0.9rem;">
-                                    REMOVE
-                                </button>
+                            <!-- Personality Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    PERSONALITY
+                                    <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <div class="profile-card-body">{{ characterSheet.hero.personality || 'N/A' }}</div>
                             </div>
                         </div>
-
-                        <!-- Status Messages -->
-                         <div v-if="isProcessingImage" class="mt-2 flex items-center gap-2 text-sm font-bold">
-                            <span class="spinner w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
-                            <span>Processing...</span>
-                        </div>
-                        <div v-if="profileImageError" class="mt-2 text-red-600 font-bold text-sm">
-                            {{ profileImageError }}
-                        </div>
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label class="block font-bangers tracking-wide text-lg mb-1">ALIAS</label>
-                        <input type="text" v-model="characterSheet.hero.alias" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="form-group">
-                            <label class="block font-bold mb-1">Gender</label>
-                            <input type="text" v-model="characterSheet.hero.gender" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        </div>
-                        <div class="form-group">
-                            <label class="block font-bold mb-1">Age</label>
-                            <input type="number" v-model.number="characterSheet.hero.age" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        </div>
-                        <div class="form-group">
-                            <label class="block font-bold mb-1">Height</label>
-                            <input type="text" v-model="characterSheet.hero.height" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Origins Section -->
-                <div class="wobbly-box mb-6 bg-white relative p-4">
-                    <div class="section-label">ORIGINS</div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div class="form-group">
-                            <label class="block font-bangers tracking-wide text-lg mb-1">ARCHETYPE</label>
-                            <input type="text" v-model="characterSheet.hero.archetype" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        </div>
-                        <div class="form-group">
-                            <label class="block font-bangers tracking-wide text-lg mb-1">POWER SOURCE</label>
-                            <input type="text" v-model="characterSheet.hero.powerSource" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        </div>
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label class="block font-bangers tracking-wide text-lg mb-1">PERSONALITY</label>
-                        <textarea v-model="characterSheet.hero.personality" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20 resize-none"></textarea>
-                    </div>
-
-                    <div class="form-group mb-6">
-                        <label class="block font-bangers tracking-wide text-lg mb-1">BACKGROUND</label>
-                        <textarea v-model="characterSheet.hero.background" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
                     </div>
                 </div>
 
                 <!-- Principles Section -->
-                <div class="wobbly-box mb-6 bg-white relative p-4">
+                <div class="principles-panel wobbly-box bg-dots">
                     <div class="section-label">PRINCIPLES</div>
-                    <div class="space-y-6">
-                        <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="relative">
-                            <!-- Principle Card Container -->
-                             <div class="border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded overflow-hidden">
-                                <!-- Header -->
-                                <div class="bg-yellow-400 border-b-2 border-black p-2 flex justify-between items-center">
-                                    <h3 class="font-bangers text-xl tracking-wide">PRINCIPLE {{ index + 1 }}</h3>
+                    <div class="principles-content-grid">
+                        <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="principle-card">
+                            <div class="principle-header">{{ principle.name || 'Principle Name' }}</div>
+                            <div class="principle-body">
+                                <div class="principle-roleplay">
+                                    <span class="principle-text">{{ principle.duringRoleplay || 'During roleplay instructions...' }}</span>
                                 </div>
-
-                                <!-- Body -->
-                                <div class="p-4 space-y-3">
-                                    <div class="form-group">
-                                        <label class="block font-bold text-sm mb-1 uppercase text-gray-600">Name</label>
-                                        <input type="text" v-model="principle.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded" placeholder="Principle of...">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During Roleplay</label>
-                                        <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="During roleplay, you..."></textarea>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 gap-3">
-                                        <div class="form-group">
-                                            <label class="block font-bangers tracking-wide text-yellow-600 text-lg mb-1">MINOR TWIST</label>
-                                            <textarea v-model="principle.minorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Minor twist..."></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="block font-bangers tracking-wide text-red-600 text-lg mb-1">MAJOR TWIST</label>
-                                            <textarea v-model="principle.majorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Major twist..."></textarea>
-                                        </div>
-                                    </div>
+                                <div class="principle-twist">
+                                    <span class="twist-label minor">Minor Twist:</span>
+                                    <span class="twist-text">{{ principle.minorTwist || 'Minor twist description...' }}</span>
                                 </div>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stats Section -->
-                <div class="wobbly-box mb-6 bg-white relative p-4">
-                    <div class="section-label">STATS</div>
-
-                    <div class="form-group mb-6">
-                        <label class="block font-bangers tracking-wide text-lg mb-1">MAX HEALTH</label>
-                        <input type="number" v-model.number="characterSheet.hero.health.max" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                        <p class="text-sm text-gray-500 font-bold mt-1 italic">Changing this automatically updates status ranges.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="block font-bangers tracking-wide text-lg mb-3">STATUS DICE</label>
-                        <div class="grid grid-cols-3 gap-4">
-                            <!-- Green Die -->
-                            <div class="flex flex-col">
-                                <div class="bg-green-500 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">GREEN</div>
-                                <dice-select v-model="characterSheet.hero.statusDice.green"></dice-select>
-                            </div>
-
-                            <!-- Yellow Die -->
-                            <div class="flex flex-col">
-                                <div class="bg-yellow-400 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-black">YELLOW</div>
-                                <dice-select v-model="characterSheet.hero.statusDice.yellow"></dice-select>
-                            </div>
-
-                            <!-- Red Die -->
-                            <div class="flex flex-col">
-                                <div class="bg-red-600 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">RED</div>
-                                <dice-select v-model="characterSheet.hero.statusDice.red"></dice-select>
+                                <div class="principle-twist">
+                                    <span class="twist-label major">Major Twist:</span>
+                                    <span class="twist-text">{{ principle.majorTwist || 'Major twist description...' }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <button class="comic-btn primary full-width" style="margin-bottom: 2rem;" @click="saveSettings">SAVE SETTINGS</button>
             </div>
-        </div>
-        <!-- Powers/Qualities Page -->
-        <div v-if="currentPage === 'powers-qualities'">
-            <powers-qualities-page :hero="characterSheet.hero"></powers-qualities-page>
-        </div>
 
-        <!-- Dice Page -->
-        <div v-if="currentPage === 'dice'">
-            <dice-page :hero="characterSheet.hero" :initial-dice="diceSelection" @update-dice="updateDiceSelection"></dice-page>
-        </div>
-    </main>
+            <!-- Abilities Page -->
+            <div v-if="currentPage === 'abilities'">
+                <div class="comic-header-box comic-header-blue">
+                    <h1 class="comic-title">ABILITY MODULES</h1>
+                </div>
 
-    <!-- Install PWA Button (shown when available) -->
-    <button id="install-button" class="comic-btn plus" style="display:none; position: fixed; right: 1rem; bottom: 5rem; z-index: 1000; width: auto; height: auto; padding: 0.5rem 1rem; border-radius: 8px;">
-        Install App
-    </button>
+                <button id="add-power-btn" class="comic-btn plus" @click="openAddAbilityModal">Add New Ability</button>
 
-    <!-- Bottom Navigation -->
-    <nav class="nav-bar">
-        <div class="nav-item" :class="{ active: currentPage === 'home' }" @click="setPage('home')">
-            <div class="nav-icon home"></div>
-            <span>HOME</span>
-        </div>
-        <div class="nav-item" :class="{ active: currentPage === 'abilities' }" @click="setPage('abilities')">
-            <div class="nav-icon powers"></div>
-            <span>ABILITIES</span>
-        </div>
-        <div class="nav-item" :class="{ active: currentPage === 'powers-qualities' }" @click="setPage('powers-qualities')">
-            <div class="nav-icon powers-qualities"></div>
-            <span>Powers/Qualities</span>
-        </div>
-        <div class="nav-item" :class="{ active: currentPage === 'dice' }" @click="setPage('dice')">
-            <div class="nav-icon dice"></div>
-            <span>DICE</span>
-        </div>
-        <div class="nav-item" :class="{ active: currentPage === 'settings' }" @click="setPage('settings')">
-            <div class="nav-icon settings"></div>
-            <span>SETTINGS</span>
-        </div>
-    </nav>
+                <!-- Green Zone -->
+                <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE</div>
+                    <div class="abilities-grid modules-grid">
+                <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
+                    </div>
+                </div>
+
+                <!-- Yellow Zone -->
+                <div v-if="abilitiesYellow.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--color-yellow); color: black;">YELLOW ZONE</div>
+                    <div class="abilities-grid modules-grid">
+                        <ability-card v-for="ability in abilitiesYellow" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
+                    </div>
+                </div>
+
+                <!-- Red Zone -->
+                <div v-if="abilitiesRed.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--color-magenta); color: white;">RED ZONE</div>
+                    <div class="abilities-grid modules-grid">
+                        <ability-card v-for="ability in abilitiesRed" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"></ability-card>
+                    </div>
+                </div>
+
+                <add-edit-ability-modal :show="showAddEditAbilityModal" :ability="editingAbility" :hero="characterSheet.hero" @close="closeAddEditAbilityModal" @save="saveAbility" @delete="deleteAbility"></add-edit-ability-modal>
+            </div>
+
+            <issue-modal :show="showIssueModal" :hero="characterSheet.hero" @close="closeIssueModal"></issue-modal>
+
+            <!-- Settings Page -->
+            <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
+                <div class="comic-header-box comic-header-teal">
+                    <h1 class="comic-title">SETTINGS</h1>
+                </div>
+
+                <div class="settings-container">
+                    <!-- Identity Section -->
+                    <div class="wobbly-box mb-6 bg-white relative p-4">
+                        <div class="section-label">IDENTITY</div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="form-group">
+                                <label class="block font-bangers tracking-wide text-lg mb-1">HERO NAME</label>
+                                <input type="text" v-model="characterSheet.hero.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                            <div class="form-group">
+                                <label class="block font-bangers tracking-wide text-lg mb-1">PLAYER NAME</label>
+                                <input type="text" v-model="characterSheet.hero.playerName" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                        </div>
+
+                        <!-- Profile Picture Upload -->
+                        <div class="form-group mb-4">
+                            <label class="block font-bangers tracking-wide text-lg mb-2">PROFILE PICTURE</label>
+                            <div class="flex items-start gap-4">
+                                <!-- Clickable Image Area -->
+                                <div class="relative group cursor-pointer" @click="$refs.fileInput.click()" style="width: 100px; height: 100px;">
+                                    <div class="w-full h-full border-2 border-black rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all">
+                                        <img v-if="characterSheet.hero.profileImage" :src="characterSheet.hero.profileImage" class="w-full h-full object-cover">
+                                        <span v-else class="text-4xl text-gray-400">+</span>
+
+                                        <!-- Hover Overlay -->
+                                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold transition-opacity">
+                                            CHANGE
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Controls -->
+                                <div class="flex flex-col gap-2 justify-center h-[100px]">
+                                    <input type="file" ref="fileInput" accept="image/*" @change="handleProfileImageUpload" class="hidden">
+                                    <button type="button" class="comic-btn primary" @click="$refs.fileInput.click()">
+                                        {{ characterSheet.hero.profileImage ? 'CHANGE PHOTO' : 'UPLOAD PHOTO' }}
+                                    </button>
+                                    <button v-if="characterSheet.hero.profileImage" type="button" class="comic-btn minus text-sm py-1" @click="clearProfileImage" style="font-size: 0.9rem;">
+                                        REMOVE
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Status Messages -->
+                            <div v-if="isProcessingImage" class="mt-2 flex items-center gap-2 text-sm font-bold">
+                                <span class="spinner w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+                                <span>Processing...</span>
+                            </div>
+                            <div v-if="profileImageError" class="mt-2 text-red-600 font-bold text-sm">
+                                {{ profileImageError }}
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">ALIAS</label>
+                            <input type="text" v-model="characterSheet.hero.alias" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="form-group">
+                                <label class="block font-bold mb-1">Gender</label>
+                                <input type="text" v-model="characterSheet.hero.gender" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                            <div class="form-group">
+                                <label class="block font-bold mb-1">Age</label>
+                                <input type="number" v-model.number="characterSheet.hero.age" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                            <div class="form-group">
+                                <label class="block font-bold mb-1">Height</label>
+                                <input type="text" v-model="characterSheet.hero.height" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Origins Section -->
+                    <div class="wobbly-box mb-6 bg-white relative p-4">
+                        <div class="section-label">ORIGINS</div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="form-group">
+                                <label class="block font-bangers tracking-wide text-lg mb-1">ARCHETYPE</label>
+                                <input type="text" v-model="characterSheet.hero.archetype" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                            <div class="form-group">
+                                <label class="block font-bangers tracking-wide text-lg mb-1">POWER SOURCE</label>
+                                <input type="text" v-model="characterSheet.hero.powerSource" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">PERSONALITY</label>
+                            <textarea v-model="characterSheet.hero.personality" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20 resize-none"></textarea>
+                        </div>
+
+                        <div class="form-group mb-6">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">BACKGROUND</label>
+                            <textarea v-model="characterSheet.hero.background" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Principles Section -->
+                    <div class="wobbly-box mb-6 bg-white relative p-4">
+                        <div class="section-label">PRINCIPLES</div>
+                        <div class="space-y-6">
+                            <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="relative">
+                                <!-- Principle Card Container -->
+                                <div class="border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded overflow-hidden">
+                                    <!-- Header -->
+                                    <div class="bg-yellow-400 border-b-2 border-black p-2 flex justify-between items-center">
+                                        <h3 class="font-bangers text-xl tracking-wide">PRINCIPLE {{ index + 1 }}</h3>
+                                    </div>
+
+                                    <!-- Body -->
+                                    <div class="p-4 space-y-3">
+                                        <div class="form-group">
+                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">Name</label>
+                                            <input type="text" v-model="principle.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded" placeholder="Principle of...">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During Roleplay</label>
+                                            <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="During roleplay, you..."></textarea>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 gap-3">
+                                            <div class="form-group">
+                                                <label class="block font-bangers tracking-wide text-yellow-600 text-lg mb-1">MINOR TWIST</label>
+                                                <textarea v-model="principle.minorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Minor twist..."></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="block font-bangers tracking-wide text-red-600 text-lg mb-1">MAJOR TWIST</label>
+                                                <textarea v-model="principle.majorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Major twist..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Section -->
+                    <div class="wobbly-box mb-6 bg-white relative p-4">
+                        <div class="section-label">STATS</div>
+
+                        <div class="form-group mb-6">
+                            <label class="block font-bangers tracking-wide text-lg mb-1">MAX HEALTH</label>
+                            <input type="number" v-model.number="characterSheet.hero.health.max" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            <p class="text-sm text-gray-500 font-bold mt-1 italic">Changing this automatically updates status ranges.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="block font-bangers tracking-wide text-lg mb-3">STATUS DICE</label>
+                            <div class="grid grid-cols-3 gap-4">
+                                <!-- Green Die -->
+                                <div class="flex flex-col">
+                                    <div class="bg-green-500 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">GREEN</div>
+                                    <dice-select v-model="characterSheet.hero.statusDice.green"></dice-select>
+                                </div>
+
+                                <!-- Yellow Die -->
+                                <div class="flex flex-col">
+                                    <div class="bg-yellow-400 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-black">YELLOW</div>
+                                    <dice-select v-model="characterSheet.hero.statusDice.yellow"></dice-select>
+                                </div>
+
+                                <!-- Red Die -->
+                                <div class="flex flex-col">
+                                    <div class="bg-red-600 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">RED</div>
+                                    <dice-select v-model="characterSheet.hero.statusDice.red"></dice-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="comic-btn primary full-width" style="margin-bottom: 2rem;" @click="saveSettings">SAVE SETTINGS</button>
+                </div>
+            </div>
+            <!-- Powers/Qualities Page -->
+            <div v-if="currentPage === 'powers-qualities'">
+                <powers-qualities-page :hero="characterSheet.hero"></powers-qualities-page>
+            </div>
+
+            <!-- Dice Page -->
+            <div v-if="currentPage === 'dice'">
+                <dice-page :hero="characterSheet.hero" :initial-dice="diceSelection" @update-dice="updateDiceSelection"></dice-page>
+            </div>
+        </main>
+
+        <!-- Install PWA Button (shown when available) -->
+        <button id="install-button" class="comic-btn plus" style="display:none; position: fixed; right: 1rem; bottom: 5rem; z-index: 1000; width: auto; height: auto; padding: 0.5rem 1rem; border-radius: 8px;">
+            Install App
+        </button>
+
+        <!-- Bottom Navigation -->
+        <nav class="nav-bar">
+            <div class="nav-item" :class="{ active: currentPage === 'home' }" @click="setPage('home')">
+                <div class="nav-icon home"></div>
+                <span>HOME</span>
+            </div>
+            <div class="nav-item" :class="{ active: currentPage === 'abilities' }" @click="setPage('abilities')">
+                <div class="nav-icon powers"></div>
+                <span>ABILITIES</span>
+            </div>
+            <div class="nav-item" :class="{ active: currentPage === 'powers-qualities' }" @click="setPage('powers-qualities')">
+                <div class="nav-icon powers-qualities"></div>
+                <span>Powers/Qualities</span>
+            </div>
+            <div class="nav-item" :class="{ active: currentPage === 'dice' }" @click="setPage('dice')">
+                <div class="nav-icon dice"></div>
+                <span>DICE</span>
+            </div>
+            <div class="nav-item" :class="{ active: currentPage === 'settings' }" @click="setPage('settings')">
+                <div class="nav-icon settings"></div>
+                <span>SETTINGS</span>
+            </div>
+        </nav>
+    </div>
 
     <script type="module">
         import PWAManager from './js/pwa.js';

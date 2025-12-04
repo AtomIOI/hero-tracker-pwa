@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 test.describe('Powers/Qualities Page', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('http://localhost:8000');
-        await page.click('.nav-item:has-text("P & Q")');
+        await page.click('.nav-item:has-text("Powers/Qualities")');
     });
 
     test('should load Powers/Qualities page', async ({ page }) => {
@@ -35,7 +35,7 @@ test.describe('Powers/Qualities Page', () => {
         // Verify added
         await expect(page.locator('.trait-name', { hasText: 'New Super Power' })).toBeVisible();
         // Verify die icon
-        await expect(page.locator('.trait-card', { hasText: 'New Super Power' }).locator('img[src*="D10.png"]')).toBeVisible();
+        await expect(page.locator('.trait-panel', { hasText: 'New Super Power' }).locator('img[src*="D10.png"]')).toBeVisible();
     });
 
     test('should delete a power', async ({ page }) => {
@@ -45,11 +45,11 @@ test.describe('Powers/Qualities Page', () => {
         await page.fill('#trait-name', 'Power To Delete');
         await page.click('button[type="submit"]', { hasText: 'Add' });
 
-        const powerCard = page.locator('.trait-card').filter({ hasText: 'Power To Delete' });
-        await expect(powerCard).toBeVisible();
+        const powerPanel = page.locator('.trait-panel').filter({ hasText: 'Power To Delete' });
+        await expect(powerPanel).toBeVisible();
 
         // Click the card to edit
-        await powerCard.click();
+        await powerPanel.click();
 
         // Modal appears
         await expect(page.locator('.modal-content h2')).toHaveText('Edit Power');
