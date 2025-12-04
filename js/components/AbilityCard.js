@@ -69,16 +69,16 @@ app.component('ability-card', {
             return map[this.ability.interactionType] || 'ACTION';
         },
         /**
-         * Returns the CSS class for the interaction type text color.
+         * Returns the CSS class for the interaction type background color.
          * @returns {string} The CSS class name.
          */
-        interactionClass() {
+        interactionBgClass() {
              const map = {
-                'action': 'text-cyan',
-                'reaction': 'text-purple',
-                'inherent': 'text-orange'
+                'action': 'bg-blue-500',
+                'reaction': 'bg-purple-500',
+                'inherent': 'bg-orange-500'
             };
-            return map[this.ability.interactionType] || 'text-cyan';
+            return map[this.ability.interactionType] || 'bg-blue-500';
         },
         /**
          * Checks if the ability is locked based on the hero's status.
@@ -215,11 +215,12 @@ app.component('ability-card', {
                     <!-- Centered Title -->
                     <h3 class="truncate text-center w-full pr-12" style="font-size: 1.4rem;">{{ ability.name }}</h3>
 
-                    <!-- Interaction Type Text Label (Top Right, Smaller) -->
-                    <div class="absolute top-0 right-0 font-bangers tracking-wide text-base font-bold z-10"
-                         :class="interactionClass"
-                         style="text-shadow: 1px 1px 0 #000; -webkit-text-stroke: 1.5px #000; transform: translate(0, 0); top: 2px; right: 5px;">
-                        {{ interactionLabel }}
+                    <!-- Interaction Type Badge (Top Right) -->
+                    <div class="absolute top-0 right-0 z-10 mr-1 mt-1">
+                        <div class="border-2 border-black rounded px-2 py-0.5 text-xs font-bold text-white shadow-sm"
+                             :class="interactionBgClass">
+                            {{ interactionLabel }}
+                        </div>
                     </div>
                 </div>
 
