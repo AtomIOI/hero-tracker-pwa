@@ -61,6 +61,15 @@
             <!-- Merged Hero & Health Container -->
             <div class="merged-hero-health wobbly-box bg-dots mb-4">
                 <div class="section-label">HERO</div>
+
+                <!-- Hero Points Star -->
+                <div class="hero-points-star cursor-pointer" @click="openHeroPointsModal">
+                    <svg viewBox="0 0 24 24" class="star-icon">
+                        <path d="M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 Z" />
+                    </svg>
+                    <span class="star-text">{{ characterSheet.hero.heroPoints.current }}</span>
+                </div>
+
                 <!-- Hero Header Content -->
                 <div class="hero-header-content">
                     <div class="portrait-container">
@@ -190,6 +199,7 @@
         </div>
 
         <issue-modal :show="showIssueModal" :hero="characterSheet.hero" @close="closeIssueModal"></issue-modal>
+        <hero-points-modal :show="showHeroPointsModal" :hero="characterSheet.hero" @close="closeHeroPointsModal"></hero-points-modal>
 
         <!-- Settings Page -->
         <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
@@ -433,6 +443,7 @@
     <script src="js/components/AbilityCard.js"></script>
     <script src="js/components/AddEditAbilityModal.js"></script>
     <script src="js/components/IssueModal.js"></script>
+    <script src="js/components/HeroPointsModal.js"></script>
     <script src="js/components/AddEditTraitModal.js"></script>
     <script src="js/components/PowersQualitiesPage.js"></script>
     <script src="js/components/DicePage.js"></script>
