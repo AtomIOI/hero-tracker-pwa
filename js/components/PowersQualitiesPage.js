@@ -67,13 +67,13 @@ app.component('powers-qualities-page', {
 
             <div class="tabs-container">
                 <button
-                    class="comic-tab"
+                    class="comic-tab tab-powers"
                     :class="{ active: activeTab === 'powers' }"
                     @click="activeTab = 'powers'">
                     POWERS
                 </button>
                 <button
-                    class="comic-tab"
+                    class="comic-tab tab-qualities"
                     :class="{ active: activeTab === 'qualities' }"
                     @click="activeTab = 'qualities'">
                     QUALITIES

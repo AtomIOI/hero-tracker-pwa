@@ -384,6 +384,11 @@ h1, h2, h3, h4, .comic-title {
     z-index: 10;
 }
 
+.comic-tab.tab-qualities.active {
+    background-color: var(--comic-purple);
+    color: var(--comic-white);
+}
+
 .tabs-container {
     display: flex;
     justify-content: center;
