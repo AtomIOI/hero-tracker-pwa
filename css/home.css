@@ -16,14 +16,19 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
 }
 
-/* Hero Identity Section */
-.hero-identity {
+/* Hero Identity Box */
+.hero-identity-box {
     flex: 1;
-    text-align: left;
+    background: white;
+    border: 2px solid var(--color-ink);
+    border-radius: 4px;
+    box-shadow: 2px 2px 0px rgba(0,0,0,1);
+    padding: 0.5rem;
+    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
