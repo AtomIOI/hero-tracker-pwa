@@ -125,6 +125,40 @@ app.component('ability-card', {
         basicActionIcons() {
             if (!this.ability.actions || !window.ABILITY_ICONS) return [];
             return this.ability.actions.map(key => window.ABILITY_ICONS[key]).filter(Boolean);
+        },
+        /**
+         * Calculates the preview dice images for the ability.
+         * @returns {Array<{src: string, alt: string}>} Array of dice image objects.
+         */
+        dicePreview() {
+            if (!this.hero) return [];
+
+            // 1. Status Die
+            let statusDieVal = 6;
+            const health = this.hero.health;
+            if (health && health.ranges) {
+                if (health.current >= health.ranges.greenMin) {
+                    statusDieVal = this.hero.statusDice.green;
+                } else if (health.current >= health.ranges.yellowMin) {
+                    statusDieVal = this.hero.statusDice.yellow;
+                } else if (health.current >= health.ranges.redMin) {
+                    statusDieVal = this.hero.statusDice.red;
+                }
+            }
+
+            // 2. Trait Die
+            let traitDieVal = null;
+            if (this.linkedTrait) {
+                traitDieVal = this.linkedTrait.die;
+            }
+
+            // 3. Unknown Die
+
+            return [
+                { src: `assets/dice/D${statusDieVal}.png`, alt: `Status: d${statusDieVal}` },
+                { src: traitDieVal ? `assets/dice/D${traitDieVal}.png` : 'assets/dice/unknown.svg', alt: traitDieVal ? `Trait: d${traitDieVal}` : 'Unknown Trait' },
+                { src: 'assets/dice/unknown.svg', alt: 'Bonus/Min/Max' }
+            ];
         }
     },
     methods: {
@@ -213,12 +247,23 @@ app.component('ability-card', {
                     {{ ability.text }}
                 </div>
 
-                <!-- Action Icons Footer -->
-                <div class="flex gap-2 mt-auto pt-2 border-t-2 border-black/10 justify-center w-full">
-                    <div v-for="(icon, idx) in basicActionIcons" :key="idx"
-                         class="w-6 h-6 text-black"
-                         :title="icon.label"
-                         v-html="icon.svg">
+                <!-- Footer: Dice (Left) & Action Icons (Right) -->
+                <div class="flex justify-between items-end mt-auto pt-2 border-t-2 border-black/10 w-full">
+                    <!-- Dice Preview -->
+                    <div class="flex items-center gap-1">
+                        <img v-for="(die, idx) in dicePreview" :key="idx"
+                             :src="die.src"
+                             :alt="die.alt"
+                             class="w-6 h-6 object-contain filter drop-shadow-md">
+                    </div>
+
+                    <!-- Action Icons -->
+                    <div class="flex gap-2">
+                        <div v-for="(icon, idx) in basicActionIcons" :key="idx"
+                             class="w-6 h-6 text-black"
+                             :title="icon.label"
+                             v-html="icon.svg">
+                        </div>
                     </div>
                 </div>
             </div>

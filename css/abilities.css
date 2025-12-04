@@ -86,10 +86,14 @@ input[type="radio"]:checked + div {
 /* Ability Card Tweaks */
 .ability-card {
     min-height: 200px;
+    height: auto; /* Allow growth */
+    display: flex; /* Flex container to allow children to stretch */
+    flex-direction: column;
 }
 .ability-card-body {
     text-align: left; /* Override center alignment */
     align-items: stretch;
+    flex: 1; /* Take remaining space */
 }
 .pattern-dots {
     /* Ensure pattern dots class works if not already defined globally well */
