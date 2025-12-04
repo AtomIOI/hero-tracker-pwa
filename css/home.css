@@ -134,9 +134,9 @@
 .filled-yellow { background-color: var(--comic-yellow); }
 .filled-red { background-color: var(--comic-red); }
 
-.empty-green { background-color: rgba(0, 255, 0, 0.2); }
-.empty-yellow { background-color: rgba(255, 255, 0, 0.2); }
-.empty-red { background-color: rgba(255, 0, 0, 0.2); }
+.empty-green { background-color: white; }
+.empty-yellow { background-color: white; }
+.empty-red { background-color: white; }
 
 .health-value-text {
     font-family: var(--font-heading);
