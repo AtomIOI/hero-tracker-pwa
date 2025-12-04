@@ -77,6 +77,8 @@ const app = createApp({
             showAddEditAbilityModal: false,
             /** @type {boolean} Controls visibility of the Issue Modal */
             showIssueModal: false,
+            /** @type {boolean} Controls visibility of the Hero Points Modal */
+            showHeroPointsModal: false,
             /** @type {Object|null} The ability currently being edited */
             editingAbility: null,
             /** @type {string} Current navigation page identifier */
@@ -328,6 +330,18 @@ const app = createApp({
          */
         closeIssueModal() {
             this.showIssueModal = false;
+        },
+        /**
+         * Opens the Hero Points Modal.
+         */
+        openHeroPointsModal() {
+            this.showHeroPointsModal = true;
+        },
+        /**
+         * Closes the Hero Points Modal.
+         */
+        closeHeroPointsModal() {
+            this.showHeroPointsModal = false;
         },
         /**
          * Handles the profile image file upload event.
