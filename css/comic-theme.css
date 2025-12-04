@@ -102,6 +102,13 @@ h1, h2, h3, h4, .comic-title {
     color: var(--comic-white);
 }
 
+.comic-header-grey {
+    background: var(--comic-grey);
+}
+.comic-header-grey .comic-title {
+    color: var(--comic-grey);
+}
+
 .issue-box {
     position: absolute;
     top: 0.5rem;
