@@ -346,8 +346,8 @@
 /* Hero Points Star */
 .hero-points-star {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: -5px;
+    right: -5px;
     width: 60px;
     height: 60px;
     z-index: 10;
