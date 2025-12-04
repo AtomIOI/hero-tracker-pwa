@@ -15,6 +15,7 @@ const urlsToCache = [
     '/css/variables.css',
     '/css/base.css',
     '/css/comic-theme.css',
+    '/css/hero-banner.css',
     '/css/mobile.css',
     '/css/desktop.css',
     '/js/app.js',
