@@ -65,6 +65,26 @@ app.component('ability-card', {
             return t ? t.name : 'No Trait Linked';
         },
         /**
+         * Returns the text color class for the trait label based on its type.
+         * @returns {string} CSS class for text color.
+         */
+        traitTextClass() {
+             if (!this.ability.traitId || !this.hero) return 'text-red-600';
+
+             const powers = this.hero.powers || [];
+             if (powers.find(p => p.id === this.ability.traitId)) {
+                 return 'text-yellow-dark'; // Yellow for Powers
+             }
+
+             const qualities = this.hero.qualities || [];
+             if (qualities.find(q => q.id === this.ability.traitId)) {
+                 return 'text-purple'; // Purple for Qualities
+             }
+
+             // If traitId exists but not found in lists (broken link), show red
+             return 'text-red-600';
+        },
+        /**
          * Returns the display label for the interaction type.
          * @returns {string} 'ACTION', 'REACTION', or 'INHERENT'.
          */
@@ -219,9 +239,15 @@ app.component('ability-card', {
             <!-- Content Wrapper -->
             <div class="flex flex-col h-full" :style="isLocked ? 'filter: grayscale(100%); opacity: 0.6;' : ''">
                 <!-- Header -->
-                <div class="ability-card-header pattern-dots flex justify-center items-center relative mb-2 pb-1 border-b-2 border-black/10" style="min-height: 40px;">
+                <div class="ability-card-header pattern-dots flex flex-col justify-center items-center relative mb-2 pb-1 border-b-2 border-black/10" style="min-height: 40px;">
                     <!-- Centered Title -->
-                    <h3 class="truncate text-center w-full" style="font-size: 1.4rem; padding-left: 4rem; padding-right: 4rem;">{{ ability.name }}</h3>
+                    <h3 class="truncate text-center w-full" style="font-size: 1.4rem; padding-left: 4rem; padding-right: 4rem; margin-bottom: 0;">{{ ability.name }}</h3>
+
+                     <!-- Trait Info (Moved to Header) -->
+                    <div class="text-sm font-bangers tracking-wide w-full text-center"
+                        :class="traitTextClass">
+                        {{ traitLabel }}
+                    </div>
 
                     <!-- Interaction Type Badge (Top Right) -->
                     <div class="z-10" style="position: absolute; top: 5px; right: 5px;">
@@ -234,11 +260,6 @@ app.component('ability-card', {
 
             <div class="ability-card-body flex flex-col h-full relative" :class="{ 'opacity-50': isLocked }">
                 <div class="ability-card-body flex flex-col flex-1 relative">
-                <!-- Trait Info -->
-                <div class="text-sm font-bangers tracking-wide mb-2 border-b-2 border-black/10 pb-1 w-full text-center"
-                     :class="{ 'text-red-600': !linkedTrait, 'text-black': linkedTrait }">
-                    {{ traitLabel }}
-                </div>
 
                 <!-- Description -->
                 <div class="flex-1 mb-2 font-comic font-bold text-base leading-tight flex items-center justify-center text-center p-2 bg-white/50 rounded border border-black/5 w-full"

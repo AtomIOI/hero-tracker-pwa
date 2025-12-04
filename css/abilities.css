@@ -107,3 +107,4 @@ input[type="radio"]:checked + div {
     position: relative; /* Anchor for absolute .section-label */
     margin-top: 2rem; /* Space for the sticker header */
 }
+.text-yellow-dark { color: #d97706; }
