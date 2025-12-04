@@ -98,8 +98,8 @@ input[type="radio"]:checked + div {
 }
 .pattern-dots {
     /* Ensure pattern dots class works if not already defined globally well */
-    background-image: radial-gradient(#00000020 1px, transparent 1px);
-    background-size: 4px 4px;
+    background-image: radial-gradient(#00000020 3px, transparent 3px);
+    background-size: 10px 10px;
 }
 
 /* Zone Container - Fix for Absolute Headers */
