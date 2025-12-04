@@ -57,6 +57,14 @@ app.component('powers-qualities-page', {
          */
         traitTypeClass() {
              return this.activeTab === 'powers' ? 'power' : 'quality';
+        },
+        /**
+         * Returns the appropriate class for the add button based on active tab.
+         * @returns {string} CSS class for the button.
+         */
+        addButtonClass() {
+            // Powers = Yellow, Qualities = Purple
+            return this.activeTab === 'powers' ? 'yellow' : 'purple';
         }
     },
     template: `
@@ -80,7 +88,7 @@ app.component('powers-qualities-page', {
                 </button>
             </div>
 
-            <button class="comic-btn plus purple add-trait-btn" @click="openAddModal">
+            <button class="comic-btn plus add-trait-btn" :class="addButtonClass" @click="openAddModal">
                 Add New {{ currentTypeLabel }}
             </button>
 

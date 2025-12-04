@@ -400,6 +400,11 @@ h1, h2, h3, h4, .comic-title {
     background-color: var(--comic-purple);
 }
 
+.comic-btn.yellow {
+    background-color: var(--comic-yellow);
+    color: var(--comic-red);
+}
+
 /* --- COMPONENT: FORM DICE SELECTOR --- */
 .dice-selector {
     display: flex;
