@@ -20,7 +20,7 @@ app.component('dice-page', {
     template: `
     <div class="dice-page pb-nav">
         <!-- Dice Tray Header -->
-        <div class="comic-header-box comic-header-red">
+        <div class="comic-header-box comic-header-teal">
             <h1 class="comic-title">DICE TRAY</h1>
         </div>
 

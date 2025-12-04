@@ -181,7 +181,7 @@ const app = createApp({
             // Use the lower bound of the segment (segmentNumber - 1) * 10
             // e.g., Segment 1 (0-10%) lights up if pct > 0
             const segmentLowerBound = (segmentNumber - 1) * 10;
-            const isFilled = pct > segmentLowerBound;
+            let isFilled = pct > segmentLowerBound;
 
             // Determine zone thresholds percentages
             const max = this.characterSheet.hero.health.max;
@@ -206,6 +206,19 @@ const app = createApp({
             let color = 'red';
             if (segmentUpperBound >= greenMinPct) color = 'green';
             else if (segmentUpperBound >= yellowMinPct) color = 'yellow';
+
+            // New: Enforce visibility based on Gyro Status
+            const status = this.getGyroStatus(); // 'green', 'yellow', 'red', 'out'
+
+            if (isFilled) {
+                if (color === 'green' && status !== 'green') {
+                    isFilled = false;
+                } else if (color === 'yellow' && (status === 'red' || status === 'out')) {
+                    isFilled = false;
+                } else if (color === 'red' && status === 'out') {
+                    isFilled = false;
+                }
+            }
 
             return isFilled ? `filled-${color}` : `empty-${color}`;
         },

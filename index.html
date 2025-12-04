@@ -65,6 +65,7 @@
 
             <!-- Merged Hero & Health Container -->
             <div class="merged-hero-health wobbly-box bg-dots mb-4">
+                <div class="section-label">HERO</div>
                 <!-- Hero Header Content -->
                 <div class="hero-header-content">
                     <div class="portrait-container">
@@ -96,7 +97,7 @@
 
             <!-- Hero Profile Panel (Full Width) -->
             <div class="hero-profile-panel wobbly-box bg-dots">
-                <div class="section-label">HERO PROFILE</div>
+                <div class="section-label">PROFILE</div>
                 <div class="profile-content">
                     <div class="profile-grid">
                         <!-- Background Card -->
@@ -163,7 +164,7 @@
                 <h1 class="comic-title">ABILITY MODULES</h1>
             </div>
 
-            <button id="add-power-btn" class="comic-btn plus" @click="openAddAbilityModal">Add New Ability</button>
+            <button id="add-power-btn" class="comic-btn secondary" @click="openAddAbilityModal">Add New Ability</button>
 
             <!-- Green Zone -->
             <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
@@ -196,7 +197,7 @@
 
         <!-- Settings Page -->
         <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
-            <div class="comic-header-box comic-header-teal">
+            <div class="comic-header-box comic-header-red">
                 <h1 class="comic-title">SETTINGS</h1>
             </div>
 
