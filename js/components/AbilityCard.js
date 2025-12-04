@@ -93,7 +93,7 @@ app.component('ability-card', {
          * @returns {string} The CSS class name.
          */
         zoneClass() {
-            if (this.isLocked) return 'bg-gray-100';
+            if (this.isLocked) return 'bg-gray-400';
             if (!this.ability.zone) return 'bg-gray-100';
             const zone = this.ability.zone.toLowerCase();
             const map = {
@@ -205,7 +205,7 @@ app.component('ability-card', {
                 <img src="assets/locked-stamp.png"
                      alt="LOCKED"
                      class="object-contain opacity-95"
-                     style="width: 90%; max-height: 90%; transform: rotate(-10deg); filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">
+                     style="width: 80%; max-height: 80%; transform: rotate(-5deg); filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">
             </div>
 
             <!-- Content Wrapper -->
