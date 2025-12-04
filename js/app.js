@@ -67,9 +67,9 @@ const app = createApp({
                         { id: 'leadership', name: 'Leadership', die: 6 }
                     ],
                     abilities: [
-                        { id: 'laser-eyes', name: 'Laser Eyes', die: 8, zone: 'green', text: 'Shoots lasers from eyes.' },
-                        { id: 'flight', name: 'Flight', die: 10, zone: 'yellow', text: 'Can fly.' },
-                        { id: 'super-strength', name: 'Super Strength', die: 12, zone: 'red', text: 'Is very strong.' }
+                        { id: 'laser-eyes', name: 'Laser Eyes', die: 8, zone: 'green', text: 'Shoots lasers from eyes.', traitId: 'lightning-bolt' },
+                        { id: 'flight', name: 'Flight', die: 10, zone: 'yellow', text: 'Can fly.', traitId: 'weather-control' },
+                        { id: 'super-strength', name: 'Super Strength', die: 12, zone: 'red', text: 'Is very strong.', traitId: 'leadership' }
                     ]
                 }
             },

@@ -46,7 +46,7 @@ app.component('ability-card', {
          */
         traitLabel() {
             const t = this.linkedTrait;
-            return t ? `${t.name} (d${t.die})` : 'No Trait Linked';
+            return t ? t.name : 'No Trait Linked';
         },
         /**
          * Returns the display label for the interaction type.
@@ -204,12 +204,14 @@ app.component('ability-card', {
 
             <div class="ability-card-body flex flex-col h-full relative" :class="{ 'opacity-50': isLocked }">
                 <!-- Trait Info -->
-                <div class="text-sm font-bangers tracking-wide mb-2 border-b-2 border-black/10 pb-1 w-full text-center" style="color: var(--color-magenta); text-shadow: 1px 1px 0px white;">
+                <div class="text-sm font-bangers tracking-wide mb-2 border-b-2 border-black/10 pb-1 w-full text-center"
+                     :class="{ 'text-red-600': !linkedTrait, 'text-black': linkedTrait }">
                     {{ traitLabel }}
                 </div>
 
                 <!-- Description -->
-                <div class="flex-1 mb-2 text-sm leading-tight flex items-center justify-center text-center p-2 bg-white/50 rounded border border-black/5 w-full">
+                <div class="flex-1 mb-2 font-comic font-bold text-base leading-tight flex items-center justify-center text-center p-2 bg-white/50 rounded border border-black/5 w-full"
+                     style="font-weight: 700;">
                     {{ ability.text }}
                 </div>
 
