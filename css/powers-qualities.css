@@ -1,0 +1,136 @@
+/* Powers & Qualities Specific Styles */
+
+/* --- SHARED CARD STYLES --- */
+.trait-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 4px 4px 0px var(--ink-black);
+    transition: transform 0.1s, box-shadow 0.1s;
+    cursor: pointer;
+    overflow: hidden; /* Keep the dots inside */
+}
+
+.trait-panel:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--ink-black);
+}
+
+.trait-panel .trait-name {
+    font-family: var(--font-header);
+    font-size: 1.5rem;
+    color: var(--ink-black);
+    z-index: 2; /* Above the background dots */
+    text-shadow: 1px 1px 0px white; /* Legibility */
+    flex-grow: 1;
+    padding-right: 1rem;
+}
+
+/* Ben-Day Dots Background Overlay */
+.trait-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.15; /* Subtle */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* --- POWER THEME (Cool / Electric) --- */
+.trait-panel.power {
+    background-color: var(--comic-white);
+    border-color: var(--comic-blue); /* Strong Blue Border */
+}
+
+.trait-panel.power::before {
+    /* Blue dots */
+    background-image: radial-gradient(var(--comic-blue) 20%, transparent 20%);
+    background-size: 8px 8px;
+}
+
+.trait-panel.power .starburst {
+    background-color: var(--comic-cyan-bg); /* Electric Cyan Burst */
+    border: 2px solid var(--ink-black);
+}
+
+/* --- QUALITY THEME (Warm / Grounded) --- */
+.trait-panel.quality {
+    background-color: var(--comic-cream);
+    border-color: var(--comic-green-bg); /* Earthy Green Border */
+}
+
+.trait-panel.quality::before {
+    /* Green dots */
+    background-image: radial-gradient(var(--comic-green-bg) 20%, transparent 20%);
+    background-size: 8px 8px;
+}
+
+.trait-panel.quality .starburst {
+    background-color: var(--comic-yellow); /* Bright Yellow Burst */
+    border: 2px solid var(--ink-black);
+}
+
+/* --- DIE & STARBURST --- */
+.trait-die-wrapper {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.starburst {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    z-index: -1;
+    /* 12-point jagged star */
+    clip-path: polygon(50% 0%, 63% 26%, 98% 20%, 78% 46%, 98% 75%, 65% 68%, 50% 100%, 35% 68%, 2% 75%, 22% 46%, 2% 20%, 37% 26%);
+    animation: slow-spin 10s linear infinite;
+}
+
+@keyframes slow-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.trait-die-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.5));
+    transform: rotate(-10deg); /* Jaunty angle */
+}
+
+/* Header Overrides for Qualities Tab */
+.comic-header-quality {
+    background-color: var(--comic-green-bg); /* Or match standard comic-green */
+}
+.comic-header-quality .comic-title {
+    color: var(--comic-white);
+    text-shadow: 2px 2px 0px var(--ink-black);
+}
+
+/* Add Button Styling match */
+.add-trait-btn {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Dynamic coloring handles in component logic or helpers?
+       For now, let's stick to the default green 'plus' style or override based on context
+    */
+}

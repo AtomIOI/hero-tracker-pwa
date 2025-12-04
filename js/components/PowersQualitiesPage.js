@@ -35,11 +35,25 @@ app.component('powers-qualities-page', {
          */
         currentTypeLabel() {
             return this.activeTab === 'powers' ? 'Power' : 'Quality';
+        },
+        /**
+         * Returns the appropriate class for the header based on active tab.
+         * @returns {string} CSS class for the header background.
+         */
+        headerClass() {
+             return this.activeTab === 'powers' ? 'comic-header-purple' : 'comic-header-yellow'; // Or 'comic-header-quality' if strictly defined
+        },
+        /**
+         * Returns the appropriate class for the trait type.
+         * @returns {string} 'power' or 'quality'.
+         */
+        traitTypeClass() {
+             return this.activeTab === 'powers' ? 'power' : 'quality';
         }
     },
     template: `
         <div>
-            <div class="comic-header-box comic-header-purple">
+            <div class="comic-header-box" :class="headerClass">
                 <h1 class="comic-title">POWERS/QUALITIES</h1>
             </div>
 
@@ -62,15 +76,17 @@ app.component('powers-qualities-page', {
                 Add New {{ currentTypeLabel }}
             </button>
 
-            <div class="traits-grid">
+            <div class="traits-list">
                 <div
                     v-for="trait in displayedTraits"
                     :key="trait.id"
-                    class="trait-card wobbly-box"
+                    class="trait-panel"
+                    :class="traitTypeClass"
                     @click="openEditModal(trait)"
                 >
                     <div class="trait-name">{{ trait.name }}</div>
-                    <div class="trait-die-container">
+                    <div class="trait-die-wrapper">
+                         <div class="starburst"></div>
                         <img :src="'assets/dice/D' + trait.die + '.png'" :alt="'d' + trait.die" class="trait-die-icon" />
                     </div>
                 </div>
