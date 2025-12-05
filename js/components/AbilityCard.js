@@ -253,13 +253,15 @@ app.component('ability-card', {
                     <!-- Badges Row -->
                     <div class="flex justify-center items-center gap-2 mt-1 w-full flex-wrap">
                         <!-- Interaction Type Badge -->
-                        <div class="border-2 border-black rounded px-3 py-1 text-lg font-bold text-white shadow-sm"
+                        <div class="rounded px-3 py-1 text-lg font-bold text-white shadow-sm"
+                             style="border: 1px solid black"
                              :class="interactionBgClass">
                             {{ interactionLabel }}
                         </div>
 
                         <!-- Trait Badge -->
-                        <div class="border-2 border-black rounded px-3 py-1 text-lg font-bold shadow-sm"
+                        <div class="rounded px-3 py-1 text-lg font-bold shadow-sm"
+                             style="border: 1px solid black"
                              :style="traitBadgeStyle">
                             {{ traitLabel }}
                         </div>
