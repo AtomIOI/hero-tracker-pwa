@@ -103,6 +103,16 @@
     animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.impact-text-overlay.red-text {
+    color: var(--comic-red);
+    text-shadow:
+        4px 4px 0 var(--color-ink),
+        -2px -2px 0 var(--color-ink),
+        2px -2px 0 var(--color-ink),
+        -2px 2px 0 var(--color-ink),
+        4px 4px 0 var(--color-yellow); /* Yellow shadow for red text */
+}
+
 @keyframes popIn {
     0% { transform: translate(-50%, -50%) scale(0) rotate(180deg); opacity: 0; }
     80% { transform: translate(-50%, -50%) scale(1.2) rotate(-10deg); opacity: 1; }

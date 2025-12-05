@@ -26,7 +26,7 @@ app.component('dice-page', {
 
         <!-- Dice Selection Area -->
         <div class="dice-selection-area">
-            <div v-if="impactText" class="impact-text-overlay">{{ impactText }}</div>
+            <div v-if="impactText" class="impact-text-overlay" :class="{ 'red-text': isCriticalFail }">{{ impactText }}</div>
             <div v-for="(die, index) in selectedDice"
                  :key="index"
                  class="die-slot-img-container"
@@ -134,6 +134,10 @@ app.component('dice-page', {
             isRolling: false,
             /** @type {string|null} Text to display for impact effect */
             impactText: null,
+            /** @type {string|null} The last impact text displayed, to avoid repetition */
+            lastImpactText: null,
+            /** @type {boolean} Whether the current roll is a critical fail */
+            isCriticalFail: false,
             /** @type {Array<Object>} List of modifiers */
             modifiers: [], // { id, name, value, type, active }
             /** @type {string} Name input for new modifier */
@@ -253,29 +257,78 @@ app.component('dice-page', {
                 };
 
                 this.isRolling = false;
-                this.determineImpactText(this.rollResults.max);
+                this.determineImpactText(this.rollResults.max, results.map(r => r.value));
 
             }, 800);
         },
         /**
-         * Determines the impact text based on the max die roll.
+         * Determines the impact text based on the max die roll and special conditions.
          * @param {number} maxValue - The highest value rolled.
+         * @param {number[]} rawValues - Array of raw dice values.
          */
-        determineImpactText(maxValue) {
-            const impacts = [
-                { text: 'ZAP!', threshold: 0, color: 'var(--color-cyan)' },
-                { text: 'BAM!', threshold: 5, color: 'var(--color-yellow)' },
-                { text: 'CRASH!', threshold: 8, color: 'var(--color-magenta)' },
-                { text: 'KA-POW!', threshold: 11, color: '#ff0000' } // Max logic
+        determineImpactText(maxValue, rawValues) {
+            this.isCriticalFail = false; // Reset critical fail state
+
+            // Check for Triples
+            const allSame = rawValues.every(v => v === rawValues[0]);
+            if (allSame) {
+                this.setImpactText("TRIPLES!");
+                return;
+            }
+
+            // Check for Two Natural Ones (Critical Fail)
+            const onesCount = rawValues.filter(v => v === 1).length;
+            if (onesCount >= 2) {
+                this.isCriticalFail = true;
+                const critTexts = ["CALAMITY!", "CRITICAL FAIL!"];
+                // Avoid immediate repetition for crit texts too
+                let critCandidates = critTexts.filter(t => t !== this.lastImpactText);
+                if (critCandidates.length === 0) critCandidates = critTexts;
+                this.setImpactText(critCandidates[Math.floor(Math.random() * critCandidates.length)]);
+                return;
+            }
+
+            // Check for Doubles (generic)
+            // Since we already checked for triples and double ones, this catches remaining pairs
+            const uniqueValues = new Set(rawValues);
+            if (uniqueValues.size < rawValues.length) {
+                 this.setImpactText("DOUBLES!");
+                 return;
+            }
+
+            // Standard Threshold Logic
+            const impactOptions = [
+                { threshold: 11, texts: ['KA-POW!', 'KA-BLAM!', 'BOOM!', 'SHRAK!'] },
+                { threshold: 8, texts: ['CRASH!', 'KABOOM!', 'BLAM!', 'THOOM!'] },
+                { threshold: 5, texts: ['BAM!', 'POW!', 'WHAM!', 'SMASH!', 'CRUNCH!'] },
+                { threshold: 0, texts: ['ZAP!', 'BOINK!', 'CLANK!', 'PLINK!', 'THWACK!'] }
             ];
 
             // Find the highest threshold met
-            const impact = impacts.slice().reverse().find(i => maxValue >= i.threshold);
-            this.impactText = impact ? impact.text : 'POW!';
+            const tier = impactOptions.find(i => maxValue >= i.threshold);
+            const possibleTexts = tier ? tier.texts : ['POW!'];
+
+            // Filter out the last one if possible to avoid immediate repetition
+            let candidates = possibleTexts.filter(t => t !== this.lastImpactText);
+            if (candidates.length === 0) candidates = possibleTexts;
+
+            // Pick random
+            const selectedText = candidates[Math.floor(Math.random() * candidates.length)];
+
+            this.setImpactText(selectedText);
+        },
+        /**
+         * Sets the impact text and handles repetition tracking and timeout.
+         * @param {string} text - The text to display.
+         */
+        setImpactText(text) {
+            this.impactText = text;
+            this.lastImpactText = text;
 
             // Clear text after 1.5 seconds
             setTimeout(() => {
                 this.impactText = null;
+                this.isCriticalFail = false;
             }, 1500);
         },
         /**
