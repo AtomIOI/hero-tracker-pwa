@@ -104,7 +104,7 @@
 }
 
 .impact-text-overlay.red-text {
-    color: var(--color-red);
+    color: var(--comic-red);
     text-shadow:
         4px 4px 0 var(--color-ink),
         -2px -2px 0 var(--color-ink),
