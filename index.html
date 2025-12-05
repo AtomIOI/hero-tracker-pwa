@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/comic-theme.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/hero-banner.css">
     <link rel="stylesheet" href="css/abilities.css">
     <link rel="stylesheet" href="css/scene-tracker.css">
     <link rel="stylesheet" href="css/settings.css">
@@ -50,14 +51,23 @@
     <main id="page-content">
         <!-- Home Page -->
         <div v-if="currentPage === 'home'">
-            <!-- Comic Header Box -->
-            <div class="comic-header-box comic-header-tan">
-                <div class="issue-box cursor-pointer select-none active:scale-95 transition-transform"
-                     @click="showIssueModal = true"
-                     title="Tap to edit Issue">
-                    ISSUE: {{ characterSheet.hero.issues.current || '...' }}
+            <!-- New Hero Banner -->
+            <div class="hero-banner-container">
+                <div class="hero-banner-bg">
+                    <!-- Issue Stamp (Interactive) -->
+                    <div class="hero-issue-stamp" @click="showIssueModal = true" title="Tap to edit Issue">
+                        ISSUE: {{ characterSheet.hero.issues.current || '#1' }}
+                    </div>
+
+                    <!-- Main Title Area -->
+                    <div class="hero-banner-inner">
+                        <h1 class="hero-banner-title">
+                            <span>HERO</span>
+                            <div class="hero-banner-center-star"></div>
+                            <span>TRACKER</span>
+                        </h1>
+                    </div>
                 </div>
-                <h1 class="comic-title">HERO TRACKER</h1>
             </div>
 
             <!-- Merged Hero & Health Container -->
