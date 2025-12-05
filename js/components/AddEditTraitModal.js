@@ -48,6 +48,22 @@ app.component('add-edit-trait-modal', {
                 }
             },
             immediate: true
+        },
+        /**
+         * Watcher for the 'show' prop to reset form data when the modal opens for a new trait.
+         * @param {boolean} newVal - Whether the modal is shown.
+         */
+        show(newVal) {
+            if (newVal && !this.trait) {
+                this.id = '';
+                this.name = '';
+                this.die = 6;
+            } else if (newVal && this.trait) {
+                // Ensure data is synced when opening in edit mode as well, just in case
+                this.id = this.trait.id;
+                this.name = this.trait.name;
+                this.die = this.trait.die;
+            }
         }
     },
     template: `
