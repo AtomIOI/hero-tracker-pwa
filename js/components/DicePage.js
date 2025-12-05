@@ -209,10 +209,37 @@ app.component('dice-page', {
 
             // Simulate rolling time
             setTimeout(() => {
+                // Secure, unbiased random roll for each die using window.crypto with rejection sampling
+                const getSecureRandomIntInclusive = (min, max) => {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    if (max < min) throw new Error('Invalid range for RNG');
+                    const range = max - min + 1;
+                    // Prefer Web Crypto API if available
+                    const cryptoObj = (typeof window !== 'undefined') && (window.crypto || window.msCrypto);
+                    if (cryptoObj && cryptoObj.getRandomValues) {
+                        // Determine the maximum unbiased value we can accept
+                        const maxUint32 = 0xFFFFFFFF;
+                        const buckets = Math.floor((maxUint32 + 1) / range);
+                        const maxUnbiased = buckets * range - 1;
+                        const arr = new Uint32Array(1);
+                        while (true) {
+                            cryptoObj.getRandomValues(arr);
+                            const v = arr[0];
+                            if (v <= maxUnbiased) {
+                                return min + (v % range);
+                            }
+                            // Otherwise, retry to avoid modulo bias
+                        }
+                    }
+                    // Fallback to Math.random if crypto is not available
+                    return Math.floor(Math.random() * range) + min;
+                };
+
                 const results = this.selectedDice.map(die => {
                     return {
                         die: die,
-                        value: Math.floor(Math.random() * die) + 1
+                        value: getSecureRandomIntInclusive(1, die)
                     };
                 });
 
