@@ -141,19 +141,19 @@
 /* Responsive adjustments */
 @media (max-width: 480px) {
     .hero-banner-title {
-        font-size: 2.4rem; /* Increased back up from 2.0rem based on feedback */
-        gap: 5px; /* Further reduced gap to fit larger text */
+        font-size: 3.4rem; /* Increased by 20% from 2.8rem */
+        gap: 10px; /* Increased gap to provide even spacing around the star */
         letter-spacing: 0.5px; /* Tighten spacing slightly */
     }
     .hero-banner-center-star {
-        width: 22px; /* Slightly smaller star to save space */
-        height: 22px;
+        width: 33px; /* Increased by 50% from 22px */
+        height: 33px;
     }
     .hero-banner-center-star::after {
-        font-size: 0.9rem;
+        font-size: 1.4rem; /* Scaled up for larger container */
     }
     .hero-banner-inner {
-        padding: 0.2rem; /* Minimize padding */
-        min-height: 60px;
+        padding: 1.5rem 1rem; /* Match other headers */
+        min-height: 100px;
     }
 }
