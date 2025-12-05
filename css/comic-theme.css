@@ -419,6 +419,7 @@ h1, h2, h3, h4, .comic-title {
 /* --- COMPONENT: FORM DICE SELECTOR --- */
 .dice-selector {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     gap: 10px;
     margin-bottom: 20px;
