@@ -42,7 +42,7 @@
     position: relative;
 }
 
-/* The Title Text */
+/* The Title Text Container */
 .hero-banner-title {
     font-family: var(--font-header);
     font-size: 3.2rem;
@@ -67,6 +67,12 @@
 
     /* Skew for action */
     transform: skew(-3deg);
+
+    /* Flex layout for center star */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
 
 /* The Issue Stamp - Top Left */
@@ -105,28 +111,31 @@
     transform: scale(0.95) rotate(-5deg);
 }
 
-/* Decorative: Price/Date Box - Top Right (Static) */
-.hero-banner-corner-deco {
-    position: absolute;
-    top: -15px;
-    right: -10px;
-    width: 40px;
-    height: 40px;
+/* Decorative: Center Star - Between Words */
+.hero-banner-center-star {
+    width: 30px;
+    height: 30px;
     background-color: var(--comic-blue);
     border: 3px solid var(--color-ink);
     border-radius: 50%;
-    z-index: 10;
     box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* Counter-skew the star so it looks round, or keep skewed?
+       The parent has skew(-3deg). If we don't counter-skew, the star will be oval.
+       Let's counter-skew for a perfect circle. */
+    transform: skew(3deg);
 }
 
-.hero-banner-corner-deco::after {
+.hero-banner-center-star::after {
     content: '★';
     color: var(--comic-yellow);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     -webkit-text-stroke: 1px var(--color-ink);
+    /* Remove text shadow from parent */
+    text-shadow: none;
 }
 
 /* Responsive adjustments */
