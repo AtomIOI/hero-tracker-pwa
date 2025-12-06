@@ -12,17 +12,47 @@ const CACHE_NAME = 'hero-tracker-v1';
 const urlsToCache = [
     '/',
     '/index.html',
+    // CSS files
     '/css/variables.css',
     '/css/base.css',
     '/css/comic-theme.css',
+    '/css/home.css',
     '/css/hero-banner.css',
+    '/css/abilities.css',
+    '/css/scene-tracker.css',
+    '/css/settings.css',
+    '/css/dice-select.css',
+    '/css/dice.css',
+    '/css/powers-qualities.css',
     '/css/mobile.css',
     '/css/desktop.css',
+    // Core JS files
     '/js/app.js',
+    '/js/ability-icons.js',
     '/js/storage.js',
     '/js/pwa.js',
+    // Vue Components
+    '/js/components/AbilityCard.js',
+    '/js/components/AddEditAbilityModal.js',
+    '/js/components/IssueModal.js',
+    '/js/components/HeroPointsModal.js',
+    '/js/components/SceneTrackerModal.js',
+    '/js/components/AddEditTraitModal.js',
+    '/js/components/PowersQualitiesPage.js',
+    '/js/components/DicePage.js',
+    '/js/components/DiceSelect.js',
+    // Assets
     '/manifest.json',
     '/assets/icons/Hero_Tracker_Icon.png',
+    '/assets/default-profile.jpg',
+    '/assets/locked-stamp.png',
+    '/assets/dice/D4.png',
+    '/assets/dice/D6.png',
+    '/assets/dice/D8.png',
+    '/assets/dice/D10.png',
+    '/assets/dice/D12.png',
+    '/assets/dice/unknown.svg',
+    // External dependencies
     'https://unpkg.com/vue@3/dist/vue.global.js',
     'https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap'
 ];
