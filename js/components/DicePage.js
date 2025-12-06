@@ -145,7 +145,9 @@ app.component('dice-page', {
             /** @type {number} Value input for new modifier */
             newModValue: 1,
             /** @type {string} Type input for new modifier ('temporary' or 'persistent') */
-            newModType: 'temporary'
+            newModType: 'temporary',
+            /** @type {number|null} ID of the timeout for clearing impact text */
+            impactTimeoutId: null
         };
     },
     computed: {
@@ -206,6 +208,12 @@ app.component('dice-page', {
          */
         rollDice() {
             if (this.isRolling) return;
+
+            // Clear any existing impact text timeout
+            if (this.impactTimeoutId) {
+                clearTimeout(this.impactTimeoutId);
+                this.impactTimeoutId = null;
+            }
 
             this.isRolling = true;
             this.impactText = null;
@@ -322,13 +330,19 @@ app.component('dice-page', {
          * @param {string} text - The text to display.
          */
         setImpactText(text) {
+            // Clear any existing timeout to prevent premature clearing
+            if (this.impactTimeoutId) {
+                clearTimeout(this.impactTimeoutId);
+            }
+
             this.impactText = text;
             this.lastImpactText = text;
 
             // Clear text after 1.5 seconds
-            setTimeout(() => {
+            this.impactTimeoutId = setTimeout(() => {
                 this.impactText = null;
                 this.isCriticalFail = false;
+                this.impactTimeoutId = null;
             }, 1500);
         },
         /**
