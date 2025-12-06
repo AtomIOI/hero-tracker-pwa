@@ -188,6 +188,14 @@
                 <button id="scene-override-btn" class="comic-btn btn-scene-override flex-1" @click="openSceneTrackerModal">SCENE OVERRIDE</button>
             </div>
 
+            <!-- Overcome Actions -->
+            <div v-if="principleAbilities.length > 0" class="zone-container mb-6">
+                <div class="section-label" style="background-color: var(--comic-blue); color: white;">OVERCOME ACTIONS</div>
+                <div class="abilities-grid modules-grid">
+                    <ability-card v-for="ability in principleAbilities" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }" :locked="!isAbilityAvailable(ability)" :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                </div>
+            </div>
+
             <!-- Green Zone -->
             <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
                 <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE</div>
@@ -349,6 +357,11 @@
                                         <div class="form-group">
                                             <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During Roleplay</label>
                                             <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="During roleplay, you..."></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">Overcome Action</label>
+                                            <textarea v-model="principle.overcomeText" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Overcome action description..."></textarea>
                                         </div>
 
                                         <div class="grid grid-cols-1 gap-3">
