@@ -36,6 +36,11 @@ const app = createApp({
                     gender: 'Unknown',
                     age: 25,
                     height: '6\'0"',
+                    eyes: 'Unknown',
+                    hair: 'Unknown',
+                    skin: 'Unknown',
+                    build: 'Unknown',
+                    costume: 'Unknown',
                     profileImage: null,
                     health: {
                         current: 30,

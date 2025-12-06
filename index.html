@@ -45,6 +45,7 @@
     <link rel="stylesheet" href="css/powers-qualities.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/desktop.css">
+    <link rel="stylesheet" href="css/physical-attributes.css">
 </head>
 
 <body id="app">
@@ -109,6 +110,53 @@
                                 <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
                             </div>
                             <button class="comic-btn plus" @click="changeHealth(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Physical Attributes Section -->
+            <div class="physical-attributes-panel wobbly-box">
+                <div class="section-label">PHYSICAL ATTRIBUTES</div>
+                <div class="physical-content">
+                    <div class="physical-row">
+                        <div class="physical-field">
+                            <span class="physical-label">GENDER</span>
+                            <span class="physical-value">{{ characterSheet.hero.gender }}</span>
+                        </div>
+                        <div class="physical-field">
+                            <span class="physical-label">AGE</span>
+                            <span class="physical-value">{{ characterSheet.hero.age }}</span>
+                        </div>
+                        <div class="physical-field">
+                            <span class="physical-label">HEIGHT</span>
+                            <span class="physical-value">{{ characterSheet.hero.height }}</span>
+                        </div>
+                    </div>
+                    <div class="physical-row">
+                        <div class="physical-field">
+                            <span class="physical-label">EYES</span>
+                            <span class="physical-value">{{ characterSheet.hero.eyes }}</span>
+                        </div>
+                        <div class="physical-field">
+                            <span class="physical-label">HAIR</span>
+                            <span class="physical-value">{{ characterSheet.hero.hair }}</span>
+                        </div>
+                        <div class="physical-field">
+                            <span class="physical-label">SKIN</span>
+                            <span class="physical-value">{{ characterSheet.hero.skin }}</span>
+                        </div>
+                    </div>
+                    <div class="physical-row full-width">
+                        <div class="physical-field">
+                            <span class="physical-label">BUILD</span>
+                            <span class="physical-value">{{ characterSheet.hero.build }}</span>
+                        </div>
+                    </div>
+                    <div class="physical-row full-width">
+                        <div class="physical-field">
+                            <span class="physical-label">COSTUME/EQUIPMENT</span>
+                            <span class="physical-value">{{ characterSheet.hero.costume }}</span>
                         </div>
                     </div>
                 </div>
@@ -298,6 +346,28 @@
                                 <label class="block font-bold mb-1">Height</label>
                                 <input type="text" v-model="characterSheet.hero.height" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mt-2">
+                            <div class="form-group">
+                                <label class="block font-bold mb-1">Eyes</label>
+                                <input type="text" v-model="characterSheet.hero.eyes" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                            <div class="form-group">
+                                <label class="block font-bold mb-1">Hair</label>
+                                <input type="text" v-model="characterSheet.hero.hair" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                            <div class="form-group">
+                                <label class="block font-bold mb-1">Skin</label>
+                                <input type="text" v-model="characterSheet.hero.skin" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="block font-bold mb-1">Build</label>
+                            <input type="text" v-model="characterSheet.hero.build" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="block font-bold mb-1">Costume/Equipment</label>
+                            <input type="text" v-model="characterSheet.hero.costume" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                         </div>
                     </div>
 

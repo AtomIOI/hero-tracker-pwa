@@ -1,0 +1,56 @@
+
+/* Physical Attributes Panel */
+.physical-attributes-panel {
+    background-color: white; /* Or matching paper color */
+    padding: 1rem;
+    padding-top: 1.5rem; /* Space for sticker */
+    margin-bottom: 1rem;
+    position: relative;
+    border: 2px solid var(--ink-black);
+}
+
+.physical-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+}
+
+.physical-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.physical-row.full-width .physical-field {
+    width: 100%;
+}
+
+.physical-field {
+    display: flex;
+    align-items: baseline;
+    flex: 1;
+    border-bottom: 2px dotted var(--ink-black);
+    padding-bottom: 2px;
+}
+
+.physical-label {
+    font-weight: bold;
+    font-style: italic;
+    margin-right: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.physical-value {
+    flex-grow: 1;
+    font-family: 'Courier Prime', 'Courier New', monospace; /* Typewriter look */
+    font-size: 1rem;
+    color: var(--ink-black);
+}
+
+/* Ensure empty values still take up space so the underline is visible */
+.physical-value:empty::after {
+    content: "\00a0";
+}
