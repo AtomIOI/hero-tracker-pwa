@@ -590,5 +590,34 @@ const app = createApp({
     }
 });
 
+/**
+ * Global Custom Directive: v-auto-expand
+ * Automatically adjusts the height of a textarea to fit its content.
+ */
+app.directive('auto-expand', {
+    mounted(el) {
+        // Ensure overflow is hidden to prevent scrollbars
+        el.style.overflow = 'hidden';
+
+        const adjustHeight = () => {
+            // Reset height to auto to shrink if content is deleted
+            el.style.height = 'auto';
+            // Set height to scrollHeight + buffer (e.g. for borders)
+            el.style.height = (el.scrollHeight + 2) + 'px';
+        };
+
+        // Attach event listener for input
+        el.addEventListener('input', adjustHeight);
+
+        // Initial adjustment (small delay to ensure rendering)
+        setTimeout(adjustHeight, 0);
+    },
+    updated(el) {
+        // Adjust height when data changes programmatically
+        el.style.height = 'auto';
+        el.style.height = (el.scrollHeight + 2) + 'px';
+    }
+});
+
 // Defer mounting until all components are registered (see index.html)
 window.__heroApp = app;
