@@ -154,6 +154,20 @@ const app = createApp({
          */
         abilitiesRed() {
             return this.characterSheet.hero.abilities.filter(a => a.zone === 'red');
+        },
+        /**
+         * Generates abilities from principles.
+         * @returns {Array<Object>} Principle abilities.
+         */
+        principleAbilities() {
+            return this.characterSheet.hero.principles.map((p, index) => ({
+                id: `principle-${index}`,
+                name: p.name || 'Unnamed Principle',
+                text: p.overcomeText || '',
+                interactionType: 'action',
+                zone: 'principle',
+                actions: ['overcome']
+            }));
         }
     },
     mounted() {
@@ -321,6 +335,8 @@ const app = createApp({
          * @returns {boolean} True if available.
          */
         isAbilityAvailable(ability) {
+            if (ability.zone === 'principle') return true;
+
             // Check override first (Adds to availability)
             if (this.sceneOverrides && this.sceneOverrides[ability.zone]) {
                 return true;
