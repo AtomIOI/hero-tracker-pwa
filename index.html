@@ -460,7 +460,37 @@
                         <div class="form-group mb-6">
                             <label class="block font-bangers tracking-wide text-lg mb-1">MAX HEALTH</label>
                             <input type="number" v-model.number="characterSheet.hero.health.max" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                            <p class="text-sm text-gray-500 font-bold mt-1 italic">Changing this automatically updates status ranges.</p>
+                            <p class="text-sm text-gray-500 font-bold mt-1 italic">Changing this automatically updates status ranges (unless Custom Ranges are enabled).</p>
+                        </div>
+
+                        <!-- Custom Health Ranges -->
+                        <div class="form-group mb-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block font-bangers tracking-wide text-lg">CUSTOM HEALTH RANGES</label>
+                                <div class="flex items-center">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" v-model="characterSheet.hero.health.customRanges" @change="if(!characterSheet.hero.health.customRanges) updateHealthRanges(true)">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="block font-bold text-xs mb-1 text-green-600 uppercase">Green Min</label>
+                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.greenMin" :disabled="!characterSheet.hero.health.customRanges" class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-xs mb-1 text-yellow-600 uppercase">Yellow Min</label>
+                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.yellowMin" :disabled="!characterSheet.hero.health.customRanges" class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-xs mb-1 text-red-600 uppercase">Red Min</label>
+                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.redMin" :disabled="!characterSheet.hero.health.customRanges" class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
+                                </div>
+                            </div>
+                            <p v-if="!characterSheet.hero.health.customRanges" class="text-sm text-gray-500 font-bold mt-1 italic">Ranges are calculated automatically.</p>
+                            <p v-else class="text-sm text-blue-600 font-bold mt-1 italic">Custom ranges enabled.</p>
                         </div>
 
                         <div class="form-group">

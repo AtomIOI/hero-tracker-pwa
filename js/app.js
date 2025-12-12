@@ -45,6 +45,7 @@ const app = createApp({
                     health: {
                         current: 30,
                         max: 30,
+                        customRanges: false,
                         ranges: {
                             greenMin: 23, // floor(30 * 0.75)
                             yellowMin: 11, // floor(30 * 0.35)
@@ -338,8 +339,12 @@ const app = createApp({
         },
         /**
          * Updates the health range thresholds based on max health.
+         * Skips update if custom ranges are enabled.
+         * @param {boolean} [force=false] - If true, forces recalculation even if customRanges is true.
          */
-        updateHealthRanges() {
+        updateHealthRanges(force = false) {
+            if (this.characterSheet.hero.health.customRanges && !force) return;
+
             const max = this.characterSheet.hero.health.max;
             this.characterSheet.hero.health.ranges.greenMin = Math.floor(max * 0.75);
             this.characterSheet.hero.health.ranges.yellowMin = Math.floor(max * 0.35);
@@ -581,6 +586,11 @@ const app = createApp({
                         this.characterSheet.hero.preferences = {
                             showLockedStamps: true
                         };
+                    }
+
+                    // Migration: Ensure customRanges flag exists
+                    if (typeof this.characterSheet.hero.health.customRanges === 'undefined') {
+                        this.characterSheet.hero.health.customRanges = false;
                     }
                 }
             } catch (e) {
