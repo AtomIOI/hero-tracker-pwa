@@ -35,6 +35,7 @@
 /* Colors - Backgrounds */
 .bg-gray-100 { background-color: #f3f4f6; }
 .bg-gray-400 { background-color: #9ca3af; } /* Darker grey for locked state */
+.bg-gray-600 { background-color: #4b5563; } /* Dark grey for Out zone active */
 .bg-green-500 { background-color: var(--color-green); }
 .bg-yellow-400 { background-color: var(--color-yellow); }
 .bg-red-600 { background-color: var(--color-magenta); } /* Map Red to Magenta/Red */

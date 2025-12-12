@@ -56,7 +56,8 @@ const app = createApp({
                         max: 5
                     },
                     preferences: {
-                        showLockedStamps: true
+                        showLockedStamps: true,
+                        showOutZone: true   // Show Out zone when health > 0
                     },
                     modifier: {
                         current: 0
@@ -78,7 +79,16 @@ const app = createApp({
                         { id: 'laser-eyes', name: 'Laser Eyes', die: 8, zone: 'green', text: 'Shoots lasers from eyes.', traitId: 'lightning-bolt' },
                         { id: 'flight', name: 'Flight', die: 10, zone: 'yellow', text: 'Can fly.', traitId: 'weather-control' },
                         { id: 'super-strength', name: 'Super Strength', die: 12, zone: 'red', text: 'Is very strong.', traitId: 'leadership' }
-                    ]
+                    ],
+                    /**
+                     * The Out Ability - special ability available only when health is 0.
+                     * @type {Object}
+                     */
+                    outAbility: {
+                        text: '',           // Description entered by user
+                        actions: [],        // Array of action keys (e.g., ['attack', 'recover'])
+                        traitId: ''         // Optional: ID of linked power/quality ('' for no dice)
+                    }
                 }
             },
             /** @type {boolean} Controls visibility of the Add/Edit Ability Modal */
@@ -143,6 +153,40 @@ const app = createApp({
          */
         abilitiesRed() {
             return this.characterSheet.hero.abilities.filter(a => a.zone === 'red');
+        },
+        /**
+         * Checks if hero is "Out" (health is 0).
+         * @returns {boolean} True if health is 0.
+         */
+        isOut() {
+            return this.characterSheet.hero.health.current === 0;
+        },
+        /**
+         * Determines if the Out Zone should be shown on the Abilities page.
+         * Shows if preference enabled OR if health is 0.
+         * @returns {boolean} True if Out Zone should be visible.
+         */
+        showOutZoneOnPage() {
+            return this.characterSheet.hero.preferences.showOutZone || this.isOut;
+        },
+        /**
+         * Gets the linked trait for the Out Ability.
+         * @returns {Object|null} The linked trait object or null.
+         */
+        outAbilityLinkedTrait() {
+            const traitId = this.characterSheet.hero.outAbility.traitId;
+            if (!traitId) return null;
+            const powers = this.characterSheet.hero.powers || [];
+            const qualities = this.characterSheet.hero.qualities || [];
+            return powers.find(p => p.id === traitId) ||
+                qualities.find(q => q.id === traitId);
+        },
+        /**
+         * Returns all available action types for basic action icons.
+         * @returns {Object} Object with action keys and their icon/label data.
+         */
+        actionTypes() {
+            return window.ABILITY_ICONS || {};
         }
     },
     mounted() {
@@ -404,7 +448,7 @@ const app = createApp({
                 // Rough check: base64 expands ~33%. Convert to approx bytes length.
                 const approxBytes = Math.ceil((dataUrl.length - 'data:image/jpeg;base64,'.length) * 3 / 4);
                 if (approxBytes > MAX_BYTES) {
-                    this.profileImageError = `Compressed image is still too large (${(approxBytes / (1024*1024)).toFixed(2)} MB). Please choose a smaller image.`;
+                    this.profileImageError = `Compressed image is still too large (${(approxBytes / (1024 * 1024)).toFixed(2)} MB). Please choose a smaller image.`;
                     return;
                 }
                 this.characterSheet.hero.profileImage = dataUrl;
@@ -525,7 +569,7 @@ const app = createApp({
             let effectDieVal = 6; // Default
             if (ability.traitId) {
                 const trait = this.characterSheet.hero.powers.find(p => p.id === ability.traitId) ||
-                              this.characterSheet.hero.qualities.find(q => q.id === ability.traitId);
+                    this.characterSheet.hero.qualities.find(q => q.id === ability.traitId);
                 if (trait) {
                     effectDieVal = trait.die;
                 }
@@ -537,6 +581,49 @@ const app = createApp({
             // 5. Update state and navigate
             this.diceSelection = [statusDieVal, effectDieVal, thirdDieVal];
             this.setPage('dice');
+        },
+
+        /**
+         * Handles using the Out Ability.
+         * Only works when health is 0 and a trait is selected.
+         */
+        handleOutAbilityUse() {
+            // Only available when Out
+            if (!this.isOut) return;
+
+            const outAbility = this.characterSheet.hero.outAbility;
+
+            // If no trait selected, nothing to roll - just return
+            if (!outAbility.traitId) return;
+
+            // Find the linked trait
+            const trait = this.characterSheet.hero.powers.find(p => p.id === outAbility.traitId) ||
+                this.characterSheet.hero.qualities.find(q => q.id === outAbility.traitId);
+
+            if (!trait) return;
+
+            // For Out ability, there's no status die (typically), just the trait die
+            // Set up dice for rolling - use trait die as first die
+            const traitDieVal = trait.die;
+            const thirdDieVal = this.diceSelection[2] || 6;
+
+            // Update state and navigate
+            this.diceSelection = [traitDieVal, thirdDieVal, 6];
+            this.setPage('dice');
+        },
+
+        /**
+         * Toggles a basic action for the Out Ability.
+         * @param {string} actionKey - The key of the action (e.g., 'attack').
+         */
+        toggleOutAbilityAction(actionKey) {
+            const actions = this.characterSheet.hero.outAbility.actions;
+            const idx = actions.indexOf(actionKey);
+            if (idx > -1) {
+                actions.splice(idx, 1);
+            } else {
+                actions.push(actionKey);
+            }
         },
 
         /**
@@ -579,7 +666,22 @@ const app = createApp({
                     // Migration: Ensure preferences object exists
                     if (!this.characterSheet.hero.preferences) {
                         this.characterSheet.hero.preferences = {
-                            showLockedStamps: true
+                            showLockedStamps: true,
+                            showOutZone: true
+                        };
+                    }
+
+                    // Migration: Ensure showOutZone preference exists
+                    if (this.characterSheet.hero.preferences.showOutZone === undefined) {
+                        this.characterSheet.hero.preferences.showOutZone = true;
+                    }
+
+                    // Migration: Ensure outAbility object exists
+                    if (!this.characterSheet.hero.outAbility) {
+                        this.characterSheet.hero.outAbility = {
+                            text: '',
+                            actions: [],
+                            traitId: ''
                         };
                     }
                 }
