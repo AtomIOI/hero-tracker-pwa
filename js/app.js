@@ -119,7 +119,17 @@ const app = createApp({
             /** @type {number} Last tap time for Out Ability */
             outAbilityLastTapTime: 0,
             /** @type {number} Last touch time for Out Ability */
-            outAbilityLastTouchTime: 0
+            outAbilityLastTouchTime: 0,
+            /** @type {boolean} Controls visibility of the Principle Modal */
+            showPrincipleModal: false,
+            /** @type {number|null} Index of principle being edited */
+            editingPrincipleIndex: null,
+            /** @type {number|null} Timer for Principle long press */
+            principleLongPressTimer: null,
+            /** @type {number} Last tap time for Principle */
+            principleLastTapTime: 0,
+            /** @type {number} Last touch time for Principle */
+            principleLastTouchTime: 0
         };
     },
     watch: {
@@ -201,7 +211,8 @@ const app = createApp({
          */
         actionTypes() {
             return window.ABILITY_ICONS || {};
-        }
+        },
+        /**
          * Generates abilities from principles.
          * @returns {Array<Object>} Principle abilities.
          */
@@ -214,7 +225,7 @@ const app = createApp({
                 zone: 'principle',
                 actions: ['overcome']
             }));
-        
+        }
     },
     mounted() {
         this.loadSettings();
@@ -485,6 +496,60 @@ const app = createApp({
             this.characterSheet.hero.outAbility.actions = data.actions;
             this.characterSheet.hero.outAbility.traitId = data.traitId;
             this.saveSettings();
+        },
+
+        /**
+         * Opens the Principle Modal for editing.
+         * @param {number} index - The index of the principle to edit.
+         */
+        openPrincipleModal(index) {
+            this.editingPrincipleIndex = index;
+            this.showPrincipleModal = true;
+        },
+        /**
+         * Closes the Principle Modal.
+         */
+        closePrincipleModal() {
+            this.showPrincipleModal = false;
+            this.editingPrincipleIndex = null;
+        },
+        /**
+         * Saves the principle data from the modal.
+         * @param {Object} data - The principle data with index, name, overcomeText.
+         */
+        savePrinciple(data) {
+            if (data.index !== null && this.characterSheet.hero.principles[data.index]) {
+                this.characterSheet.hero.principles[data.index].name = data.name;
+                this.characterSheet.hero.principles[data.index].overcomeText = data.overcomeText;
+            }
+        },
+        /**
+         * Handles interaction start on Principle card (long press or double tap).
+         * @param {Event} event - The DOM event.
+         * @param {number} index - The principle index.
+         */
+        handlePrincipleInteractionStart(event, index) {
+            const now = Date.now();
+            if (event.type === 'mousedown' && (now - this.principleLastTouchTime < 500)) return;
+            if (event.type === 'touchstart') this.principleLastTouchTime = now;
+            if (now - this.principleLastTapTime < 300) {
+                this.principleLastTapTime = 0;
+                this.cancelPrincipleLongPress();
+                return;
+            }
+            this.principleLastTapTime = now;
+            this.principleLongPressTimer = setTimeout(() => {
+                this.openPrincipleModal(index);
+            }, 600);
+        },
+        /**
+         * Cancels Principle long press timer.
+         */
+        cancelPrincipleLongPress() {
+            if (this.principleLongPressTimer) {
+                clearTimeout(this.principleLongPressTimer);
+                this.principleLongPressTimer = null;
+            }
         },
 
         /**

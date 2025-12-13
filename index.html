@@ -245,19 +245,40 @@
                     <button id="scene-override-btn" class="comic-btn btn-scene-override flex-1"
                         @click="openSceneTrackerModal">SCENE OVERRIDE</button>
                 </div>
-            <!-- Overcome Actions -->
-            <div v-if="principleAbilities.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--comic-blue); color: white;">OVERCOME ACTIONS</div>
-                <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in principleAbilities" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }" :locked="!isAbilityAvailable(ability)" :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                <!-- Overcome Actions -->
+                <div v-if="principleAbilities.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--comic-blue); color: white;">OVERCOME
+                        ACTIONS</div>
+                    <div class="abilities-grid modules-grid">
+                        <div v-for="(ability, index) in principleAbilities" :key="ability.id"
+                            @mousedown="handlePrincipleInteractionStart($event, index)"
+                            @touchstart="handlePrincipleInteractionStart($event, index)"
+                            @mouseup="cancelPrincipleLongPress" @mouseleave="cancelPrincipleLongPress"
+                            @touchend="cancelPrincipleLongPress" @touchcancel="cancelPrincipleLongPress">
+                            <ability-card :ability="ability" :hero="characterSheet.hero" @use="handleAbilityUse"
+                                :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"
+                                :locked="!isAbilityAvailable(ability)"
+                                :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Green Zone -->
-            <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE</div>
-                <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }" :locked="!isAbilityAvailable(ability)" :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                <principle-modal :show="showPrincipleModal"
+                    :principle="editingPrincipleIndex !== null ? characterSheet.hero.principles[editingPrincipleIndex] : null"
+                    :principle-index="editingPrincipleIndex" @close="closePrincipleModal"
+                    @save="savePrinciple"></principle-modal>
+
+                <!-- Green Zone -->
+                <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE
+                    </div>
+                    <div class="abilities-grid modules-grid">
+                        <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability"
+                            :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse"
+                            :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"
+                            :locked="!isAbilityAvailable(ability)"
+                            :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                    </div>
                 </div>
 
                 <!-- Yellow Zone -->
@@ -498,12 +519,14 @@
 
                         <div class="form-group mb-4">
                             <label class="block font-bangers tracking-wide text-lg mb-1">PERSONALITY</label>
-                            <textarea v-model="characterSheet.hero.personality" v-auto-expand class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20 resize-none"></textarea>
+                            <textarea v-model="characterSheet.hero.personality" v-auto-expand
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20 resize-none"></textarea>
                         </div>
 
                         <div class="form-group mb-6">
                             <label class="block font-bangers tracking-wide text-lg mb-1">BACKGROUND</label>
-                            <textarea v-model="characterSheet.hero.background" v-auto-expand class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
+                            <textarea v-model="characterSheet.hero.background" v-auto-expand
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
                         </div>
                     </div>
 
@@ -533,23 +556,37 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During Roleplay</label>
-                                            <textarea v-model="principle.duringRoleplay" v-auto-expand class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="During roleplay, you..."></textarea>
+                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During
+                                                Roleplay</label>
+                                            <textarea v-model="principle.duringRoleplay" v-auto-expand
+                                                class="w-full border-2 border-black p-2 font-comic text-md rounded h-16"
+                                                placeholder="During roleplay, you..."></textarea>
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">Overcome Action</label>
-                                            <textarea v-model="principle.overcomeText" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Overcome action description..."></textarea>
+                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">Overcome
+                                                Action</label>
+                                            <textarea v-model="principle.overcomeText"
+                                                class="w-full border-2 border-black p-2 font-comic text-md rounded h-16"
+                                                placeholder="Overcome action description..."></textarea>
                                         </div>
 
                                         <div class="grid grid-cols-1 gap-3">
                                             <div class="form-group">
-                                                <label class="block font-bangers tracking-wide text-yellow-600 text-lg mb-1">MINOR TWIST</label>
-                                                <textarea v-model="principle.minorTwist" v-auto-expand class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Minor twist..."></textarea>
+                                                <label
+                                                    class="block font-bangers tracking-wide text-yellow-600 text-lg mb-1">MINOR
+                                                    TWIST</label>
+                                                <textarea v-model="principle.minorTwist" v-auto-expand
+                                                    class="w-full border-2 border-black p-2 font-comic text-md rounded h-16"
+                                                    placeholder="Minor twist..."></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label class="block font-bangers tracking-wide text-red-600 text-lg mb-1">MAJOR TWIST</label>
-                                                <textarea v-model="principle.majorTwist" v-auto-expand class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Major twist..."></textarea>
+                                                <label
+                                                    class="block font-bangers tracking-wide text-red-600 text-lg mb-1">MAJOR
+                                                    TWIST</label>
+                                                <textarea v-model="principle.majorTwist" v-auto-expand
+                                                    class="w-full border-2 border-black p-2 font-comic text-md rounded h-16"
+                                                    placeholder="Major twist..."></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -724,6 +761,7 @@
     <script src="js/components/AbilityCard.js"></script>
     <script src="js/components/AddEditAbilityModal.js"></script>
     <script src="js/components/OutAbilityModal.js"></script>
+    <script src="js/components/PrincipleModal.js"></script>
     <script src="js/components/IssueModal.js"></script>
     <script src="js/components/HeroPointsModal.js"></script>
     <script src="js/components/SceneTrackerModal.js"></script>
