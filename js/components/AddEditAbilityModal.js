@@ -235,7 +235,7 @@ app.component('add-edit-ability-modal', {
 
                     <div class="form-group">
                         <label for="ability-text">Description</label>
-                        <textarea id="ability-text" v-model="text" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
+                        <textarea id="ability-text" v-model="text" v-auto-expand class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
                     </div>
 
                     <div class="flex gap-4 mt-4">

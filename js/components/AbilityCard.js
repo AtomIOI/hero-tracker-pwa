@@ -260,7 +260,7 @@ app.component('ability-card', {
                         </div>
 
                         <!-- Trait Badge -->
-                        <div class="rounded px-3 py-1 text-lg font-bold shadow-sm"
+                        <div v-if="linkedTrait" class="rounded px-3 py-1 text-lg font-bold shadow-sm"
                              style="border: 1px solid black"
                              :style="traitBadgeStyle">
                             {{ traitLabel }}

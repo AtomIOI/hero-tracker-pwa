@@ -122,6 +122,17 @@ const app = createApp({
             outAbilityLastTouchTime: 0
         };
     },
+    watch: {
+        /**
+         * Deep watcher to auto-save character sheet changes.
+         */
+        characterSheet: {
+            handler() {
+                this.persistData();
+            },
+            deep: true
+        }
+    },
     computed: {
         /**
          * Calculates the health percentage.
@@ -191,6 +202,19 @@ const app = createApp({
         actionTypes() {
             return window.ABILITY_ICONS || {};
         }
+         * Generates abilities from principles.
+         * @returns {Array<Object>} Principle abilities.
+         */
+        principleAbilities() {
+            return this.characterSheet.hero.principles.map((p, index) => ({
+                id: `principle-${index}`,
+                name: p.name || 'Unnamed Principle',
+                text: p.overcomeText || '',
+                interactionType: 'action',
+                zone: 'principle',
+                actions: ['overcome']
+            }));
+        
     },
     mounted() {
         this.loadSettings();
@@ -357,6 +381,8 @@ const app = createApp({
          * @returns {boolean} True if available.
          */
         isAbilityAvailable(ability) {
+            if (ability.zone === 'principle') return true;
+
             // Check override first (Adds to availability)
             if (this.sceneOverrides && this.sceneOverrides[ability.zone]) {
                 return true;
@@ -556,15 +582,27 @@ const app = createApp({
         },
 
         /**
-         * Saves the current settings to localStorage.
+         * Persists the current character sheet to localStorage silently.
+         * @returns {boolean} True if save was successful.
          */
-        saveSettings() {
+        persistData() {
             this.updateHealthRanges();
             try {
                 localStorage.setItem('hero-character', JSON.stringify(this.characterSheet));
-                alert('Settings Saved!');
+                return true;
             } catch (e) {
-                console.error('Error saving settings', e);
+                console.error('Error auto-saving settings', e);
+                return false;
+            }
+        },
+
+        /**
+         * Saves the current settings to localStorage (Manual Trigger).
+         */
+        saveSettings() {
+            if (this.persistData()) {
+                alert('Settings Saved!');
+            } else {
                 alert('Error saving settings');
             }
         },
@@ -771,6 +809,35 @@ const app = createApp({
                 console.error('Error loading settings', e);
             }
         }
+    }
+});
+
+/**
+ * Global Custom Directive: v-auto-expand
+ * Automatically adjusts the height of a textarea to fit its content.
+ */
+app.directive('auto-expand', {
+    mounted(el) {
+        // Ensure overflow is hidden to prevent scrollbars
+        el.style.overflow = 'hidden';
+
+        const adjustHeight = () => {
+            // Reset height to auto to shrink if content is deleted
+            el.style.height = 'auto';
+            // Set height to scrollHeight + buffer (e.g. for borders)
+            el.style.height = (el.scrollHeight + 2) + 'px';
+        };
+
+        // Attach event listener for input
+        el.addEventListener('input', adjustHeight);
+
+        // Initial adjustment (small delay to ensure rendering)
+        setTimeout(adjustHeight, 0);
+    },
+    updated(el) {
+        // Adjust height when data changes programmatically
+        el.style.height = 'auto';
+        el.style.height = (el.scrollHeight + 2) + 'px';
     }
 });
 

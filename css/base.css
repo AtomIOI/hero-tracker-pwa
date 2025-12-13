@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+html, body {
+    overscroll-behavior-y: contain; /* Disables pull-to-refresh on Android */
+}
+
 body {
     font-family: var(--font-body), sans-serif;
     background-color: var(--color-paper);
