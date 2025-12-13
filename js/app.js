@@ -57,7 +57,13 @@ const app = createApp({
                         max: 5
                     },
                     preferences: {
-                        showLockedStamps: true
+                        showLockedStamps: true,
+                        showOutZone: true
+                    },
+                    outAbility: {
+                        text: '',
+                        actions: [],
+                        traitId: ''
                     },
                     modifier: {
                         current: 0
@@ -104,8 +110,16 @@ const app = createApp({
             profileImageError: '',
             /** @type {boolean} Flag indicating if an image is being processed */
             isProcessingImage: false,
+            /** @type {boolean} Controls visibility of the Out Ability Modal */
+            showOutAbilityModal: false,
             /** @type {Array<number>} Current selection of dice for the Dice Page */
-            diceSelection: [6, 6, 6]
+            diceSelection: [6, 6, 6],
+            /** @type {number|null} Timer for Out Ability long press */
+            outAbilityLongPressTimer: null,
+            /** @type {number} Last tap time for Out Ability */
+            outAbilityLastTapTime: 0,
+            /** @type {number} Last touch time for Out Ability */
+            outAbilityLastTouchTime: 0
         };
     },
     computed: {
@@ -144,6 +158,38 @@ const app = createApp({
          */
         abilitiesRed() {
             return this.characterSheet.hero.abilities.filter(a => a.zone === 'red');
+        },
+        /**
+         * Checks if hero is "Out" (health is 0).
+         * @returns {boolean} True if health is 0.
+         */
+        isOut() {
+            return this.characterSheet.hero.health.current === 0;
+        },
+        /**
+         * Determines if the Out Zone should be shown on the Abilities page.
+         * @returns {boolean} True if Out Zone should be visible.
+         */
+        showOutZoneOnPage() {
+            return this.characterSheet.hero.preferences.showOutZone || this.isOut;
+        },
+        /**
+         * Gets the linked trait for the Out Ability.
+         * @returns {Object|null} The linked trait object or null.
+         */
+        outAbilityLinkedTrait() {
+            const traitId = this.characterSheet.hero.outAbility.traitId;
+            if (!traitId) return null;
+            const powers = this.characterSheet.hero.powers || [];
+            const qualities = this.characterSheet.hero.qualities || [];
+            return powers.find(p => p.id === traitId) || qualities.find(q => q.id === traitId);
+        },
+        /**
+         * Returns all available action types for basic action icons.
+         * @returns {Object} Object with action keys and their icon/label data.
+         */
+        actionTypes() {
+            return window.ABILITY_ICONS || {};
         }
     },
     mounted() {
@@ -393,6 +439,29 @@ const app = createApp({
         },
 
         /**
+         * Opens the Out Ability Modal.
+         */
+        openOutAbilityModal() {
+            this.showOutAbilityModal = true;
+        },
+        /**
+         * Closes the Out Ability Modal.
+         */
+        closeOutAbilityModal() {
+            this.showOutAbilityModal = false;
+        },
+        /**
+         * Saves the Out Ability data from the modal.
+         * @param {Object} data - The out ability data.
+         */
+        saveOutAbility(data) {
+            this.characterSheet.hero.outAbility.text = data.text;
+            this.characterSheet.hero.outAbility.actions = data.actions;
+            this.characterSheet.hero.outAbility.traitId = data.traitId;
+            this.saveSettings();
+        },
+
+        /**
          * Handles the profile image file upload event.
          * Processes, resizes, and saves the image as a Data URL.
          * @param {Event} event - The input change event.
@@ -409,7 +478,7 @@ const app = createApp({
                 // Rough check: base64 expands ~33%. Convert to approx bytes length.
                 const approxBytes = Math.ceil((dataUrl.length - 'data:image/jpeg;base64,'.length) * 3 / 4);
                 if (approxBytes > MAX_BYTES) {
-                    this.profileImageError = `Compressed image is still too large (${(approxBytes / (1024*1024)).toFixed(2)} MB). Please choose a smaller image.`;
+                    this.profileImageError = `Compressed image is still too large (${(approxBytes / (1024 * 1024)).toFixed(2)} MB). Please choose a smaller image.`;
                     return;
                 }
                 this.characterSheet.hero.profileImage = dataUrl;
@@ -530,7 +599,7 @@ const app = createApp({
             let effectDieVal = 6; // Default
             if (ability.traitId) {
                 const trait = this.characterSheet.hero.powers.find(p => p.id === ability.traitId) ||
-                              this.characterSheet.hero.qualities.find(q => q.id === ability.traitId);
+                    this.characterSheet.hero.qualities.find(q => q.id === ability.traitId);
                 if (trait) {
                     effectDieVal = trait.die;
                 }
@@ -545,6 +614,66 @@ const app = createApp({
         },
 
         /**
+         * Handles using the Out Ability.
+         * Only works when health is 0 and a trait is selected.
+         */
+        handleOutAbilityUse() {
+            if (!this.isOut) return;
+            const outAbility = this.characterSheet.hero.outAbility;
+            if (!outAbility.traitId) return;
+            const trait = this.characterSheet.hero.powers.find(p => p.id === outAbility.traitId) ||
+                this.characterSheet.hero.qualities.find(q => q.id === outAbility.traitId);
+            if (!trait) return;
+            const traitDieVal = trait.die;
+            const thirdDieVal = this.diceSelection[2] || 6;
+            this.diceSelection = [traitDieVal, thirdDieVal, 6];
+            this.setPage('dice');
+        },
+
+        /**
+         * Toggles a basic action for the Out Ability.
+         * @param {string} actionKey - The key of the action.
+         */
+        toggleOutAbilityAction(actionKey) {
+            const actions = this.characterSheet.hero.outAbility.actions;
+            const idx = actions.indexOf(actionKey);
+            if (idx > -1) {
+                actions.splice(idx, 1);
+            } else {
+                actions.push(actionKey);
+            }
+        },
+
+        /**
+         * Handles interaction start on Out Ability card (long press or double tap).
+         * @param {Event} event - The DOM event.
+         */
+        handleOutAbilityInteractionStart(event) {
+            const now = Date.now();
+            if (event.type === 'mousedown' && (now - this.outAbilityLastTouchTime < 500)) return;
+            if (event.type === 'touchstart') this.outAbilityLastTouchTime = now;
+            if (now - this.outAbilityLastTapTime < 300) {
+                this.handleOutAbilityUse();
+                this.outAbilityLastTapTime = 0;
+                this.cancelOutAbilityLongPress();
+                return;
+            }
+            this.outAbilityLastTapTime = now;
+            this.outAbilityLongPressTimer = setTimeout(() => {
+                this.openOutAbilityModal();
+            }, 600);
+        },
+        /**
+         * Cancels Out Ability long press timer.
+         */
+        cancelOutAbilityLongPress() {
+            if (this.outAbilityLongPressTimer) {
+                clearTimeout(this.outAbilityLongPressTimer);
+                this.outAbilityLongPressTimer = null;
+            }
+        },
+
+        /**
          * Loads settings from localStorage and merges with default state.
          * Handles data migration if necessary.
          */
@@ -553,13 +682,28 @@ const app = createApp({
                 const saved = localStorage.getItem('hero-character');
                 if (saved) {
                     const parsed = JSON.parse(saved);
+
+                    // Deep merge health object to preserve ranges
+                    const savedHealth = parsed.hero?.health || {};
+                    const savedRanges = savedHealth.ranges || {};
+
                     // Merge saved data with current structure to ensure new fields exist if loading old data
                     this.characterSheet = {
                         ...this.characterSheet,
                         ...parsed,
                         hero: {
                             ...this.characterSheet.hero,
-                            ...(parsed.hero || {})
+                            ...(parsed.hero || {}),
+                            // Deep merge health object
+                            health: {
+                                ...this.characterSheet.hero.health,
+                                ...savedHealth,
+                                // Deep merge ranges object
+                                ranges: {
+                                    ...this.characterSheet.hero.health.ranges,
+                                    ...savedRanges
+                                }
+                            }
                         }
                     };
 
@@ -591,6 +735,36 @@ const app = createApp({
                     // Migration: Ensure customRanges flag exists
                     if (typeof this.characterSheet.hero.health.customRanges === 'undefined') {
                         this.characterSheet.hero.health.customRanges = false;
+                    }
+
+                    // Migration: Ensure showOutZone preference exists
+                    if (typeof this.characterSheet.hero.preferences.showOutZone === 'undefined') {
+                        this.characterSheet.hero.preferences.showOutZone = true;
+                    }
+
+                    // Migration: Ensure outAbility object exists
+                    if (!this.characterSheet.hero.outAbility) {
+                        this.characterSheet.hero.outAbility = { text: '', actions: [], traitId: '' };
+                    }
+
+                    // Migration: Ensure health ranges have valid values
+                    const health = this.characterSheet.hero.health;
+                    if (typeof health.ranges.greenMin !== 'number' || health.ranges.greenMin <= 0) {
+                        health.ranges.greenMin = Math.floor(health.max * 0.75);
+                    }
+                    if (typeof health.ranges.yellowMin !== 'number' || health.ranges.yellowMin <= 0) {
+                        health.ranges.yellowMin = Math.floor(health.max * 0.35);
+                    }
+                    if (typeof health.ranges.redMin !== 'number' || health.ranges.redMin <= 0) {
+                        health.ranges.redMin = 1;
+                    }
+
+                    // Validate range logic (greenMin > yellowMin > redMin)
+                    if (health.ranges.yellowMin >= health.ranges.greenMin) {
+                        health.ranges.yellowMin = Math.floor(health.ranges.greenMin * 0.5);
+                    }
+                    if (health.ranges.redMin >= health.ranges.yellowMin) {
+                        health.ranges.redMin = 1;
                     }
                 }
             } catch (e) {

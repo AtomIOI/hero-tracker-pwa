@@ -48,176 +48,184 @@
     <link rel="stylesheet" href="css/physical-attributes.css">
 </head>
 
-<body id="app">
-    <main id="page-content">
-        <!-- Home Page -->
-        <div v-if="currentPage === 'home'">
-            <!-- New Hero Banner -->
-            <div class="hero-banner-container">
-                <div class="hero-banner-bg">
-                    <!-- Issue Stamp (Interactive) -->
-                    <div class="hero-issue-stamp" @click="showIssueModal = true" title="Tap to edit Issue">
-                        ISSUE: {{ characterSheet.hero.issues.current || '#1' }}
-                    </div>
+<body>
+    <div id="app">
+        <main id="page-content">
+            <!-- Home Page -->
+            <div v-if="currentPage === 'home'">
+                <!-- New Hero Banner -->
+                <div class="hero-banner-container">
+                    <div class="hero-banner-bg">
+                        <!-- Issue Stamp (Interactive) -->
+                        <div class="hero-issue-stamp" @click="showIssueModal = true" title="Tap to edit Issue">
+                            ISSUE: {{ characterSheet.hero.issues.current || '#1' }}
+                        </div>
 
-                    <!-- Main Title Area -->
-                    <div class="hero-banner-inner">
-                        <h1 class="hero-banner-title">
-                            <span>HERO</span>
-                            <div class="hero-banner-center-star"></div>
-                            <span>TRACKER</span>
-                        </h1>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Merged Hero & Health Container -->
-            <div class="hero-section-wrapper mb-4">
-                <!-- Hero Points Star -->
-                <div class="hero-points-star cursor-pointer" @click="openHeroPointsModal">
-                    <svg viewBox="0 0 24 24" class="star-icon">
-                        <path d="M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 Z" />
-                    </svg>
-                    <span class="star-text">{{ characterSheet.hero.heroPoints.current }}</span>
-                </div>
-
-                <div class="merged-hero-health wobbly-box bg-dots">
-                    <div class="section-label">HERO</div>
-
-                    <!-- Hero Header Content -->
-                <div class="hero-header-content">
-                    <div class="portrait-container">
-                        <div class="comic-portrait">
-                            <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'" alt="Hero Profile Picture">
+                        <!-- Main Title Area -->
+                        <div class="hero-banner-inner">
+                            <h1 class="hero-banner-title">
+                                <span>HERO</span>
+                                <div class="hero-banner-center-star"></div>
+                                <span>TRACKER</span>
+                            </h1>
                         </div>
                     </div>
-                    <!-- Hero Identity Box -->
-                    <div class="hero-identity-box">
-                        <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
-                        <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
-                    </div>
                 </div>
 
-                    <!-- Health Section -->
-                    <div class="health-section">
-                        <div class="health-readout-box">
-                            {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
-                        </div>
-                        <!-- Health Bar with Embedded Controls -->
-                        <div class="health-bar-container">
-                            <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
-                            <div class="health-segments">
-                                <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)"></div>
+                <!-- Merged Hero & Health Container -->
+                <div class="hero-section-wrapper mb-4">
+                    <!-- Hero Points Star -->
+                    <div class="hero-points-star cursor-pointer" @click="openHeroPointsModal">
+                        <svg viewBox="0 0 24 24" class="star-icon">
+                            <path
+                                d="M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 Z" />
+                        </svg>
+                        <span class="star-text">{{ characterSheet.hero.heroPoints.current }}</span>
+                    </div>
+
+                    <div class="merged-hero-health wobbly-box bg-dots">
+                        <div class="section-label">HERO</div>
+
+                        <!-- Hero Header Content -->
+                        <div class="hero-header-content">
+                            <div class="portrait-container">
+                                <div class="comic-portrait">
+                                    <img :src="characterSheet.hero.profileImage || 'assets/default-profile.jpg'"
+                                        alt="Hero Profile Picture">
+                                </div>
                             </div>
-                            <button class="comic-btn plus" @click="changeHealth(1)">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Physical Attributes Section -->
-            <div class="physical-attributes-panel wobbly-box">
-                <div class="section-label">PHYSICAL ATTRIBUTES</div>
-                <div class="physical-content">
-                    <div class="physical-row">
-                        <div class="physical-field">
-                            <span class="physical-label">GENDER</span>
-                            <span class="physical-value">{{ characterSheet.hero.gender }}</span>
-                        </div>
-                        <div class="physical-field">
-                            <span class="physical-label">AGE</span>
-                            <span class="physical-value">{{ characterSheet.hero.age }}</span>
-                        </div>
-                        <div class="physical-field">
-                            <span class="physical-label">HEIGHT</span>
-                            <span class="physical-value">{{ characterSheet.hero.height }}</span>
-                        </div>
-                    </div>
-                    <div class="physical-row">
-                        <div class="physical-field">
-                            <span class="physical-label">EYES</span>
-                            <span class="physical-value">{{ characterSheet.hero.eyes }}</span>
-                        </div>
-                        <div class="physical-field">
-                            <span class="physical-label">HAIR</span>
-                            <span class="physical-value">{{ characterSheet.hero.hair }}</span>
-                        </div>
-                        <div class="physical-field">
-                            <span class="physical-label">SKIN</span>
-                            <span class="physical-value">{{ characterSheet.hero.skin }}</span>
-                        </div>
-                    </div>
-                    <div class="physical-row full-width">
-                        <div class="physical-field">
-                            <span class="physical-label">BUILD</span>
-                            <span class="physical-value">{{ characterSheet.hero.build }}</span>
-                        </div>
-                    </div>
-                    <div class="physical-row full-width">
-                        <div class="physical-field">
-                            <span class="physical-label">COSTUME/EQUIPMENT</span>
-                            <span class="physical-value">{{ characterSheet.hero.costume }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Profile Panel (Full Width) -->
-            <div class="hero-profile-panel wobbly-box bg-dots">
-                <div class="section-label">PROFILE</div>
-                <div class="profile-content">
-                    <div class="profile-grid">
-                        <!-- Background Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">BACKGROUND</div>
-                            <div class="profile-card-body">{{ characterSheet.hero.background || 'N/A' }}</div>
-                        </div>
-                        <!-- Power Source Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">POWER SOURCE</div>
-                            <div class="profile-card-body">{{ characterSheet.hero.powerSource || 'N/A' }}</div>
-                        </div>
-                        <!-- Archetype Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">
-                                ARCHETYPE
-                                <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor"/>
-                                </svg>
+                            <!-- Hero Identity Box -->
+                            <div class="hero-identity-box">
+                                <h2 class="hero-name">{{ characterSheet.hero.name || 'Unknown Hero' }}</h2>
+                                <div class="hero-alias">{{ characterSheet.hero.alias || 'Unknown Alias' }}</div>
                             </div>
-                            <div class="profile-card-body">{{ characterSheet.hero.archetype || 'N/A' }}</div>
                         </div>
-                        <!-- Personality Card -->
-                        <div class="profile-card">
-                            <div class="profile-card-header">
-                                PERSONALITY
-                                <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
-                                </svg>
+
+                        <!-- Health Section -->
+                        <div class="health-section">
+                            <div class="health-readout-box">
+                                {{ characterSheet.hero.health.current }} / {{ characterSheet.hero.health.max }}
                             </div>
-                            <div class="profile-card-body">{{ characterSheet.hero.personality || 'N/A' }}</div>
+                            <!-- Health Bar with Embedded Controls -->
+                            <div class="health-bar-container">
+                                <button class="comic-btn minus" @click="changeHealth(-1)">-</button>
+                                <div class="health-segments">
+                                    <div v-for="n in 10" :key="n" class="health-segment" :class="getSegmentClass(n)">
+                                    </div>
+                                </div>
+                                <button class="comic-btn plus" @click="changeHealth(1)">+</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Physical Attributes Section -->
+                <div class="physical-attributes-panel wobbly-box">
+                    <div class="section-label">PHYSICAL ATTRIBUTES</div>
+                    <div class="physical-content">
+                        <div class="physical-row">
+                            <div class="physical-field">
+                                <span class="physical-label">GENDER</span>
+                                <span class="physical-value">{{ characterSheet.hero.gender }}</span>
+                            </div>
+                            <div class="physical-field">
+                                <span class="physical-label">AGE</span>
+                                <span class="physical-value">{{ characterSheet.hero.age }}</span>
+                            </div>
+                            <div class="physical-field">
+                                <span class="physical-label">HEIGHT</span>
+                                <span class="physical-value">{{ characterSheet.hero.height }}</span>
+                            </div>
+                        </div>
+                        <div class="physical-row">
+                            <div class="physical-field">
+                                <span class="physical-label">EYES</span>
+                                <span class="physical-value">{{ characterSheet.hero.eyes }}</span>
+                            </div>
+                            <div class="physical-field">
+                                <span class="physical-label">HAIR</span>
+                                <span class="physical-value">{{ characterSheet.hero.hair }}</span>
+                            </div>
+                            <div class="physical-field">
+                                <span class="physical-label">SKIN</span>
+                                <span class="physical-value">{{ characterSheet.hero.skin }}</span>
+                            </div>
+                        </div>
+                        <div class="physical-row full-width">
+                            <div class="physical-field">
+                                <span class="physical-label">BUILD</span>
+                                <span class="physical-value">{{ characterSheet.hero.build }}</span>
+                            </div>
+                        </div>
+                        <div class="physical-row full-width">
+                            <div class="physical-field">
+                                <span class="physical-label">COSTUME/EQUIPMENT</span>
+                                <span class="physical-value">{{ characterSheet.hero.costume }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Profile Panel (Full Width) -->
+                <div class="hero-profile-panel wobbly-box bg-dots">
+                    <div class="section-label">PROFILE</div>
+                    <div class="profile-content">
+                        <div class="profile-grid">
+                            <!-- Background Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">BACKGROUND</div>
+                                <div class="profile-card-body">{{ characterSheet.hero.background || 'N/A' }}</div>
+                            </div>
+                            <!-- Power Source Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">POWER SOURCE</div>
+                                <div class="profile-card-body">{{ characterSheet.hero.powerSource || 'N/A' }}</div>
+                            </div>
+                            <!-- Archetype Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    ARCHETYPE
+                                    <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="profile-card-body">{{ characterSheet.hero.archetype || 'N/A' }}</div>
+                            </div>
+                            <!-- Personality Card -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    PERSONALITY
+                                    <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="profile-card-body">{{ characterSheet.hero.personality || 'N/A' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Principles Section -->
                 <div class="principles-panel wobbly-box bg-dots">
                     <div class="section-label">PRINCIPLES</div>
                     <div class="principles-content-grid">
-                        <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="principle-card">
+                        <div v-for="(principle, index) in characterSheet.hero.principles" :key="index"
+                            class="principle-card">
                             <div class="principle-header">{{ principle.name || 'Principle Name' }}</div>
                             <div class="principle-body">
                                 <div class="principle-roleplay">
-                                    <span class="principle-text">{{ principle.duringRoleplay || 'During roleplay instructions...' }}</span>
+                                    <span class="principle-text">{{ principle.duringRoleplay || '...' }}</span>
                                 </div>
                                 <div class="principle-twist">
                                     <span class="twist-label minor">Minor Twist:</span>
-                                    <span class="twist-text">{{ principle.minorTwist || 'Minor twist description...' }}</span>
+                                    <span class="twist-text">{{ principle.minorTwist || '...' }}</span>
                                 </div>
                                 <div class="principle-twist">
                                     <span class="twist-label major">Major Twist:</span>
-                                    <span class="twist-text">{{ principle.majorTwist || 'Major twist description...' }}</span>
+                                    <span class="twist-text">{{ principle.majorTwist || '...' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -231,47 +239,127 @@
                     <h1 class="comic-title">ABILITY MODULES</h1>
                 </div>
 
-            <div class="flex gap-2 mb-4 justify-between">
-                <button id="add-power-btn" class="comic-btn secondary flex-1" @click="openAddAbilityModal">Add New Ability</button>
-                <button id="scene-override-btn" class="comic-btn btn-scene-override flex-1" @click="openSceneTrackerModal">SCENE OVERRIDE</button>
-            </div>
-
-            <!-- Green Zone -->
-            <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE</div>
-                <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }" :locked="!isAbilityAvailable(ability)" :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                <div class="flex gap-2 mb-4 justify-between">
+                    <button id="add-power-btn" class="comic-btn secondary flex-1" @click="openAddAbilityModal">Add New
+                        Ability</button>
+                    <button id="scene-override-btn" class="comic-btn btn-scene-override flex-1"
+                        @click="openSceneTrackerModal">SCENE OVERRIDE</button>
                 </div>
-            </div>
 
-            <!-- Yellow Zone -->
-            <div v-if="abilitiesYellow.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--color-yellow); color: black;">YELLOW ZONE</div>
-                <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesYellow" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }" :locked="!isAbilityAvailable(ability)" :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                <!-- Green Zone -->
+                <div v-if="abilitiesGreen.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--color-green); color: white;">GREEN ZONE
+                    </div>
+                    <div class="abilities-grid modules-grid">
+                        <ability-card v-for="ability in abilitiesGreen" :key="ability.id" :ability="ability"
+                            :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse"
+                            :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"
+                            :locked="!isAbilityAvailable(ability)"
+                            :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Red Zone -->
-            <div v-if="abilitiesRed.length > 0" class="zone-container mb-6">
-                <div class="section-label" style="background-color: var(--color-magenta); color: white;">RED ZONE</div>
-                <div class="abilities-grid modules-grid">
-                    <ability-card v-for="ability in abilitiesRed" :key="ability.id" :ability="ability" :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse" :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }" :locked="!isAbilityAvailable(ability)" :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                <!-- Yellow Zone -->
+                <div v-if="abilitiesYellow.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--color-yellow); color: black;">YELLOW ZONE
+                    </div>
+                    <div class="abilities-grid modules-grid">
+                        <ability-card v-for="ability in abilitiesYellow" :key="ability.id" :ability="ability"
+                            :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse"
+                            :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"
+                            :locked="!isAbilityAvailable(ability)"
+                            :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                    </div>
                 </div>
+
+                <!-- Red Zone -->
+                <div v-if="abilitiesRed.length > 0" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: var(--color-magenta); color: white;">RED ZONE
+                    </div>
+                    <div class="abilities-grid modules-grid">
+                        <ability-card v-for="ability in abilitiesRed" :key="ability.id" :ability="ability"
+                            :hero="characterSheet.hero" @edit="openEditAbilityModal(ability)" @use="handleAbilityUse"
+                            :class="{ 'ability-unavailable': !isAbilityAvailable(ability) }"
+                            :locked="!isAbilityAvailable(ability)"
+                            :show-locked-stamp="characterSheet.hero.preferences.showLockedStamps"></ability-card>
+                    </div>
+                </div>
+
+                <!-- Out Zone -->
+                <div v-if="showOutZoneOnPage" class="zone-container mb-6">
+                    <div class="section-label" style="background-color: #374151; color: white;">OUT ZONE</div>
+                    <div class="abilities-grid modules-grid">
+                        <div class="ability-card wobbly-box no-select relative p-2"
+                            :class="isOut ? 'bg-gray-600' : 'bg-gray-400'" style="touch-action: manipulation;"
+                            @mousedown="handleOutAbilityInteractionStart" @touchstart="handleOutAbilityInteractionStart"
+                            @mouseup="cancelOutAbilityLongPress" @mouseleave="cancelOutAbilityLongPress"
+                            @touchend="cancelOutAbilityLongPress" @touchcancel="cancelOutAbilityLongPress"
+                            @contextmenu.prevent>
+                            <div v-if="!isOut && characterSheet.hero.preferences.showLockedStamps"
+                                class="absolute inset-0 z-20 flex items-center justify-center rounded pointer-events-none">
+                                <img src="assets/locked-stamp.png" alt="LOCKED" class="object-contain opacity-95"
+                                    style="width: 80%; max-height: 80%; transform: rotate(-5deg); filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));">
+                            </div>
+                            <div class="flex flex-col h-full"
+                                :style="!isOut ? 'filter: grayscale(100%); opacity: 0.6;' : ''">
+                                <div class="ability-card-header pattern-dots flex flex-col justify-center items-center relative mb-2 pb-1 border-b-2 border-black/10"
+                                    style="min-height: 40px;">
+                                    <h3 class="truncate text-center w-full text-white" style="font-size: 1.4rem;">OUT
+                                        ABILITY</h3>
+                                    <div v-if="outAbilityLinkedTrait"
+                                        class="flex justify-center items-center gap-2 mt-1 w-full">
+                                        <div class="rounded px-3 py-1 text-lg font-bold shadow-sm"
+                                            style="border: 1px solid black; background-color: var(--comic-yellow); color: var(--comic-red);">
+                                            {{ outAbilityLinkedTrait.name }}</div>
+                                    </div>
+                                </div>
+                                <div class="ability-card-body flex flex-col flex-1 relative">
+                                    <div class="flex-1 mb-2 font-comic font-bold text-base leading-tight flex items-center justify-center text-center p-2 bg-white/50 rounded border border-black/5 w-full"
+                                        style="font-weight:700;">{{ characterSheet.hero.outAbility.text || 'Configure'
+                                        }}
+                                    </div>
+                                    <div
+                                        class="flex justify-between items-end mt-auto pt-2 border-t-2 border-black/10 w-full">
+                                        <div class="flex items-center gap-1">
+                                            <img v-if="outAbilityLinkedTrait"
+                                                :src="'assets/dice/D' + outAbilityLinkedTrait.die + '.png'"
+                                                :alt="'d' + outAbilityLinkedTrait.die"
+                                                class="w-6 h-6 object-contain filter drop-shadow-md">
+                                            <span v-else class="text-xs text-gray-500 italic">No Dice</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <div v-for="actionKey in characterSheet.hero.outAbility.actions"
+                                                :key="actionKey" class="w-6 h-6 text-black"
+                                                :title="actionTypes[actionKey]?.label"
+                                                v-html="actionTypes[actionKey]?.svg">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <out-ability-modal :show="showOutAbilityModal" :hero="characterSheet.hero" @close="closeOutAbilityModal"
+                    @save="saveOutAbility"></out-ability-modal>
+
+                <add-edit-ability-modal :show="showAddEditAbilityModal" :ability="editingAbility"
+                    :hero="characterSheet.hero" @close="closeAddEditAbilityModal" @save="saveAbility"
+                    @delete="deleteAbility"></add-edit-ability-modal>
             </div>
 
-                <add-edit-ability-modal :show="showAddEditAbilityModal" :ability="editingAbility" :hero="characterSheet.hero" @close="closeAddEditAbilityModal" @save="saveAbility" @delete="deleteAbility"></add-edit-ability-modal>
-            </div>
+            <issue-modal :show="showIssueModal" :hero="characterSheet.hero" @close="closeIssueModal"></issue-modal>
+            <hero-points-modal :show="showHeroPointsModal" :hero="characterSheet.hero"
+                @close="closeHeroPointsModal"></hero-points-modal>
+            <scene-tracker-modal :show="showSceneTrackerModal" :overrides="sceneOverrides"
+                @close="closeSceneTrackerModal" @toggle-override="toggleSceneOverride"></scene-tracker-modal>
 
-        <issue-modal :show="showIssueModal" :hero="characterSheet.hero" @close="closeIssueModal"></issue-modal>
-        <hero-points-modal :show="showHeroPointsModal" :hero="characterSheet.hero" @close="closeHeroPointsModal"></hero-points-modal>
-        <scene-tracker-modal :show="showSceneTrackerModal" :overrides="sceneOverrides" @close="closeSceneTrackerModal" @toggle-override="toggleSceneOverride"></scene-tracker-modal>
-
-        <!-- Settings Page -->
-        <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
-            <div class="comic-header-box comic-header-red">
-                <h1 class="comic-title">SETTINGS</h1>
-            </div>
+            <!-- Settings Page -->
+            <div v-if="currentPage === 'settings'" class="settings-page pb-nav">
+                <div class="comic-header-box comic-header-red">
+                    <h1 class="comic-title">SETTINGS</h1>
+                </div>
 
                 <div class="settings-container">
                     <!-- Identity Section -->
@@ -281,11 +369,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div class="form-group">
                                 <label class="block font-bangers tracking-wide text-lg mb-1">HERO NAME</label>
-                                <input type="text" v-model="characterSheet.hero.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.name"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                             <div class="form-group">
                                 <label class="block font-bangers tracking-wide text-lg mb-1">PLAYER NAME</label>
-                                <input type="text" v-model="characterSheet.hero.playerName" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.playerName"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                         </div>
 
@@ -294,13 +384,17 @@
                             <label class="block font-bangers tracking-wide text-lg mb-2">PROFILE PICTURE</label>
                             <div class="flex items-start gap-4">
                                 <!-- Clickable Image Area -->
-                                <div class="relative group cursor-pointer" @click="$refs.fileInput.click()" style="width: 100px; height: 100px;">
-                                    <div class="w-full h-full border-2 border-black rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all">
-                                        <img v-if="characterSheet.hero.profileImage" :src="characterSheet.hero.profileImage" class="w-full h-full object-cover">
+                                <div class="relative group cursor-pointer" @click="$refs.fileInput.click()"
+                                    style="width: 100px; height: 100px;">
+                                    <div
+                                        class="w-full h-full border-2 border-black rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all">
+                                        <img v-if="characterSheet.hero.profileImage"
+                                            :src="characterSheet.hero.profileImage" class="w-full h-full object-cover">
                                         <span v-else class="text-4xl text-gray-400">+</span>
 
                                         <!-- Hover Overlay -->
-                                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold transition-opacity">
+                                        <div
+                                            class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-bold transition-opacity">
                                             CHANGE
                                         </div>
                                     </div>
@@ -308,11 +402,14 @@
 
                                 <!-- Controls -->
                                 <div class="flex flex-col gap-2 justify-center h-[100px]">
-                                    <input type="file" ref="fileInput" accept="image/*" @change="handleProfileImageUpload" class="hidden">
+                                    <input type="file" ref="fileInput" accept="image/*"
+                                        @change="handleProfileImageUpload" class="hidden">
                                     <button type="button" class="comic-btn primary" @click="$refs.fileInput.click()">
                                         {{ characterSheet.hero.profileImage ? 'CHANGE PHOTO' : 'UPLOAD PHOTO' }}
                                     </button>
-                                    <button v-if="characterSheet.hero.profileImage" type="button" class="comic-btn minus text-sm py-1" @click="clearProfileImage" style="font-size: 0.9rem;">
+                                    <button v-if="characterSheet.hero.profileImage" type="button"
+                                        class="comic-btn minus text-sm py-1" @click="clearProfileImage"
+                                        style="font-size: 0.9rem;">
                                         REMOVE
                                     </button>
                                 </div>
@@ -320,7 +417,8 @@
 
                             <!-- Status Messages -->
                             <div v-if="isProcessingImage" class="mt-2 flex items-center gap-2 text-sm font-bold">
-                                <span class="spinner w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+                                <span
+                                    class="spinner w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
                                 <span>Processing...</span>
                             </div>
                             <div v-if="profileImageError" class="mt-2 text-red-600 font-bold text-sm">
@@ -330,44 +428,53 @@
 
                         <div class="form-group mb-4">
                             <label class="block font-bangers tracking-wide text-lg mb-1">ALIAS</label>
-                            <input type="text" v-model="characterSheet.hero.alias" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            <input type="text" v-model="characterSheet.hero.alias"
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                         </div>
 
                         <div class="grid grid-cols-3 gap-2">
                             <div class="form-group">
                                 <label class="block font-bold mb-1">Gender</label>
-                                <input type="text" v-model="characterSheet.hero.gender" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.gender"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                             <div class="form-group">
                                 <label class="block font-bold mb-1">Age</label>
-                                <input type="number" v-model.number="characterSheet.hero.age" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="number" v-model.number="characterSheet.hero.age"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                             <div class="form-group">
                                 <label class="block font-bold mb-1">Height</label>
-                                <input type="text" v-model="characterSheet.hero.height" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.height"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2 mt-2">
                             <div class="form-group">
                                 <label class="block font-bold mb-1">Eyes</label>
-                                <input type="text" v-model="characterSheet.hero.eyes" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.eyes"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                             <div class="form-group">
                                 <label class="block font-bold mb-1">Hair</label>
-                                <input type="text" v-model="characterSheet.hero.hair" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.hair"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                             <div class="form-group">
                                 <label class="block font-bold mb-1">Skin</label>
-                                <input type="text" v-model="characterSheet.hero.skin" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.skin"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                         </div>
                         <div class="form-group mt-2">
                             <label class="block font-bold mb-1">Build</label>
-                            <input type="text" v-model="characterSheet.hero.build" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            <input type="text" v-model="characterSheet.hero.build"
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                         </div>
                         <div class="form-group mt-2">
                             <label class="block font-bold mb-1">Costume/Equipment</label>
-                            <input type="text" v-model="characterSheet.hero.costume" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            <input type="text" v-model="characterSheet.hero.costume"
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                         </div>
                     </div>
 
@@ -378,22 +485,26 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div class="form-group">
                                 <label class="block font-bangers tracking-wide text-lg mb-1">ARCHETYPE</label>
-                                <input type="text" v-model="characterSheet.hero.archetype" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.archetype"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                             <div class="form-group">
                                 <label class="block font-bangers tracking-wide text-lg mb-1">POWER SOURCE</label>
-                                <input type="text" v-model="characterSheet.hero.powerSource" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                                <input type="text" v-model="characterSheet.hero.powerSource"
+                                    class="w-full border-2 border-black p-2 font-comic text-lg rounded">
                             </div>
                         </div>
 
                         <div class="form-group mb-4">
                             <label class="block font-bangers tracking-wide text-lg mb-1">PERSONALITY</label>
-                            <textarea v-model="characterSheet.hero.personality" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20 resize-none"></textarea>
+                            <textarea v-model="characterSheet.hero.personality"
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded h-20 resize-none"></textarea>
                         </div>
 
                         <div class="form-group mb-6">
                             <label class="block font-bangers tracking-wide text-lg mb-1">BACKGROUND</label>
-                            <textarea v-model="characterSheet.hero.background" class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
+                            <textarea v-model="characterSheet.hero.background"
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded h-24 resize-none"></textarea>
                         </div>
                     </div>
 
@@ -401,34 +512,51 @@
                     <div class="wobbly-box mb-6 bg-white relative p-4">
                         <div class="section-label">PRINCIPLES</div>
                         <div class="space-y-6">
-                            <div v-for="(principle, index) in characterSheet.hero.principles" :key="index" class="relative">
+                            <div v-for="(principle, index) in characterSheet.hero.principles" :key="index"
+                                class="relative">
                                 <!-- Principle Card Container -->
-                                <div class="border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded overflow-hidden">
+                                <div
+                                    class="border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded overflow-hidden">
                                     <!-- Header -->
-                                    <div class="bg-yellow-400 border-b-2 border-black p-2 flex justify-between items-center">
+                                    <div
+                                        class="bg-yellow-400 border-b-2 border-black p-2 flex justify-between items-center">
                                         <h3 class="font-bangers text-xl tracking-wide">PRINCIPLE {{ index + 1 }}</h3>
                                     </div>
 
                                     <!-- Body -->
                                     <div class="p-4 space-y-3">
                                         <div class="form-group">
-                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">Name</label>
-                                            <input type="text" v-model="principle.name" class="w-full border-2 border-black p-2 font-comic text-lg rounded" placeholder="Principle of...">
+                                            <label
+                                                class="block font-bold text-sm mb-1 uppercase text-gray-600">Name</label>
+                                            <input type="text" v-model="principle.name"
+                                                class="w-full border-2 border-black p-2 font-comic text-lg rounded"
+                                                placeholder="Principle of...">
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During Roleplay</label>
-                                            <textarea v-model="principle.duringRoleplay" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="During roleplay, you..."></textarea>
+                                            <label class="block font-bold text-sm mb-1 uppercase text-gray-600">During
+                                                Roleplay</label>
+                                            <textarea v-model="principle.duringRoleplay"
+                                                class="w-full border-2 border-black p-2 font-comic text-md rounded h-16"
+                                                placeholder="During roleplay, you..."></textarea>
                                         </div>
 
                                         <div class="grid grid-cols-1 gap-3">
                                             <div class="form-group">
-                                                <label class="block font-bangers tracking-wide text-yellow-600 text-lg mb-1">MINOR TWIST</label>
-                                                <textarea v-model="principle.minorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Minor twist..."></textarea>
+                                                <label
+                                                    class="block font-bangers tracking-wide text-yellow-600 text-lg mb-1">MINOR
+                                                    TWIST</label>
+                                                <textarea v-model="principle.minorTwist"
+                                                    class="w-full border-2 border-black p-2 font-comic text-md rounded h-16"
+                                                    placeholder="Minor twist..."></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label class="block font-bangers tracking-wide text-red-600 text-lg mb-1">MAJOR TWIST</label>
-                                                <textarea v-model="principle.majorTwist" class="w-full border-2 border-black p-2 font-comic text-md rounded h-16" placeholder="Major twist..."></textarea>
+                                                <label
+                                                    class="block font-bangers tracking-wide text-red-600 text-lg mb-1">MAJOR
+                                                    TWIST</label>
+                                                <textarea v-model="principle.majorTwist"
+                                                    class="w-full border-2 border-black p-2 font-comic text-md rounded h-16"
+                                                    placeholder="Major twist..."></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -445,10 +573,12 @@
                             <label class="block font-bangers tracking-wide text-lg mb-2">PREFERENCES</label>
                             <div class="flex items-center">
                                 <label class="toggle-switch">
-                                    <input type="checkbox" v-model="characterSheet.hero.preferences.showLockedStamps" id="pref-show-locked">
+                                    <input type="checkbox" v-model="characterSheet.hero.preferences.showLockedStamps"
+                                        id="pref-show-locked">
                                     <span class="slider"></span>
                                 </label>
-                                <label for="pref-show-locked" class="font-comic font-bold text-lg cursor-pointer">Show Locked Stamps</label>
+                                <label for="pref-show-locked" class="font-comic font-bold text-lg cursor-pointer">Show
+                                    Locked Stamps</label>
                             </div>
                         </div>
                     </div>
@@ -459,8 +589,10 @@
 
                         <div class="form-group mb-6">
                             <label class="block font-bangers tracking-wide text-lg mb-1">MAX HEALTH</label>
-                            <input type="number" v-model.number="characterSheet.hero.health.max" class="w-full border-2 border-black p-2 font-comic text-lg rounded">
-                            <p class="text-sm text-gray-500 font-bold mt-1 italic">Changing this automatically updates status ranges (unless Custom Ranges are enabled).</p>
+                            <input type="number" v-model.number="characterSheet.hero.health.max"
+                                class="w-full border-2 border-black p-2 font-comic text-lg rounded">
+                            <p class="text-sm text-gray-500 font-bold mt-1 italic">Changing this automatically updates
+                                status ranges (unless Custom Ranges are enabled).</p>
                         </div>
 
                         <!-- Custom Health Ranges -->
@@ -469,7 +601,8 @@
                                 <label class="block font-bangers tracking-wide text-lg">CUSTOM HEALTH RANGES</label>
                                 <div class="flex items-center">
                                     <label class="toggle-switch">
-                                        <input type="checkbox" v-model="characterSheet.hero.health.customRanges" @change="if(!characterSheet.hero.health.customRanges) updateHealthRanges(true)">
+                                        <input type="checkbox" v-model="characterSheet.hero.health.customRanges"
+                                            @change="!characterSheet.hero.health.customRanges && updateHealthRanges(true)">
                                         <span class="slider"></span>
                                     </label>
                                 </div>
@@ -477,19 +610,29 @@
 
                             <div class="grid grid-cols-3 gap-2">
                                 <div>
-                                    <label class="block font-bold text-xs mb-1 text-green-600 uppercase">Green Min</label>
-                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.greenMin" :disabled="!characterSheet.hero.health.customRanges" class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
+                                    <label class="block font-bold text-xs mb-1 text-green-600 uppercase">Green
+                                        Min</label>
+                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.greenMin"
+                                        :disabled="!characterSheet.hero.health.customRanges"
+                                        class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
                                 </div>
                                 <div>
-                                    <label class="block font-bold text-xs mb-1 text-yellow-600 uppercase">Yellow Min</label>
-                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.yellowMin" :disabled="!characterSheet.hero.health.customRanges" class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
+                                    <label class="block font-bold text-xs mb-1 text-yellow-600 uppercase">Yellow
+                                        Min</label>
+                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.yellowMin"
+                                        :disabled="!characterSheet.hero.health.customRanges"
+                                        class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
                                 </div>
                                 <div>
                                     <label class="block font-bold text-xs mb-1 text-red-600 uppercase">Red Min</label>
-                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.redMin" :disabled="!characterSheet.hero.health.customRanges" class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
+                                    <input type="number" v-model.number="characterSheet.hero.health.ranges.redMin"
+                                        :disabled="!characterSheet.hero.health.customRanges"
+                                        class="w-full border-2 border-black p-2 font-comic text-lg rounded disabled:bg-gray-100 disabled:text-gray-400">
                                 </div>
                             </div>
-                            <p v-if="!characterSheet.hero.health.customRanges" class="text-sm text-gray-500 font-bold mt-1 italic">Ranges are calculated automatically.</p>
+                            <p v-if="!characterSheet.hero.health.customRanges"
+                                class="text-sm text-gray-500 font-bold mt-1 italic">Ranges are calculated automatically.
+                            </p>
                             <p v-else class="text-sm text-blue-600 font-bold mt-1 italic">Custom ranges enabled.</p>
                         </div>
 
@@ -498,26 +641,33 @@
                             <div class="grid grid-cols-3 gap-4">
                                 <!-- Green Die -->
                                 <div class="flex flex-col">
-                                    <div class="bg-green-500 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">GREEN</div>
+                                    <div
+                                        class="bg-green-500 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">
+                                        GREEN</div>
                                     <dice-select v-model="characterSheet.hero.statusDice.green"></dice-select>
                                 </div>
 
                                 <!-- Yellow Die -->
                                 <div class="flex flex-col">
-                                    <div class="bg-yellow-400 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-black">YELLOW</div>
+                                    <div
+                                        class="bg-yellow-400 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-black">
+                                        YELLOW</div>
                                     <dice-select v-model="characterSheet.hero.statusDice.yellow"></dice-select>
                                 </div>
 
                                 <!-- Red Die -->
                                 <div class="flex flex-col">
-                                    <div class="bg-red-600 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">RED</div>
+                                    <div
+                                        class="bg-red-600 border-2 border-black border-b-0 rounded-t-lg p-1 text-center font-bangers tracking-wide text-white">
+                                        RED</div>
                                     <dice-select v-model="characterSheet.hero.statusDice.red"></dice-select>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <button class="comic-btn primary full-width" style="margin-bottom: 2rem;" @click="saveSettings">SAVE SETTINGS</button>
+                    <button class="comic-btn primary full-width" style="margin-bottom: 2rem;" @click="saveSettings">SAVE
+                        SETTINGS</button>
                 </div>
             </div>
             <!-- Powers/Qualities Page -->
@@ -527,12 +677,14 @@
 
             <!-- Dice Page -->
             <div v-if="currentPage === 'dice'">
-                <dice-page :hero="characterSheet.hero" :initial-dice="diceSelection" @update-dice="updateDiceSelection"></dice-page>
+                <dice-page :hero="characterSheet.hero" :initial-dice="diceSelection"
+                    @update-dice="updateDiceSelection"></dice-page>
             </div>
         </main>
 
         <!-- Install PWA Button (shown when available) -->
-        <button id="install-button" class="comic-btn plus" style="display:none; position: fixed; right: 1rem; bottom: 5rem; z-index: 1000; width: auto; height: auto; padding: 0.5rem 1rem; border-radius: 8px;">
+        <button id="install-button" class="comic-btn plus"
+            style="display:none; position: fixed; right: 1rem; bottom: 5rem; z-index: 1000; width: auto; height: auto; padding: 0.5rem 1rem; border-radius: 8px;">
             Install App
         </button>
 
@@ -546,7 +698,8 @@
                 <div class="nav-icon powers"></div>
                 <span>ABILITIES</span>
             </div>
-            <div class="nav-item" :class="{ active: currentPage === 'powers-qualities' }" @click="setPage('powers-qualities')">
+            <div class="nav-item" :class="{ active: currentPage === 'powers-qualities' }"
+                @click="setPage('powers-qualities')">
                 <div class="nav-icon powers-qualities"></div>
                 <span>Powers/Qualities</span>
             </div>
@@ -577,6 +730,7 @@
     <script src="js/app.js"></script>
     <script src="js/components/AbilityCard.js"></script>
     <script src="js/components/AddEditAbilityModal.js"></script>
+    <script src="js/components/OutAbilityModal.js"></script>
     <script src="js/components/IssueModal.js"></script>
     <script src="js/components/HeroPointsModal.js"></script>
     <script src="js/components/SceneTrackerModal.js"></script>
@@ -585,9 +739,9 @@
     <script src="js/components/DicePage.js"></script>
     <script src="js/components/DiceSelect.js"></script>
     <script>
-      if (window.__heroApp) {
-        window.vm = window.__heroApp.mount('#app');
-      }
+        if (window.__heroApp) {
+            window.vm = window.__heroApp.mount('#app');
+        }
     </script>
 </body>
 
