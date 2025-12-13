@@ -82,7 +82,7 @@ app.component('dice-page', {
             <div class="modifiers-header">MODIFIERS ({{ totalModifier > 0 ? '+' : '' }}{{ totalModifier }})</div>
 
             <div class="modifiers-list">
-                <div v-for="mod in modifiers" :key="mod.id"
+                <div v-for="mod in (hero.modifiers || [])" :key="mod.id"
                      class="modifier-chip"
                      :class="{ active: mod.active, persistent: mod.type === 'persistent', temporary: mod.type === 'temporary' }"
                      @click="toggleModifier(mod)">
@@ -138,8 +138,6 @@ app.component('dice-page', {
             lastImpactText: null,
             /** @type {boolean} Whether the current roll is a critical fail */
             isCriticalFail: false,
-            /** @type {Array<Object>} List of modifiers */
-            modifiers: [], // { id, name, value, type, active }
             /** @type {string} Name input for new modifier */
             newModName: '',
             /** @type {number} Value input for new modifier */
@@ -156,7 +154,7 @@ app.component('dice-page', {
          * @returns {number} The total modifier value.
          */
         totalModifier() {
-            return this.modifiers
+            return (this.hero.modifiers || [])
                 .filter(m => m.active)
                 .reduce((sum, m) => sum + m.value, 0);
         },
@@ -173,7 +171,7 @@ app.component('dice-page', {
          * @returns {boolean} True if any active temporary modifiers exist.
          */
         hasTemporaryActive() {
-            return this.modifiers.some(m => m.active && m.type === 'temporary');
+            return (this.hero.modifiers || []).some(m => m.active && m.type === 'temporary');
         }
     },
     methods: {
@@ -350,7 +348,8 @@ app.component('dice-page', {
          */
         addModifier() {
             if (!this.newModName) return;
-            this.modifiers.push({
+            if (!this.hero.modifiers) this.hero.modifiers = [];
+            this.hero.modifiers.push({
                 id: Date.now(),
                 name: this.newModName,
                 value: this.newModValue,
@@ -372,15 +371,30 @@ app.component('dice-page', {
          * @param {number} id - The ID of the modifier to remove.
          */
         removeModifier(id) {
-            this.modifiers = this.modifiers.filter(m => m.id !== id);
+            if (!this.hero.modifiers) return;
+            const index = this.hero.modifiers.findIndex(m => m.id === id);
+            if (index > -1) {
+                this.hero.modifiers.splice(index, 1);
+            }
         },
         /**
          * Clears all active temporary modifiers.
          */
         clearUsedModifiers() {
-            // Remove active temporary modifiers
-            // Or just deactivate them? "disappear after you use them" suggests removal.
-            this.modifiers = this.modifiers.filter(m => !(m.active && m.type === 'temporary'));
+            if (!this.hero.modifiers) return;
+            // Filter out active temporary modifiers
+            // We need to mutate the array in place or replace it carefully
+            const kept = this.hero.modifiers.filter(m => !(m.active && m.type === 'temporary'));
+
+            // Clear and repopulate to maintain reactivity on the array itself if needed,
+            // though replacing properties usually works in Vue 3 proxies.
+            // However, since it's a prop, we should be careful.
+            // Ideally we'd emit an event, but since we are directly mutating the shared state object (characterSheet),
+            // and Vue 3 proxies are deep, direct splice/assignment should work if we are modifying the object found in the prop.
+
+            // Safe mutation:
+            this.hero.modifiers.length = 0;
+            this.hero.modifiers.push(...kept);
         }
     }
 });

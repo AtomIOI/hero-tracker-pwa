@@ -68,6 +68,7 @@ const app = createApp({
                     modifier: {
                         current: 0
                     },
+                    modifiers: [], // List of active modifiers { id, name, value, type, active }
                     statusDice: {
                         green: 6,
                         yellow: 8,
@@ -848,6 +849,11 @@ const app = createApp({
                     // Migration: Ensure outAbility object exists
                     if (!this.characterSheet.hero.outAbility) {
                         this.characterSheet.hero.outAbility = { text: '', actions: [], traitId: '' };
+                    }
+
+                    // Migration: Ensure modifiers array exists
+                    if (!this.characterSheet.hero.modifiers) {
+                        this.characterSheet.hero.modifiers = [];
                     }
 
                     // Migration: Ensure health ranges have valid values
