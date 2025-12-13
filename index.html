@@ -610,6 +610,15 @@
                                 <label for="pref-show-locked" class="font-comic font-bold text-lg cursor-pointer">Show
                                     Locked Stamps</label>
                             </div>
+                            <div class="flex items-center mt-2">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" v-model="characterSheet.hero.preferences.hideDiceTray"
+                                        id="pref-hide-dice">
+                                    <span class="slider"></span>
+                                </label>
+                                <label for="pref-hide-dice" class="font-comic font-bold text-lg cursor-pointer">Hide Dice
+                                    Tray</label>
+                            </div>
                         </div>
                     </div>
 

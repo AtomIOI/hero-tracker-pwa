@@ -24,57 +24,59 @@ app.component('dice-page', {
             <h1 class="comic-title">DICE TRAY</h1>
         </div>
 
-        <!-- Dice Selection Area -->
-        <div class="dice-selection-area">
-            <div v-if="impactText" class="impact-text-overlay" :class="{ 'red-text': isCriticalFail }">{{ impactText }}</div>
-            <div v-for="(die, index) in selectedDice"
-                 :key="index"
-                 class="die-slot-img-container"
-                 :class="{ selected: activeSlot === index, shaking: isRolling }"
-                 @click="openDieSelector(index)">
-                <img :src="'assets/dice/D' + die + '.png'" class="die-img" :alt="'d'+die" />
-            </div>
-        </div>
-
-        <!-- Roll Button -->
-        <div class="roll-button-container">
-            <div class="roll-btn" @click="rollDice" :class="{ disabled: isRolling }">
-                {{ isRolling ? '...' : 'ROLL!' }}
-            </div>
-        </div>
-
-        <!-- Results Area -->
-        <div class="results-container" v-if="rollResults">
-            <!-- Min -->
-            <div class="result-box min">
-                <div class="result-label">MIN</div>
-                <div class="result-value">{{ rollResults.min }}</div>
-                <div class="result-detail">d{{ rollResults.rawRolls[0].die }}</div>
-            </div>
-
-            <!-- Mid (Effect) -->
-            <div class="result-box mid">
-                <div class="result-label">MID</div>
-                <div class="result-value">{{ finalMidValue }}</div>
-                <div class="result-detail" v-if="totalModifier !== 0">
-                    {{ rollResults.mid }} {{ totalModifier >= 0 ? '+' : '' }}{{ totalModifier }}
+        <div v-if="!hero.preferences?.hideDiceTray">
+            <!-- Dice Selection Area -->
+            <div class="dice-selection-area">
+                <div v-if="impactText" class="impact-text-overlay" :class="{ 'red-text': isCriticalFail }">{{ impactText }}</div>
+                <div v-for="(die, index) in selectedDice"
+                     :key="index"
+                     class="die-slot-img-container"
+                     :class="{ selected: activeSlot === index, shaking: isRolling }"
+                     @click="openDieSelector(index)">
+                    <img :src="'assets/dice/D' + die + '.png'" class="die-img" :alt="'d'+die" />
                 </div>
-                <div class="result-detail" v-else>d{{ rollResults.rawRolls[1].die }}</div>
             </div>
 
-            <!-- Max -->
-            <div class="result-box max">
-                <div class="result-label">MAX</div>
-                <div class="result-value">{{ rollResults.max }}</div>
-                <div class="result-detail">d{{ rollResults.rawRolls[2].die }}</div>
+            <!-- Roll Button -->
+            <div class="roll-button-container">
+                <div class="roll-btn" @click="rollDice" :class="{ disabled: isRolling }">
+                    {{ isRolling ? '...' : 'ROLL!' }}
+                </div>
             </div>
-        </div>
 
-        <!-- Placeholder for no results -->
-        <div class="results-container" v-else style="opacity: 0.5;">
-             <div class="result-box min"><div class="result-label">MIN</div><div class="result-value">-</div></div>
-             <div class="result-box mid"><div class="result-label">MID</div><div class="result-value">-</div></div>
-             <div class="result-box max"><div class="result-label">MAX</div><div class="result-value">-</div></div>
+            <!-- Results Area -->
+            <div class="results-container" v-if="rollResults">
+                <!-- Min -->
+                <div class="result-box min">
+                    <div class="result-label">MIN</div>
+                    <div class="result-value">{{ rollResults.min }}</div>
+                    <div class="result-detail">d{{ rollResults.rawRolls[0].die }}</div>
+                </div>
+
+                <!-- Mid (Effect) -->
+                <div class="result-box mid">
+                    <div class="result-label">MID</div>
+                    <div class="result-value">{{ finalMidValue }}</div>
+                    <div class="result-detail" v-if="totalModifier !== 0">
+                        {{ rollResults.mid }} {{ totalModifier >= 0 ? '+' : '' }}{{ totalModifier }}
+                    </div>
+                    <div class="result-detail" v-else>d{{ rollResults.rawRolls[1].die }}</div>
+                </div>
+
+                <!-- Max -->
+                <div class="result-box max">
+                    <div class="result-label">MAX</div>
+                    <div class="result-value">{{ rollResults.max }}</div>
+                    <div class="result-detail">d{{ rollResults.rawRolls[2].die }}</div>
+                </div>
+            </div>
+
+            <!-- Placeholder for no results -->
+            <div class="results-container" v-else style="opacity: 0.5;">
+                 <div class="result-box min"><div class="result-label">MIN</div><div class="result-value">-</div></div>
+                 <div class="result-box mid"><div class="result-label">MID</div><div class="result-value">-</div></div>
+                 <div class="result-box max"><div class="result-label">MAX</div><div class="result-value">-</div></div>
+            </div>
         </div>
 
         <!-- Modifiers Section -->
