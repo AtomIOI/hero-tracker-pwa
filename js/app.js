@@ -873,6 +873,44 @@ const app = createApp({
             } catch (e) {
                 console.error('Error loading settings', e);
             }
+        },
+
+        /**
+         * Forces an application update by clearing caches and reloading.
+         * Explicitly saves data first as a safeguard.
+         */
+        async updateApp() {
+            if (!confirm("Update App? This will refresh the application to the latest version. Your character data will be preserved.")) return;
+
+            // Safeguard: Ensure data is saved
+            if (!this.persistData()) {
+                alert("Critical Error: Could not save character data. Update aborted to prevent data loss.");
+                return;
+            }
+
+            try {
+                // 1. Unregister Service Workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (const registration of registrations) {
+                        await registration.unregister();
+                    }
+                }
+
+                // 2. Clear Caches
+                if ('caches' in window) {
+                    const keys = await caches.keys();
+                    for (const key of keys) {
+                        await caches.delete(key);
+                    }
+                }
+
+                // 3. Reload Page
+                window.location.reload();
+            } catch (error) {
+                console.error("Update failed:", error);
+                alert("Update failed. Please try refreshing the page manually.");
+            }
         }
     }
 });
