@@ -610,6 +610,15 @@
                                 <label for="pref-show-locked" class="font-comic font-bold text-lg cursor-pointer">Show
                                     Locked Stamps</label>
                             </div>
+                            <div class="flex items-center mt-2">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" v-model="characterSheet.hero.preferences.showOutZone"
+                                        id="pref-show-out">
+                                    <span class="slider"></span>
+                                </label>
+                                <label for="pref-show-out" class="font-comic font-bold text-lg cursor-pointer">Show Out
+                                    Ability</label>
+                            </div>
                         </div>
                     </div>
 
